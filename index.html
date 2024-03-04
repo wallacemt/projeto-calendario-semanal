@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/4585/4585338.png" type="image/x-icon">
+    <title>Calendario Semanal</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="estilos/style.css">
+    <link rel="stylesheet" href="estilos/media-query.css">
+</head>
+<body>
+    <main>
+        <i id="icone-menu" class="material-icons" onclick="menu()">menu</i>
+        <section id="menu">
+            <ul>
+                <li class="menu-item" id="seg" onclick="butseg()"><img src="imagens/seg.png" alt=""></li>
+                <li class="menu-item" id="ter" onclick="butter()"><img src="imagens/ter.png" alt=""></li>
+                <li class="menu-item" id="qua" onclick="butqua()"><img src="imagens/qua.png" alt=""></li>
+                <li class="menu-item" id="qui" onclick="butqui()"><img src="imagens/qui.png" alt=""></li>
+                <li class="menu-item" id="sex" onclick="butsex()"><img src="imagens/sex.png" alt=""></li>
+                <li class="menu-item" id="sab" onclick="butsab()"><img src="imagens/sab.png" alt=""></li>
+                <li class="menu-item" id="dom" onclick="butdom()"><img src="imagens/dom.png" alt=""></li>
+                <li class="menu-item" id="extra" onclick="butextra()"><img src="imagens/extra.png" alt=""></li>
+            </ul>
+            <footer>Create by <a href="https://github.com/wallacemt">Wallace</a></footer>
+        </section>
+
+        <section id="conteudo">
+            <h1 id="titulo"></h1>
+            
+            <a id="link-1" href="" target="_blank">
+                <div class="conteudo-item" id="conteudo-1"></div>
+            </a>
+            <h2 id="titulo-conteudo-1"></h2>
+            <p id="subtitulo-1"></p>
+
+            <a id="link-2" href="" target="_blank">
+                <div class="conteudo-item" id="conteudo-2"></div>
+            </a>
+            <h2 id="titulo-conteudo-2"></h2>
+            <p id="subtitulo-2"></p>
+
+            <a id="link-3" href="" target="_blank">
+                <div class="conteudo-item" id="conteudo-3"></div>
+            </a>
+            <h2 id="titulo-conteudo-3"></h2>
+            <p id="subtitulo-3"></p>
+
+            <!--Lista dos animes extra para ver depois.-->
+            <ul class="extra" id="content-extra">
+                <li>
+                    <a id="link-extra-1" href="" target="_blank">
+                        <div class="conteudo-item" id="conteudo-extra-1"></div>
+                    </a>
+                    <h2 id="titulo-anime-extra-1"></h2>
+                    <p id="subtitulo-extra-1"></p>
+                </li>
+                <li>
+                    <a id="link-extra-2" href="" target="_blank">
+                        <div class="conteudo-item" id="conteudo-extra-2"></div>
+                    </a>
+                    <h2 id="titulo-anime-extra-2"></h2>
+                    <p id="subtitulo-extra-2"></p>
+                </li>
+                <li>
+                    <a id="link-extra-3" href="" target="_blank">
+                        <div class="conteudo-item" id="conteudo-extra-3"></div>
+                    </a>
+                    <h2 id="titulo-anime-extra-3"></h2>
+                    <p id="subtitulo-extra-3"></p>
+                </li>
+                <li>
+                    <a id="link-extra-4" href="" target="_blank">
+                        <div class="conteudo-item" id="conteudo-extra-4"></div>
+                    </a>
+                    <h2 id="titulo-anime-extra-4"></h2>
+                    <p id="subtitulo-extra-4"></p>
+                </li>
+                <li>
+                    <a id="link-extra-5" href="" target="_blank">
+                        <div class="conteudo-item" id="conteudo-extra-5"></div>
+                    </a>
+                    <h2 id="titulo-anime-extra-5"></h2>
+                    <p id="subtitulo-extra-5"></p>
+                </li>
+                <li>
+                    <a id="link-extra-6" href="" target="_blank">
+                        <div class="conteudo-item" id="conteudo-extra-6"></div>
+                    </a>
+                    <h2 id="titulo-anime-extra-6"></h2>
+                    <p id="subtitulo-extra-6"></p>
+                </li>
+            </ul>
+        </section>
+    </main>
+    
+    <script src="script.js"></script>
+    
+    <script>
+        window.onresize = function mudouTamanho(){
+            var menu = document.getElementById('menu')
+            if(window.innerWidth >= 768){
+                menu.style.display = 'block'
+            }else{
+                menu.style.display = 'none'
+            }
+        }
+    </script>
+</body>
+</html>
