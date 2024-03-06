@@ -18,8 +18,53 @@ let tituloconteudo3 = document.getElementById('titulo-conteudo-3')
 let subtitulo3 = document.getElementById('subtitulo-3');
 let link3 = document.getElementById('link-3');
 
-let taAparecendo = 0
 
+
+//funcao que carrega o conteudo correspondente ao dia da semana
+function carregarSem(){
+    let dataAtual = new Date();
+
+    let diaSem = dataAtual.getDay();
+
+    let diasDaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'];
+
+    console.log(diaSem);
+
+    console.log("Hoje è " + diasDaSemana[diaSem]  + " boa diverssão.");
+
+    if(diasDaSemana[diaSem] == "Segunda"){
+        document.addEventListener('DOMContentLoaded', butseg());
+
+    }else if(diasDaSemana[diaSem] == "Terça"){
+        document.addEventListener('DOMContentLoaded', butter());
+
+
+    }else if(diasDaSemana[diaSem] == "Quarta"){
+        document.addEventListener('DOMContentLoaded', butqua());
+
+    }else if(diasDaSemana[diaSem] == "Quinta"){
+        document.addEventListener('DOMContentLoaded', butqui());
+
+    }else if(diasDaSemana[diaSem] == "Sexta"){
+        document.addEventListener('DOMContentLoaded', butsex());
+
+    }else if(diasDaSemana[diaSem] == "Sabado"){
+        document.addEventListener('DOMContentLoaded', butsab());
+
+    }else{
+        document.addEventListener('DOMContentLoaded', butdom());
+        
+    }
+
+}
+
+
+
+
+
+
+
+let taAparecendo = 0
 function menu(){
     let menu = document.getElementById('menu')
     if(menu.style.display == 'block'){
