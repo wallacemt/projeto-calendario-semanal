@@ -58,12 +58,6 @@ function carregarSem(){
 
 }
 
-
-
-
-
-
-
 let taAparecendo = 0
 function menu(){
     let menu = document.getElementById('menu')
