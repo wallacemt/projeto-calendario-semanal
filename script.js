@@ -71,13 +71,12 @@ function menu(){
 }
 
 function butseg(){
-    const titulosanimesSegunda = ["Kekkon Yubiwa", "Bucchigiri?", "Undead Unluck"]
-    const subtitulosAnimesSegunda=[
-    "Temporada: Inverno 2024\n Estúdio: Staple Entertainment\n Status: Em Progresso\n Gêneros: Ação Ecchi Fantasia Romance", "Temporada: Inverno 2024\nEstúdio: MAPPA\nGêneros: Ação", " Temporada: Outono 2023\nAutor: Yoshifumi Tozuka\nDireção: Yuuki Yase\n Estúdio: David Production\n Gêneros: Ação, Comédia, Shounen, Sobrenatural, Superpoder"];
+    const titulosanimesSegunda = ["Vago", "Vago", "Vago"]
+    const subtitulosAnimesSegunda=["Vazio", "Vazio", "Vazio"];
 
-    const imagensAnimesSegunda=["https://www.anitube.vip/media/categories/video/32cc64407f53842cdef8a3f482a22410.jpg", "https://cdn.anicdn.net/media/categories/video/8693722045353926369c8e7ab8a5ff3e.jpg", "https://cdn.anicdn.net/media/categories/video/95769d5e5d2d94eb3d1f1381915f876d731.jpg"];
+    const imagensAnimesSegunda=["https://ih1.redbubble.net/image.4636018952.5529/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"];
 
-    const linkAnimesSegunda = ["https://www.anitube.vip/anime/kekkon-yubiwa-monogatari","https://www.anitube.vip/download/anime/bucchigiri", "https://www.anitube.vip/download/anime/undead-unluck"];
+    const linkAnimesSegunda = [];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
@@ -101,13 +100,13 @@ function butseg(){
         link1.href = linkAnimesSegunda[0];
         
 
-        banner2.style.backgroundImage = 'url(' + imagensAnimesSegunda[1] + ')';
+        banner2.style.backgroundImage = 'url(' + imagensAnimesSegunda[0] + ')';
         banner2.style.display = 'block'
         tituloconteudo2.innerText = titulosanimesSegunda[1] 
         subtitulo2.innerText = subtitulosAnimesSegunda[1]
         link2.href = linkAnimesSegunda[1];
         
-        banner3.style.backgroundImage = 'url('+ imagensAnimesSegunda[2] + ')';
+        banner3.style.backgroundImage = 'url('+ imagensAnimesSegunda[0] + ')';
         banner3.style.display = 'block'
         tituloconteudo3.innerText = titulosanimesSegunda[2] 
         subtitulo3.innerText = subtitulosAnimesSegunda[2]
@@ -177,13 +176,13 @@ function butter(){
 }
 
 function butqua(){
-    const titulosanimesQuarta = ["Mato Seihei no Slave", "Shangri-La Frontier", "Shaman King: Flowers"];
+    const titulosanimesQuarta = ["Mato Seihei no Slave", "Vago", "Shaman King: Flowers"];
 
-    const subtitulosAnimesQuarta = ["Estúdio: Seven Arcs\nStatus: Em Progresso\nGêneros: Ação Ecchi Fantasia", "Autor: Ryousuke Fuji e Katarina\nDireção: Toshiyuki Kubooka\nEstúdio: C2C\nGêneros: Ação Aventura Fantasia Jogos Shounen", "Estúdio: Bridge\nGêneros: Ação, Aventura, Sobrenatural"];
+    const subtitulosAnimesQuarta = ["Estúdio: Seven Arcs\nStatus: Em Progresso\nGêneros: Ação Ecchi Fantasia", "Vazio", "Estúdio: Bridge\nGêneros: Ação, Aventura, Sobrenatural"];
 
-    const imagensAnimesQuarta = ["https://www.anitube.vip/media/categories/video/5d9539763ee2a79091013e3792bbf267.jpg", "https://www.anitube.vip/media/categories/video/e5bb61f161dadfca4ebe6d6016a94462940.jpg", "https://cdn.anicdn.net/media/categories/video/afa0c448ffaca160a7d4ee03b04f1997.jpg"];
+    const imagensAnimesQuarta = ["https://www.anitube.vip/media/categories/video/5d9539763ee2a79091013e3792bbf267.jpg", "https://ih1.redbubble.net/image.4636018952.5529/flat,750x,075,f-pad,750x1000,f8f8f8.jpg", "https://cdn.anicdn.net/media/categories/video/afa0c448ffaca160a7d4ee03b04f1997.jpg"];
 
-    const linkAnimesQuarta = ['https://www.anitube.vip/anime/mato-seihei-no-slave', 'https://www.anitube.vip/anime/shangri-la-frontier-kusoge-hunter-kamige-ni-idoman-to-su',"https://www.anitube.vip/anime/shaman-king-flowers"];
+    const linkAnimesQuarta = ['https://www.anitube.vip/anime/mato-seihei-no-slave',"https://www.anitube.vip/anime/shaman-king-flowers"];
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
@@ -333,13 +332,13 @@ function butsex(){
     }
 }
 function butsab(){
-    const titulosanimesSabado = ["Solo Leveling", "Mashle S2"]
+    const titulosanimesSabado = ["Vago", "Vago"]
 
-    const subtitulosAnimesSabado = ["Estúdio: A-1 Pictures\nGêneros: Ação, Aventura, Fantasia"," Estúdio: A-1 Pictures\nGêneros: Ação, Comédia, Fantasia" ];
+    const subtitulosAnimesSabado = ["Vazio","Vazio" ];
 
-    const imagensAnimesSabado = ["https://cdn.anicdn.net/media/categories/video/36dc63c846890690feb95783f34ab877.jpg", "https://cdn.anicdn.net/media/categories/video/84b580801c99a45fddeca9f3d89aa743.jpg"];
+    const imagensAnimesSabado = ["https://ih1.redbubble.net/image.4636018952.5529/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"];
 
-    const linkAnimesSabado = ["https://www.anitube.vip/download/anime/ore-dake-level-up-na-ken", "https://www.anitube.vip/download/anime/mashle-2nd-season"];
+    const linkAnimesSabado = [];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
@@ -359,7 +358,7 @@ function butsab(){
         subtitulo1.innerText = subtitulosAnimesSabado[0]
         link1.href = linkAnimesSabado[0];
     
-        banner2.style.backgroundImage = 'url(' + imagensAnimesSabado[1] + ')';
+        banner2.style.backgroundImage = 'url(' + imagensAnimesSabado[0] + ')';
         banner2.style.display = 'block'
         tituloconteudo2.innerText = titulosanimesSabado[1] 
         subtitulo2.innerText = subtitulosAnimesSabado[1]
@@ -435,13 +434,13 @@ function butextra(){
     let linkExtra = document.querySelectorAll('[id^="link-extra-"]');
     
     
-    const imagensAnimesExtra=["https://www.anitube.vip/media/categories/video/3bd5574cdf7eaa90415f09d4aab9aa9b22.jpg", "https://encurtador.com.br/dnDGP", "https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg", "https://www.anitube.vip/media/categories/video/6191ef71619248a9be7992300a3aef9c583.jpg", "https://www.anitube.vip/media/categories/video/24ff43761bcc71c3bfe5e8d4168da636.jpg", "https://www.anitube.vip/media/categories/video/8654b7e38946e9d533caf185a8fef8b7276.jpg"];
+    const imagensAnimesExtra=["https://encurtador.com.br/dnDGP", "https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg", "https://www.anitube.vip/media/categories/video/6191ef71619248a9be7992300a3aef9c583.jpg", "https://www.anitube.vip/media/categories/video/24ff43761bcc71c3bfe5e8d4168da636.jpg", "https://www.anitube.vip/media/categories/video/8654b7e38946e9d533caf185a8fef8b7276.jpg"];
     
-    const tituloanimesExtra = ["Bastard","Ao no Exorcist","(Des)encanto","Keijo","Dungeon Meshi", "Hajimete no Gal"  ]
+    const tituloanimesExtra = ["Ao no Exorcist","(Des)encanto","Keijo","Dungeon Meshi", "Hajimete no Gal"  ]
 
-    const subtitulosAnimesExtra=["Autor: Kazushi Hagiwara\n Direção: Takaharu Ozaki\n Estúdio: LIDENFILMS\n Gêneros: Ação Aventura Comédia Ecchi Fantasia Seinen", "Gêneros: Ação Fantasia","Gênero: Animação Aventura Comédia", "Autor: Daichi Sorayomi\n Direção: Hideya Takahashi\n Estúdio: Xebec\n Gêneros: Ação Ecchi Esporte Shounen", "Estúdio: Trigger\n Gêneros: Comédia Fantasia", "Autor: Meguru Ueno\n Direção: Hiroyuki Furukawa\n Estúdio: NAZ\n Gêneros: Comédia Ecchi Romance Shounen Escolar"];
+    const subtitulosAnimesExtra=["Gênero: Animação Aventura Comédia", "Autor: Daichi Sorayomi\n Direção: Hideya Takahashi\n Estúdio: Xebec\n Gêneros: Ação Ecchi Esporte Shounen", "Estúdio: Trigger\n Gêneros: Comédia Fantasia", "Autor: Meguru Ueno\n Direção: Hiroyuki Furukawa\n Estúdio: NAZ\n Gêneros: Comédia Ecchi Romance Shounen Escolar"];
     
-    const linkAnimesExtra = ["https://www.anitube.vip/anime/bastard-ankoku-no-hakaishin-ona", "https://darkmahou.org/ao-no-exorcist/", "https://www.anitube.vip/anime/keijo", "https://www.anitube.vip/anime/dungeon-meshi", "https://www.anitube.vip/anime/39f08a00833ef97fdbdb4a5ca62d76231d4b72be"];
+    const linkAnimesExtra = ["https://www.anitube.vip/anime/bastard-ankoku-no-hakaishin-ona", "https://darkmahou.org/ao-no-exorcist/","https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download", "https://www.anitube.vip/anime/keijo","https://www.anitube.vip/anime/dungeon-meshi", "https://www.anitube.vip/anime/39f08a00833ef97fdbdb4a5ca62d76231d4b72be"];
     //Tentar fazer um comando de repetição para mostra todos os conteudos extra sem precisar de muitas linhas.
     let contador = 0
 
@@ -475,7 +474,6 @@ function butextra(){
             subtituloExtra[i].textContent = subtitulosAnimesExtra[i]; 
 
             linkExtra[i].href = linkAnimesExtra[i];
-            
         }
 
         if(window.innerWidth <= 800 && taAparecendo === 0){
