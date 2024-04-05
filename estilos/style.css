@@ -44,7 +44,7 @@ section#conteudo{
     background-image: linear-gradient(to bottom, #6210afcb,#4b12f7,#4207f5, #16074a00 );
     transform: translate(-50%, -50%);
     height: 90vh;
-    width: 590px;
+    width: 650px;
     border-radius: 50px;
     background-repeat: no-repeat;
     overflow-x: auto ;
@@ -135,12 +135,26 @@ i#icone-menu{
     background-color: rgba(245, 222, 179, 0.192);
     background-attachment: fixed;
     background-size: cover;
+    transition: 1s;
 }
 .conteudo-item:hover{
-    width: 350px;
-    height: 550px;
+    width: 500px;
+    height: 650px;
     box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.486);
+    transition: 1.5s;
+    background-position: center;
+    animation: animar 3s ease 0.5s infinite alternate;
 }
+
+@keyframes animar{
+    from{
+        box-shadow: 0px 0px 20px rgb(255, 255, 255);
+    }
+    to{
+        box-shadow: 3px 2px 35px rgb(232, 244, 10);
+    }
+}
+
 #content-extra{
     display: none;
 }

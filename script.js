@@ -71,12 +71,13 @@ function menu(){
 }
 
 function butseg(){
-    const titulosanimesSegunda = ["Vago", "Vago", "Vago"]
-    const subtitulosAnimesSegunda=["Vazio", "Vazio", "Vazio"];
+    const titulosanimesSegunda = ["Kaii to Otome to Kamikakushi", "Kenka Dokugaku"]
 
-    const imagensAnimesSegunda=["https://ih1.redbubble.net/image.4636018952.5529/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"];
+    const subtitulosAnimesSegunda=["Estúdio: Zero-G\Gêneros: Mistério Sobrenatural", "Estúdio: Okuruto Noboru\nGêneros: Ação Comedia"];
 
-    const linkAnimesSegunda = [];
+    const imagensAnimesSegunda=["https://www.anitube.vip/media/categories/video/ec2000adeba93895d10e9a5fd96df67b.jpg","https://www.anitube.vip/media/categories/video/8ca507dac7aef4edbdc255020efddb2b.jpg"];
+
+    const linkAnimesSegunda = ["https://www.anitube.vip/anime/kaii-to-otome-to-kamikakushi","https://www.anitube.vip/anime/kenka-dokugaku"];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
@@ -86,10 +87,10 @@ function butseg(){
 
         subtitulo1.style.display = 'block'
         subtitulo2.style.display = 'block'
-        subtitulo3.style.display = 'block'
+        subtitulo3.style.display = 'none'
         tituloconteudo1.style.display = 'block'
         tituloconteudo2.style.display = 'block'
-        tituloconteudo3.style.display = 'block'
+        tituloconteudo3.style.display = 'none'
 
         //Inserindo intens dentro da section conteudo
 
@@ -100,17 +101,22 @@ function butseg(){
         link1.href = linkAnimesSegunda[0];
         
 
-        banner2.style.backgroundImage = 'url(' + imagensAnimesSegunda[0] + ')';
+        banner2.style.backgroundImage = 'url(' + imagensAnimesSegunda[1] + ')';
         banner2.style.display = 'block'
         tituloconteudo2.innerText = titulosanimesSegunda[1] 
         subtitulo2.innerText = subtitulosAnimesSegunda[1]
         link2.href = linkAnimesSegunda[1];
         
-        banner3.style.backgroundImage = 'url('+ imagensAnimesSegunda[0] + ')';
-        banner3.style.display = 'block'
-        tituloconteudo3.innerText = titulosanimesSegunda[2] 
-        subtitulo3.innerText = subtitulosAnimesSegunda[2]
-        link3.href = linkAnimesSegunda[2];
+        banner3.style.display = 'none'
+        // banner3.style.backgroundImage = 'url('+ imagensAnimesSegunda[0] + ')';
+        // banner3.style.display = 'block'
+        // tituloconteudo3.innerText = titulosanimesSegunda[2] 
+        // subtitulo3.innerText = subtitulosAnimesSegunda[2]
+        // link3.href = linkAnimesSegunda[2];
+        
+        
+
+
 
         conteudo.style.display = 'block'
         conteudoExtra.style.display = 'none';
@@ -127,10 +133,12 @@ function butseg(){
 }
 
 function butter(){
-    const titulosanimesTerca = ["Boku no Kokoro no Yabai Yatsu S2", "Urusei Yatsura S2"]
-    const subtitulosAnimesTerca = ["Temporada: Inverno 2024\nEstúdio: Shin-Ei Animation\nGêneros: Comédia Romance", "Estúdio: David Production\nStatus: Em Progresso\nGêneros: Comédia Romance Sci-Fi"];
-    const imagensAnimesTerca = ["https://www.anitube.vip/media/categories/video/ffdf04427cfea3528928482d8c9ee6d4.jpg", "https://www.anitube.vip/media/categories/video/afd0deef11d5a3a4890d1f0cb6902092.jpg"];
-    const linkAnimesTerca = ["https://www.anitube.vip/anime/boku-no-kokoro-no-yabai-yatsu-season-2", "https://www.anitube.vip/anime/urusei-yatsura-2022-2nd-season"]
+    const titulosanimesTerca = ["One Room", "Seiyuu Radio"]
+
+    const subtitulosAnimesTerca = ["Estúdio: Okuruto Noboru\nGêneros: Comédia Romance Sobrenatural", "Estúdio: Connect\nGêneros: Comédia"];
+
+    const imagensAnimesTerca = ["https://www.anitube.vip/media/categories/video/a654cd650ff64de9b1510aa78d7b01d0.jpg", "https://www.anitube.vip/media/categories/video/6fb95642a66a0eefdab8fe6eb01abb6f.jpg"];
+    const linkAnimesTerca = ["https://www.anitube.vip/anime/one-room-hiatari-futsuu-tenshi-tsuki", "https://www.anitube.vip/anime/seiyuu-radio-no-uraomote"]
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
@@ -176,13 +184,13 @@ function butter(){
 }
 
 function butqua(){
-    const titulosanimesQuarta = ["Mato Seihei no Slave", "Vago", "Shaman King: Flowers"];
+    const titulosanimesQuarta = ["Kami wa Game ni Ueteiru", "Date A Live V"];
 
-    const subtitulosAnimesQuarta = ["Estúdio: Seven Arcs\nStatus: Em Progresso\nGêneros: Ação Ecchi Fantasia", "Vazio", "Estúdio: Bridge\nGêneros: Ação, Aventura, Sobrenatural"];
+    const subtitulosAnimesQuarta = ["Estúdio: LIDENFILMS\nGêneros: Ecchi Fantasia Suspense", "Estúdio: Geek Toys\nGêneros: Ação Fantasia Romance Sci-Fi"];
 
-    const imagensAnimesQuarta = ["https://www.anitube.vip/media/categories/video/5d9539763ee2a79091013e3792bbf267.jpg", "https://ih1.redbubble.net/image.4636018952.5529/flat,750x,075,f-pad,750x1000,f8f8f8.jpg", "https://cdn.anicdn.net/media/categories/video/afa0c448ffaca160a7d4ee03b04f1997.jpg"];
+    const imagensAnimesQuarta = ["https://www.anitube.vip/media/categories/video/9a3774c23cb2256c78f82cfa0d5f5df3.jpg", "https://www.anitube.vip/media/categories/video/985a2b9a0a6ae0367dc2aece0b37d833.jpg"];
 
-    const linkAnimesQuarta = ['https://www.anitube.vip/anime/mato-seihei-no-slave',"https://www.anitube.vip/anime/shaman-king-flowers"];
+    const linkAnimesQuarta = ["https://anitube.vip/anime/kami-wa-game-ni-ueteiru","https://www.anitube.vip/anime/date-a-live-v"];
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
@@ -190,10 +198,13 @@ function butqua(){
         titulo.style.color = '#feffb3'
         subtitulo1.style.display = 'block'
         subtitulo2.style.display = 'block'
-        subtitulo3.style.display = 'block'
+
+        subtitulo3.style.display = 'none'
+
         tituloconteudo1.style.display = 'block'
         tituloconteudo2.style.display = 'block'
-        tituloconteudo3.style.display = 'block'
+
+        tituloconteudo3.style.display = 'none'
 
         //Inserindo intens dentro da section
         banner1.style.backgroundImage ='url(' + imagensAnimesQuarta[0] + ')';
@@ -208,11 +219,12 @@ function butqua(){
         subtitulo2.innerText = subtitulosAnimesQuarta[1]
         link2.href = linkAnimesQuarta[1];
 
-        banner3.style.backgroundImage = 'url(' + imagensAnimesQuarta[2] + ')';
-        banner3.style.display = 'block'
-        tituloconteudo3.innerText = titulosanimesQuarta[2] 
-        subtitulo3.innerText = subtitulosAnimesQuarta[2]
-        link3.href = linkAnimesQuarta[2];
+        banner3.style.display = 'none'
+        // banner3.style.backgroundImage = 'url(' + imagensAnimesQuarta[0] + ')';
+        // banner3.style.display = 'block'
+        // tituloconteudo3.innerText = titulosanimesQuarta[2] 
+        // subtitulo3.innerText = subtitulosAnimesQuarta[2]
+        // link3.href = linkAnimesQuarta[2];
 
         conteudo.style.display = 'block'
         conteudoExtra.style.display = 'none';
@@ -231,10 +243,13 @@ function butqua(){
 function butqui(){
     //butqui kkkkkkkk lembra Butiquim kkkkk
 
-    const titulosanimesQuinta = ["Akuyaku Reijou Level 99", "Majo to Yajuu", "Metallic Rouge"]
-    const subtitulosAnimesQuinta = ['Estúdio: Jumondo\nGêneros: Fantasia', 'Estúdio: Yokohama Animation Lab\nGêneros: Ação Fantasia', 'Estúdio: Bones\nGêneros: Ação Sci-Fi'];
-    const imagensAnimesQuinta = ['https://www.anitube.vip/media/categories/video/984d09774965045ada1662baec5abba4.jpg', 'https://www.anitube.vip/media/categories/video/dcc0d0b608ff9782e5495b222be50e00.jpg', 'https://www.anitube.vip/media/categories/video/97d5400491dfd0cdbbbc843db3e7e53b.jpg'];
-    const linkAnimesQuinta = ['https://www.anitube.vip/anime/akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen', 'https://www.anitube.vip/anime/majo-to-yajuu', 'https://www.anitube.vip/anime/metallic-rouge'];
+    const titulosanimesQuinta = ["Sasayaku you ni Koi wo Utau", "Wind Breaker"];
+
+    const subtitulosAnimesQuinta = ['Estúdio: Cloud Hearts\nGenero: Romance Musical',"Estúdio: CloverWorks\nGêneros: Ação"];
+
+    const imagensAnimesQuinta = ['https://www.intoxianime.com/wp-content/uploads/2023/08/F3sR38mbsAAOeLh.jpg', "https://www.anitube.vip/media/categories/video/ec6ed9842f843b70681e0939032ea443.jpg"];
+
+    const linkAnimesQuinta = ["https://abre.ai/jogy", "https://www.anitube.vip/anime/wind-breaker"];
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
@@ -242,10 +257,13 @@ function butqui(){
         titulo.style.color = '#feffb3'
         subtitulo1.style.display = 'block'
         subtitulo2.style.display = 'block'
-        subtitulo3.style.display = 'block'
+
+        subtitulo3.style.display = 'none'
+
         tituloconteudo1.style.display='block'
-        tituloconteudo2.style.display = 'block' 
-        tituloconteudo3.style.display = 'block'
+        tituloconteudo2.style.display = 'block'
+
+        tituloconteudo3.style.display = 'none'
 
 
         //Inserindo intens dentro da section conteudo
@@ -261,11 +279,12 @@ function butqui(){
         subtitulo2.innerText = subtitulosAnimesQuinta[1]
         link2.href = linkAnimesQuinta[1];
 
-        banner3.style.backgroundImage = 'url('+ imagensAnimesQuinta[2] + ')';
-        banner3.style.display = 'block'
-        tituloconteudo3.innerText = titulosanimesQuinta[2] 
-        subtitulo3.innerText = subtitulosAnimesQuinta[2]
-        link3.href = linkAnimesQuinta[2];
+        banner3.style.display = 'none'
+        // banner3.style.backgroundImage = 'url('+ imagensAnimesQuinta[2] + ')';
+        // banner3.style.display = 'block'
+        // tituloconteudo3.innerText = titulosanimesQuinta[2] 
+        // subtitulo3.innerText = subtitulosAnimesQuinta[2]
+        // link3.href = linkAnimesQuinta[2];
 
         conteudo.style.display = 'block'
         conteudoExtra.style.display = 'none';
@@ -281,13 +300,13 @@ function butqui(){
 }
 
 function butsex(){
-    const titulosanimesSexta = ["Ishura", "Chiyu Mahou no Machigatta Tsukaikata"]
+    const titulosanimesSexta = ["Ookami to Koushinryou", "Kono Subarashii Sekai ni Shukufuku wo! 3"]
 
-    const subtitulosAnimesSexta = ["Estúdio: Passione\nGêneros: Ação Aventura Fantasia", "Estúdio:Shin-Ei Animation, Studio Add\nGêneros: Ação, Fantasia"];
+    const subtitulosAnimesSexta = ["Estúdio: Passione\nGêneros: Aventura Drama Fantasia Romance", "Estúdio: Drive\nGêneros: Aventura Comédia Fantasia"];
 
-    const imagensAnimesSexta = ["https://www.anitube.vip/media/categories/video/f6d51a1d32d50d00c1c18c4a10177b7a.jpg", "https://cdn.anicdn.net/media/categories/video/41c33878b38abbe1feadde0677581e06.jpg"];
+    const imagensAnimesSexta = ["https://www.anitube.vip/media/categories/video/5a79d3daf80921be196351208b0a3f76.jpg", "https://www.anitube.vip/media/categories/video/f2e7b9c8431351fcd494ae13c0b2e148.jpg"];
 
-    const linkAnimesSexta = ["https://www.anitube.vip/anime/ishura", "https://www.anitube.vip/anime/chiyu-mahou-no-machigatta-tsukaikata"];
+    const linkAnimesSexta = ["https://www.anitube.vip/anime/ookami-to-koushinryou-merchant-meets-the-wise-wolf", "https://www.anitube.vip/anime/kono-subarashii-sekai-ni-shukufuku-wo-3"];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
@@ -301,17 +320,17 @@ function butsex(){
 
         //Inserindo intens dentro da section conteudo
 
-        banner1.style.backgroundImage ='url(' + imagensAnimesSexta[0] + ')';
+        banner1.style.backgroundImage ='url(' + imagensAnimesSexta[1] + ')';
         banner1.style.display = 'block'
-        tituloconteudo1.innerText = titulosanimesSexta[0] 
-        subtitulo1.innerText = subtitulosAnimesSexta[0]
-        link1.href = linkAnimesSexta[0];
+        tituloconteudo1.innerText = titulosanimesSexta[1] 
+        subtitulo1.innerText = subtitulosAnimesSexta[1]
+        link1.href = linkAnimesSexta[1];
     
-        banner2.style.backgroundImage = 'url(' + imagensAnimesSexta[1] + ')';
+        banner2.style.backgroundImage = 'url(' + imagensAnimesSexta[0] + ')';
         banner2.style.display = 'block'
-        tituloconteudo2.innerText = titulosanimesSexta[1]
-        subtitulo2.innerText = subtitulosAnimesSexta[1]
-        link2.href = linkAnimesSexta[1];
+        tituloconteudo2.innerText = titulosanimesSexta[0]
+        subtitulo2.innerText = subtitulosAnimesSexta[0]
+        link2.href = linkAnimesSexta[0];
 
         conteudo.style.display = 'block'
 
@@ -332,13 +351,13 @@ function butsex(){
     }
 }
 function butsab(){
-    const titulosanimesSabado = ["Vago", "Vago"]
+    const titulosanimesSabado = ["Kaiju No. 8","Kimetsu no Yaiba Hashira Training Arc", "My Hero Academia Season 7"]
 
-    const subtitulosAnimesSabado = ["Vazio","Vazio" ];
+    const subtitulosAnimesSabado = ["Estúdio: Production I.G\nGêneros: Ação Sci-Fi","Estúdio: Ufotable\nGêneros: Ação Fantasia","Estúdio: Bones\nGêneros: Ação Shonen" ];
 
-    const imagensAnimesSabado = ["https://ih1.redbubble.net/image.4636018952.5529/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"];
+    const imagensAnimesSabado = ["https://m.media-amazon.com/images/I/81IgJ1cGaWS._AC_UF1000,1000_QL80_.jpg","https://www.anitube.vip/media/categories/video/c627366905207421de9d84f3d524cca4.jpg","https://www.anitube.vip/media/categories/video/9115c0b3bac60336151b483fc4594afb.jpg"];
 
-    const linkAnimesSabado = [];
+    const linkAnimesSabado = ["https://www.anitube.vip/anime/kaijuu-8-gou", "https://www.anitube.vip/anime/boku-no-hero-academia-7th-season"];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
@@ -348,8 +367,10 @@ function butsab(){
         titulo.style.color = '#feffb3'
         subtitulo1.style.display = 'block'
         subtitulo2.style.display = 'block'
+        subtitulo3.style.display = "block"
         tituloconteudo1.style.display='block'
-        tituloconteudo2.style.display = 'block' 
+        tituloconteudo2.style.display = 'block'
+        tituloconteudo3.style.display = 'block'
         //Inserindo intens dentro da section conteudo
 
         banner1.style.backgroundImage ='url(' + imagensAnimesSabado[0] + ')';
@@ -358,7 +379,7 @@ function butsab(){
         subtitulo1.innerText = subtitulosAnimesSabado[0]
         link1.href = linkAnimesSabado[0];
     
-        banner2.style.backgroundImage = 'url(' + imagensAnimesSabado[0] + ')';
+        banner2.style.backgroundImage = 'url(' + imagensAnimesSabado[1] + ')';
         banner2.style.display = 'block'
         tituloconteudo2.innerText = titulosanimesSabado[1] 
         subtitulo2.innerText = subtitulosAnimesSabado[1]
@@ -367,8 +388,11 @@ function butsab(){
         conteudo.style.display = 'block'
 
         banner3.style.display = 'none'
-        subtitulo3.innerText = ''
-        tituloconteudo3.style.display = 'none'
+        banner3.style.backgroundImage = 'url('+ imagensAnimesSabado[2] + ')';
+        banner3.style.display = 'block'
+        tituloconteudo3.innerText = titulosanimesSabado[2] 
+        subtitulo3.innerText = subtitulosAnimesSabado[2]
+        link3.href = linkAnimesSabado[2];
 
         
         conteudoExtra.style.display = 'none';
@@ -434,14 +458,14 @@ function butextra(){
     let linkExtra = document.querySelectorAll('[id^="link-extra-"]');
     
     
-    const imagensAnimesExtra=["https://encurtador.com.br/dnDGP", "https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg", "https://www.anitube.vip/media/categories/video/6191ef71619248a9be7992300a3aef9c583.jpg", "https://www.anitube.vip/media/categories/video/24ff43761bcc71c3bfe5e8d4168da636.jpg", "https://www.anitube.vip/media/categories/video/8654b7e38946e9d533caf185a8fef8b7276.jpg"];
+    const imagensAnimesExtra=["https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg"];
     
-    const tituloanimesExtra = ["Ao no Exorcist","(Des)encanto","Keijo","Dungeon Meshi", "Hajimete no Gal"  ]
+    const tituloanimesExtra = ["(Des)encanto"]
 
-    const subtitulosAnimesExtra=["Gênero: Animação Aventura Comédia", "Autor: Daichi Sorayomi\n Direção: Hideya Takahashi\n Estúdio: Xebec\n Gêneros: Ação Ecchi Esporte Shounen", "Estúdio: Trigger\n Gêneros: Comédia Fantasia", "Autor: Meguru Ueno\n Direção: Hiroyuki Furukawa\n Estúdio: NAZ\n Gêneros: Comédia Ecchi Romance Shounen Escolar"];
+    const subtitulosAnimesExtra=["Gênero: Animação Aventura Comédia"];
     
-    const linkAnimesExtra = ["https://www.anitube.vip/anime/bastard-ankoku-no-hakaishin-ona", "https://darkmahou.org/ao-no-exorcist/","https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download", "https://www.anitube.vip/anime/keijo","https://www.anitube.vip/anime/dungeon-meshi", "https://www.anitube.vip/anime/39f08a00833ef97fdbdb4a5ca62d76231d4b72be"];
-    //Tentar fazer um comando de repetição para mostra todos os conteudos extra sem precisar de muitas linhas.
+    const linkAnimesExtra = ["https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download"];
+    //Comando de repetição para mostra todos os conteudos extra sem precisar de muitas linhas.
     let contador = 0
 
     if(taAparecendo == 0){
@@ -466,14 +490,16 @@ function butextra(){
         tituloconteudo3.style.display = 'none'
 
         
-        for (let i = 0; i < bannerExtra.length; i++){
-            
-            bannerExtra[i].style.backgroundImage ='url(' + imagensAnimesExtra[i] + ')';
-            tituloAExtra[i].textContent = tituloanimesExtra[i];
-            
-            subtituloExtra[i].textContent = subtitulosAnimesExtra[i]; 
+        for (let i = 0; i < imagensAnimesExtra.length; i++){
+            if(tituloAExtra.length >= 0){
 
-            linkExtra[i].href = linkAnimesExtra[i];
+                bannerExtra[i].style.backgroundImage ='url(' + imagensAnimesExtra[i] + ')';
+                tituloAExtra[i].textContent = tituloanimesExtra[i];
+                
+                subtituloExtra[i].textContent = subtitulosAnimesExtra[i]; 
+                linkExtra[i].href = linkAnimesExtra[i];
+                console.log(linkAnimesExtra[i]);
+            }
         }
 
         if(window.innerWidth <= 800 && taAparecendo === 0){

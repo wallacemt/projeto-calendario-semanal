@@ -9,7 +9,7 @@ Desktop: 992px até 1200px
 Grandes telas: acima de 1200px
 */
 
-@media screen and (max-width: 768px){/*Media query para tablet*/
+@media screen and (max-width: 850px){/*Media query para tablet*/
     body{
         background: url(../imagens/img-mq.png) center center;
         background-size: cover;
