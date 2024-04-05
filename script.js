@@ -458,21 +458,26 @@ function butextra(){
     let linkExtra = document.querySelectorAll('[id^="link-extra-"]');
     
     
-    const imagensAnimesExtra=["https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg"];
+    const imagensAnimesExtra=["https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg", "https://i.ytimg.com/vi/evwOpOFXNcI/maxresdefault.jpg"];
     
-    const tituloanimesExtra = ["(Des)encanto"]
+    const tituloanimesExtra = ["(Des)encanto", "Hanma Baki vs. Kengan Ashura"]
 
-    const subtitulosAnimesExtra=["Gênero: Animação Aventura Comédia"];
+    const subtitulosAnimesExtra=["Gênero: Animação Aventura Comédia", "FILME"];
     
-    const linkAnimesExtra = ["https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download"];
+    const linkAnimesExtra = ["https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download", "#"];
     //Comando de repetição para mostra todos os conteudos extra sem precisar de muitas linhas.
     let contador = 0
+    for(let i = 0; i < 6; i++){
+        bannerExtra[i].style.display = 'none';
+        tituloAExtra[i].style.display = 'none'
+        subtituloExtra[i].style.display = "none"; 
+    }
 
     if(taAparecendo == 0){
 
         conteudo.style.display = 'inline'
         conteudoExtra.style.display = 'inline';
-
+        
         let titulo = document.getElementById('titulo')
         titulo.innerText = 'Animes de Extra'
         titulo.style.color = "#EB3215"
@@ -492,6 +497,9 @@ function butextra(){
         
         for (let i = 0; i < imagensAnimesExtra.length; i++){
             if(tituloAExtra.length >= 0){
+                bannerExtra[i].style.display = 'block';
+                tituloAExtra[i].style.display = 'block'
+                subtituloExtra[i].style.display = "block"; 
 
                 bannerExtra[i].style.backgroundImage ='url(' + imagensAnimesExtra[i] + ')';
                 tituloAExtra[i].textContent = tituloanimesExtra[i];
