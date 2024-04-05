@@ -357,7 +357,7 @@ function butsab(){
 
     const imagensAnimesSabado = ["https://m.media-amazon.com/images/I/81IgJ1cGaWS._AC_UF1000,1000_QL80_.jpg","https://www.anitube.vip/media/categories/video/c627366905207421de9d84f3d524cca4.jpg","https://www.anitube.vip/media/categories/video/9115c0b3bac60336151b483fc4594afb.jpg"];
 
-    const linkAnimesSabado = ["https://www.anitube.vip/anime/kaijuu-8-gou", "https://www.anitube.vip/anime/boku-no-hero-academia-7th-season"];
+    const linkAnimesSabado = ["https://www.anitube.vip/anime/kaijuu-8-gou", "https://www.anitube.vip/anime/kimetsu-no-yaiba-hashira-geiko-hen", "https://www.anitube.vip/anime/boku-no-hero-academia-7th-season"];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
