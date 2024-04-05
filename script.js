@@ -184,13 +184,13 @@ function butter(){
 }
 
 function butqua(){
-    const titulosanimesQuarta = ["Kami wa Game ni Ueteiru", "Date A Live V"];
+    const titulosanimesQuarta = ["Kami wa Game ni Ueteiru", "The Fable"];
 
-    const subtitulosAnimesQuarta = ["Estúdio: LIDENFILMS\nGêneros: Ecchi Fantasia Suspense", "Estúdio: Geek Toys\nGêneros: Ação Fantasia Romance Sci-Fi"];
+    const subtitulosAnimesQuarta = ["Estúdio: LIDENFILMS\nGêneros: Ecchi Fantasia Suspense", "Estúdio: Tezuka Productions\nGêneros: Comédia"];
 
-    const imagensAnimesQuarta = ["https://www.anitube.vip/media/categories/video/9a3774c23cb2256c78f82cfa0d5f5df3.jpg", "https://www.anitube.vip/media/categories/video/985a2b9a0a6ae0367dc2aece0b37d833.jpg"];
+    const imagensAnimesQuarta = ["https://www.anitube.vip/media/categories/video/9a3774c23cb2256c78f82cfa0d5f5df3.jpg", "https://www.anitube.vip/media/categories/video/c4f29ac83ccaa1e652e070995366ae5a.jpg"];
 
-    const linkAnimesQuarta = ["https://anitube.vip/anime/kami-wa-game-ni-ueteiru","https://www.anitube.vip/anime/date-a-live-v"];
+    const linkAnimesQuarta = ["https://anitube.vip/anime/kami-wa-game-ni-ueteiru","https://www.anitube.vip/anime/the-fable"];
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
