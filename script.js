@@ -249,7 +249,7 @@ function butqui(){
 
     const imagensAnimesQuinta = ['https://www.intoxianime.com/wp-content/uploads/2023/08/F3sR38mbsAAOeLh.jpg', "https://www.anitube.vip/media/categories/video/ec6ed9842f843b70681e0939032ea443.jpg"];
 
-    const linkAnimesQuinta = ["https://animesonline.nz/animes/sasayaku-you-ni-koi-wo-utau/", "https://www.anitube.vip/anime/wind-breaker"];
+    const linkAnimesQuinta = ["https://www.anitube.vip/anime/sasayaku-you-ni-koi-wo-utau", "https://www.anitube.vip/anime/wind-breaker"];
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
