@@ -351,13 +351,13 @@ function butsex(){
     }
 }
 function butsab(){
-    const titulosanimesSabado = ["Kaiju No. 8","Kimetsu no Yaiba Hashira Training Arc", "My Hero Academia Season 7"]
+    const titulosanimesSabado = ["Kaiju No. 8", "My Hero Academia Season 7"]
 
-    const subtitulosAnimesSabado = ["Estúdio: Production I.G\nGêneros: Ação Sci-Fi","Estúdio: Ufotable\nGêneros: Ação Fantasia","Estúdio: Bones\nGêneros: Ação Shonen" ];
+    const subtitulosAnimesSabado = ["Estúdio: Production I.G\nGêneros: Ação Sci-Fi","Estúdio: Bones\nGêneros: Ação Shonen" ];
 
-    const imagensAnimesSabado = ["https://m.media-amazon.com/images/I/81IgJ1cGaWS._AC_UF1000,1000_QL80_.jpg","https://www.anitube.vip/media/categories/video/c627366905207421de9d84f3d524cca4.jpg","https://www.anitube.vip/media/categories/video/9115c0b3bac60336151b483fc4594afb.jpg"];
+    const imagensAnimesSabado = ["https://m.media-amazon.com/images/I/81IgJ1cGaWS._AC_UF1000,1000_QL80_.jpg","https://www.anitube.vip/media/categories/video/9115c0b3bac60336151b483fc4594afb.jpg"];
 
-    const linkAnimesSabado = ["https://www.anitube.vip/anime/kaijuu-8-gou", "https://www.anitube.vip/anime/kimetsu-no-yaiba-hashira-geiko-hen", "https://www.anitube.vip/anime/boku-no-hero-academia-7th-season"];
+    const linkAnimesSabado = ["https://www.anitube.vip/anime/kaijuu-8-gou", "https://www.anitube.vip/anime/boku-no-hero-academia-7th-season"];
 
     if(taAparecendo == 0){
         //Area de cabeçalho
@@ -366,11 +366,9 @@ function butsab(){
         titulo.innerText = 'Animes de Sabado'
         titulo.style.color = '#feffb3'
         subtitulo1.style.display = 'block'
-        subtitulo2.style.display = 'block'
-        subtitulo3.style.display = "block"
+        subtitulo2.style.display = "block"
         tituloconteudo1.style.display='block'
         tituloconteudo2.style.display = 'block'
-        tituloconteudo3.style.display = 'block'
         //Inserindo intens dentro da section conteudo
 
         banner1.style.backgroundImage ='url(' + imagensAnimesSabado[0] + ')';
@@ -378,24 +376,20 @@ function butsab(){
         tituloconteudo1.innerText = titulosanimesSabado[0] 
         subtitulo1.innerText = subtitulosAnimesSabado[0]
         link1.href = linkAnimesSabado[0];
-    
-        banner2.style.backgroundImage = 'url(' + imagensAnimesSabado[1] + ')';
+        
+        banner2.style.backgroundImage = 'url('+ imagensAnimesSabado[1] + ')';
         banner2.style.display = 'block'
         tituloconteudo2.innerText = titulosanimesSabado[1] 
-        subtitulo2.innerText = subtitulosAnimesSabado[1]
-        link2.href = linkAnimesSabado[1];
-
-        conteudo.style.display = 'block'
+        subtitulo3.innerText = subtitulosAnimesSabado[1]
+        link3.href = linkAnimesSabado[1];
 
         banner3.style.display = 'none'
-        banner3.style.backgroundImage = 'url('+ imagensAnimesSabado[2] + ')';
-        banner3.style.display = 'block'
-        tituloconteudo3.innerText = titulosanimesSabado[2] 
-        subtitulo3.innerText = subtitulosAnimesSabado[2]
-        link3.href = linkAnimesSabado[2];
-
+        subtitulo3.innerText = ''
+        tituloconteudo3.style.display = 'none' 
         
+        conteudo.style.display = 'block'
         conteudoExtra.style.display = 'none';
+        
 
         if(window.innerWidth <= 800 && taAparecendo === 0){
             let menu = document.getElementById('menu')
@@ -409,10 +403,13 @@ function butsab(){
 
 }
 function butdom(){
-    const titulosanimesDomingo = ["One Piece🏴‍☠️"]
-    const subtitulosAnimesDomingo = ["Autor: Eiichiro Oda\nDireção: Konosuke Uda\nEstúdio: Toei Animation\nStatus: Infinito\nGêneros: Ação Aventura Comédia Drama Fantasia Shounen Superpoder"];
-    const imagensAnimesDomingo = ["https://pbs.twimg.com/media/F_0mcEtWEAAVPCm?format=jpg&name=900x900"];
-    const linkAnimesDomingo = ["https://www.anitube.vip/anime/398a5cebfadb2606fbf802b42aad57755b4eae55"];
+    const titulosanimesDomingo = ["One Piece🏴‍☠️", "Kimetsu no Yaiba Hashira Training Arc"];
+
+    const subtitulosAnimesDomingo = ["Autor: Eiichiro Oda\nDireção: Konosuke Uda\nEstúdio: Toei Animation\nStatus: Infinito\nGêneros: Ação Aventura Comédia Drama Fantasia Shounen Superpoder", "Estúdio: Ufotable\nGêneros: Ação Fantasia"];
+
+    const imagensAnimesDomingo = ["https://pbs.twimg.com/media/F_0mcEtWEAAVPCm?format=jpg&name=900x900", "https://www.anitube.vip/media/categories/video/c627366905207421de9d84f3d524cca4.jpg"];
+
+    const linkAnimesDomingo = ["https://www.anitube.vip/anime/398a5cebfadb2606fbf802b42aad57755b4eae55",  "https://www.anitube.vip/anime/kimetsu-no-yaiba-hashira-geiko-hen"];
     if(taAparecendo == 0){
         //Area de cabeçalho
         conteudo.style.display = 'inline'
@@ -420,6 +417,9 @@ function butdom(){
         titulo.style.color = '#feffb3'
         subtitulo1.style.display = 'block'
         tituloconteudo1.style.display='block'
+
+        subtitulo2.style.display = 'block'
+        tituloconteudo2.style.display = 'block'
         
         //Inserindo intens dentro da section conteudo
         banner1.style.backgroundImage ='url(' + imagensAnimesDomingo[0] + ')';
@@ -428,9 +428,11 @@ function butdom(){
         subtitulo1.innerText = subtitulosAnimesDomingo[0]
         link1.href = linkAnimesDomingo[0];
         
-        banner2.style.display = 'none'
-        subtitulo2.innerText = ''
-        tituloconteudo2.style.display = 'none' 
+        banner2.style.backgroundImage = 'url(' + imagensAnimesDomingo[1] + ')';
+        banner2.style.display = 'block'
+        tituloconteudo2.innerText = titulosanimesDomingo[1] 
+        subtitulo2.innerText = subtitulosAnimesDomingo[1]
+        link2.href = linkAnimesDomingo[1];
         
         banner3.style.display = 'none'
         subtitulo3.innerText = ''
