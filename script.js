@@ -381,7 +381,7 @@ function butsab(){
         banner2.style.display = 'block'
         tituloconteudo2.innerText = titulosanimesSabado[1] 
         subtitulo3.innerText = subtitulosAnimesSabado[1]
-        link3.href = linkAnimesSabado[1];
+        link2.href = linkAnimesSabado[1];
 
         banner3.style.display = 'none'
         subtitulo3.innerText = ''
