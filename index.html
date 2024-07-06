@@ -6,28 +6,31 @@
     <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/4585/4585338.png" type="image/x-icon">
     <title>Calendario Semanal</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="estilos/style.css">
-    <link rel="stylesheet" href="estilos/media-query.css">
+    <link rel="stylesheet" href="src/css/style.css">
+    <script src="src/js/script.js" defer></script>
+    <script src="src/js/season.js" defer></script>
+    <script src="src/js/animesSeason.js"></script>
+    <link rel="stylesheet" href="src/css/media-query.css">
 </head>
 <body onload="carregarSem()">
     <main>
         <i id="icone-menu" class="material-icons" onclick="menu()">menu</i>
         <section id="menu">
             <ul>
-                <li class="menu-item" id="seg" onclick="butseg()"><img src="imagens/seg.png" alt=""></li>
-                <li class="menu-item" id="ter" onclick="butter()"><img src="imagens/ter.png" alt=""></li>
-                <li class="menu-item" id="qua" onclick="butqua()"><img src="imagens/qua.png" alt=""></li>
-                <li class="menu-item" id="qui" onclick="butqui()"><img src="imagens/qui.png" alt=""></li>
-                <li class="menu-item" id="sex" onclick="butsex()"><img src="imagens/sex.png" alt=""></li>
-                <li class="menu-item" id="sab" onclick="butsab()"><img src="imagens/sab.png" alt=""></li>
-                <li class="menu-item" id="dom" onclick="butdom()"><img src="imagens/dom.png" alt=""></li>
-                <li class="menu-item" id="extra" onclick="butextra()"><img src="imagens/extra.png" alt=""></li>
+                <li class="menu-item" id="seg" onclick="butseg()"><img src="src/img/seg.png" alt=""></li>
+                <li class="menu-item" id="ter" onclick="butter()"><img src="src/img/ter.png" alt=""></li>
+                <li class="menu-item" id="qua" onclick="butqua()"><img src="src/img/qua.png" alt=""></li>
+                <li class="menu-item" id="qui" onclick="butqui()"><img src="src/img/qui.png" alt=""></li>
+                <li class="menu-item" id="sex" onclick="butsex()"><img src="src/img/sex.png" alt=""></li>
+                <li class="menu-item" id="sab" onclick="butsab()"><img src="src/img/sab.png" alt=""></li>
+                <li class="menu-item" id="dom" onclick="butdom()"><img src="src/img/dom.png" alt=""></li>
+                <li class="menu-item" id="extra" onclick="butextra()"><img src="src/img/extra.png" alt=""></li>
             </ul>
-            <footer>Create by <a href="https://github.com/wallacemt">Wallace</a></footer>
+            <footer>Create by <a href="https://github.com/wallacemt" target="_blank">Wallace</a></footer>
         </section>
 
         <section id="conteudo">
-            <h1 id="titulo"></h1>
+            <h1 id="titulo"></h1><span></span>
             
             <a id="link-1" href="" target="_blank">
                 <div class="conteudo-item" id="conteudo-1"></div>
@@ -95,8 +98,9 @@
         </section>
     </main>
     
-    <script src="script.js"></script>
-    
+    <audio id="radio" class="hide" controls>
+        <source src="https://jazzradio.ice.infomaniak.ch/jazzradio-high.mp3" type="audio/mpeg">
+    </audio>
     <script>
         window.onresize = function mudouTamanho(){
             var menu = document.getElementById('menu')

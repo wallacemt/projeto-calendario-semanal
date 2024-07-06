@@ -1,0 +1,137 @@
+@charset "UTF-8";
+
+/* Typical Device Breakpoints
+-------------------------------
+Pequenas telas: até 600px
+Celular: de 600px até 768px
+Tablet: 768px até 992px
+Desktop: 992px até 1200px
+Grandes telas: acima de 1200px
+*/
+
+@media screen and (max-width: 850px){/*Media query para tablet*/
+    body{
+        
+        background-size: cover;
+    }
+    section#menu img{
+        width: 45px;
+        margin-left: auto;
+        margin-right: 20%;
+    }
+    section#menu{
+        display: none;
+        position: fixed;
+        top: 0;
+    }
+    section#menu li{
+        text-align: right;
+    }
+    section#conteudo{
+        width: 500px;
+        height: calc(80% + 30px);
+        h1{
+            font-size: 1.4em;
+        }
+        p, h2{
+            width: 350px;
+            display: block;
+            columns: 1;
+        }
+    }
+    .conteudo-item{
+        width: 350px;
+    }
+    .conteudo-item:hover{
+        width: 400px;
+    }
+    i#icone-menu{
+        display:block;
+        background-color: #4b12f793;
+        margin: auto;
+        margin-top: 10px;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        padding: 10px;
+        cursor: pointer;
+        position: top;
+        font-size: 2em;
+        text-align: center;
+    }
+    #conteudo{
+        margin-top: auto;
+    }
+    footer{
+        margin-left: 15px;
+    }
+}
+
+
+@media screen and (max-width: 600px){/*Media query para celular*/
+    body{
+        background-size: cover;
+    }
+    section#menu img{
+        width: 40px;
+        margin-left: auto;
+        margin-right: 30%;
+    }
+    section#menu{
+        display: none;
+        position: fixed;
+        top: 0;
+    }
+    section#menu li{
+        text-align: right;
+    }
+    section#conteudo{
+        width: 430px;
+        margin-top: 10px;
+        height: calc(80% + 30px); 
+        h1{
+            font-size: 1.4em;
+        }
+        p, h2{
+            font-size: 1.3em;
+            width: 280px
+        };
+        p{
+            font-size: 0.9em;
+        }
+    }
+    .conteudo-item{
+        width: 290px;
+    }
+    .conteudo-item:hover{
+        width: 300px;
+    }
+    i#icone-menu{
+        display:block;
+        background-color: #4b12f793;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: -10;
+        margin-bottom: 1;
+        color: white;
+        width: 30;
+        height: 30px;
+        padding: 10px;
+        cursor: pointer;
+        position: top;
+        font-size: 2em;
+        text-align: center;
+    }
+    #conteudo{
+        margin-top: auto;
+    }
+    footer{
+        font-size: 0.8em;
+        width: 55px;
+        max-height: 70px;
+        margin-left: 8px;
+        border-radius: 25%;
+        box-sizing: border-box;
+    }
+}
