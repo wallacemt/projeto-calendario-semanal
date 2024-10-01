@@ -49,6 +49,7 @@ section#conteudo{
     background-repeat: no-repeat;
     overflow-x: auto ;
     transition: 1s ease;
+    padding-bottom: 15px;
     h1{
         color: #feffb3;
        
@@ -129,7 +130,7 @@ i#icone-menu{
     height: 500px;
     background-size: cover;
     margin: auto;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     margin-top: 20px;
     align-items: center;
     background: url() center;
@@ -138,6 +139,7 @@ i#icone-menu{
     background-size: cover;
     transition: 1s;
 }
+
 .conteudo-item:hover{
     width: 500px;
     height: 650px;

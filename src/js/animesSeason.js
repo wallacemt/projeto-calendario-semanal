@@ -1,89 +1,95 @@
 const animesSegunda = {
     conteudo1:{
-        tituloBanner: "Tsue to Tsurugi no Wistoria",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/866102370852bb9a9b29f88245582302.jpg",
-        subtituloBanner: "Estúdio: Actas, Bandai Namco Pictures\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/tsue-to-tsurugi-no-wistoria"
+        tituloBanner: "Hitoribocchi no Isekai Kouryaku",
+        imagemBanner: "https://www.anitube.us/media/categories/video/c1e82f6215cd78dfaf51d40d537bc6d4.jpg",
+        subtituloBanner: "Estúdio: Passione, Hayabusa Film\nGêneros: Ação Aventura Fantasia",
+        linkBanner: "https://anitube.us/anime/hitoribocchi-no-isekai-kouryaku"
     },
     conteudo2:{
-        tituloBanner: "Isekai Shikkaku",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/2b8dc9b28cd4b481d10366eca2f8f107.jpg",
-        subtituloBanner: "Estúdio: AtelierPontdarc\nGêneros: Aventura Comédia Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/isekai-shikkaku"
+        tituloBanner: "Youkai Gakkou no Sensei Hajimemashita!",
+        imagemBanner: "https://www.anitube.us/media/categories/video/6320e78b71829ed711ec9cfbd234307d.jpg",
+        subtituloBanner: "Estúdio: Satelight\nGêneros: Comédia Fantasia",
+        linkBanner: "https://www.anitube.us/anime/youkai-gakkou-no-sensei-hajimemashita"
+    },
+    conteudo3:{
+        tituloBanner: "Kamonohashi Ron no Kindan Suiri 2nd ",
+        imagemBanner: "https://www.anitube.us/media/categories/video/9b5ff551172607fa0ca7eaad23514c7e.jpg",
+        subtituloBanner: "Estúdio: Diomedéa\nGêneros: Comédia Mistério",
+        linkBanner: "https://www.anitube.us/anime/kamonohashi-ron-no-kindan-suiri-2nd-season"
     }
 }
 
 const animesTerca = {
     conteudo1: {
-        imagemBanner: "https://www.anitube.vip/media/categories/video/98c6cad52e53452af0a74bfb43ca34f6.jpg",
-        tituloBanner: "Tokidoki Bosotto Russia-go",
-        subtituloBanner: "Estúdio: Doga Kobo\nGêneros: Comédia Romance",
-        linkBanner: "https://www.anitube.vip/anime/tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
+        tituloBanner: "Kimi wa Meido-sama.",
+        imagemBanner: "https://www.anitube.us/media/categories/video/52402ec7cb6e5abfd7f416b37bbf8a85.jpg",
+        subtituloBanner: "Estúdio: Felix Film\nGêneros: Comédia",
+        linkBanner: "https://www.anitube.us/anime/kimi-wa-meido-sama"
     },
     conteudo2: {
-        imagemBanner: "https://www.anitube.vip/media/categories/video/137cc046a03a23d40de605447c0467dd.jpg",
-        tituloBanner: "Megami no Café Terrace",
-        subtituloBanner: "Estúdio: Tezuka Productions\nGêneros: Comédia Ecchi Romance",
-        linkBanner: "https://www.anitube.vip/anime/megami-no-cafe-terrace-2nd-season"
+        tituloBanner: "Kekkon suru tte, Hontou desu ka",
+        imagemBanner: "https://www.anitube.us/media/categories/video/5af968913bec59add1662306f13606f9.jpg",
+        subtituloBanner: "Estúdio: Ashi Productions\nGêneros: Romance",
+        linkBanner: "https://www.anitube.us/anime/kekkon-suru-tte-hontou-desu-ka"
     }
 }
 
 const animesQuarta = {
     conteudo1: {
-        tituloBanner: "Naze Boku no Sekai",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/14cdda52cd28c8ef05e2e04fa45c87f1.jpg",
-        subtituloBanner: "Estúdio: Project No.9\nGêneros: Ação Fantasia Sci-Fi",
-        linkBanner: "https://www.anitube.vip/anime/naze-boku-no-sekai-wo-daremo-oboeteinai-no-ka"
+        tituloBanner: "Maou 2099",
+        imagemBanner: "https://www.anitube.us/media/categories/video/c09d8e37054eaab9b2fe4924356ff53e.jpg",
+        subtituloBanner: "Estúdio: J.C.Staff\nGêneros: Ação Fantasia Sci-Fi",
+        linkBanner: "https://www.anitube.us/anime/maou-2099"
     },
     conteudo2: {
-        tituloBanner: "Maougun Saikyou",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/b4f622b0137725556084f36695822ee8.jpg",
-        subtituloBanner: "Estúdio: Studio A-CAT Productions\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/maougun-saikyou-no-majutsushi-wa-ningen-datta"
+        tituloBanner: "Shangri-La Frontier 2nd",
+        imagemBanner: "https://www.anitube.us/media/categories/video/e510e5861dc6136e2ef1c0c873db0a92.jpg",
+        subtituloBanner: "Estúdio: C2C\nGêneros: Ação Aventura Fantasia",
+        linkBanner: "https://www.anitube.us/anime/shangri-la-frontier-kusoge-hunter-kamige-ni-idoman-to-su-2nd-season"
     }
 };
 
 const animesQuinta = {
     conteudo1: {
-        tituloBanner: "Hazurewaku no Joutai Ijou Skill",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/9548e90265f38ead95821af5f3b8e443.jpg",
-        subtituloBanner: "Estúdio: Seven Arcs\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/hazurewaku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-wo-juurin-suru-made"
+        tituloBanner: "Sayounara Ryuusei, Konnichiwa Jinsei",
+        imagemBanner: "https://www.anitube.us/media/categories/video/e0096a3bcfa5a2ac9901775766a18bd2.jpg",
+        subtituloBanner: "Estúdio: SynergySP, Vega Entertainment\nGêneros: Ação Aventura Fantasia",
+        linkBanner: "https://www.anitube.us/anime/sayounara-ryuusei-konnichiwa-jinsei"
     },
     conteudo2: {
-        tituloBanner: "Shinmai Ossan Boukensha",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/4a8b4c4f67e42507a12653ddec7f803d.jpg",
-        subtituloBanner: "Estúdio: Yumeta Company\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/shinmai-ossan-boukensha-saikyou-party-ni-shinu-hodo-kitaerarete-muteki-ni-naru"
+        tituloBanner: "Nageki no Bourei wa Intai shitai",
+        imagemBanner: "https://www.anitube.us/media/categories/video/663f1f4e4e78504f5c9ee584b97fe14c.jpg",
+        subtituloBanner: "Estúdio: Zero-G\nGêneros: Ação Aventura Fantasia",
+        linkBanner: "https://www.anitube.us/anime/nageki-no-bourei-wa-intai-shitai"
     }
 };
 
 const animesSexta = {
     conteudo1: {
-        tituloBanner: "Ore wa Subete wo Parry suru",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/7b97a2649f020f4f783a633a2a5dad77.jpg",
-        subtituloBanner: "Estúdio: OLM\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/ore-wa-subete-wo-parry-suru-gyaku-kanchigai-no-sekai-saikyou-wa-boukensha-ni-naritai"
+        tituloBanner: "Mecha-Ude: Mechanical Arms",
+        imagemBanner: "https://www.anitube.us/media/categories/video/bbc36605e481523edc715abfd22d272b.jpg",
+        subtituloBanner: "Estúdio: OLM\nGêneros: Ação Sci-Fi",
+        linkBanner: "https://www.anitube.us/anime/mecha-ude-tv"
     },
     conteudo2: {
-        tituloBanner: "Mob kara Hajimaru",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/78204df7624cd0d745e33d3e3b0ab4b5.jpg",
-        subtituloBanner: "Estúdio: Gekkou\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/mob-kara-hajimaru-tansaku-eiyuutan"
+        tituloBanner: "Blue Exorcist: Beyond the Snow Saga",
+        imagemBanner: "https://www.anitube.us/media/categories/video/76d3bac70e82dafb18692a2af93cf32c.jpg",
+        subtituloBanner: "Estúdio: Studio VOLN\nGêneros: Ação Aventura Fantasia",
+        linkBanner: "https://www.anitube.us/anime/ao-no-exorcist-yuki-no-hate-hen"
     }
 };
 const animesSabado = {
     conteudo1: {
-        tituloBanner: "Tower of God Season 2",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/1b3be97f332334a9fab0311966efebb5.jpg",
-        subtituloBanner: "Estúdio: The Answer Studio\nGêneros: Ação Aventura Drama Fantasia Mistério",
-        linkBanner: "https://www.anitube.vip/anime/kami-no-tou-ouji-no-kikan"
+        tituloBanner: "DAN DA DAN",
+        imagemBanner: "https://www.anitube.us/media/categories/video/5eeec20c3fb193da9cbc38d2f8a4303c.jpg",
+        subtituloBanner: "Estúdio: Science SARU\nGêneros: Ação Comédia Sobrenatural",
+        linkBanner: "https://www.anitube.us/anime/dandadan"
     },
     conteudo2: {
-        tituloBanner: "Fairy Tail 100nen quest",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/02e49ba702b18b9e3d4b9a026c66981b.jpg",
-        subtituloBanner: "Estúdio: J.C.Staff\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/fairy-tail-100-nen-quest"
+        tituloBanner: "Blue Lock 2nd Season",
+        imagemBanner: "https://www.anitube.us/media/categories/video/25f9519f238e4b059c7e36de2f98baa1.jpg",
+        subtituloBanner: "Estúdio: 8bi\nGêneros: Esportes",
+        linkBanner: "https://www.anitube.us/anime/blue-lock-vs-u-20-japan"
     }
 };
 const animesDomingo = {
@@ -94,23 +100,17 @@ const animesDomingo = {
         linkBanner: "https://www.anitube.vip/anime/398a5cebfadb2606fbf802b42aad57755b4eae55"
     },
     conteudo2: {
-        tituloBanner: "NieR:Automata Ver1.1a Part 2",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/f1cd74018ae0d7502faf660d7141bb65.jpg",
-        subtituloBanner: "Estúdio: A-1 Pictures\nGêneros: Ação Fantasia Sci-Fi",
-        linkBanner: "https://www.anitube.vip/anime/nier-automata-ver1-1a-part-2"
+        tituloBanner: "Bleach: Sennen Kessen-hen - Soukoku-tan",
+        imagemBanner: "https://www.anitube.us/media/categories/video/1aa939cf35391b2c75fe0fe4f15b9375.jpg",
+        subtituloBanner: "Estúdio: Pierrot Films\nGêneros: Ação Aventura Fantasia",
+        linkBanner: "https://www.anitube.us/anime/bleach-sennen-kessen-hen-soukoku-tan"
     }
 };
-const animesExtra = {
-    conteudo1: {
-        tituloBanner: "(Des)encanto",
-        imagemBanner: "https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg",
-        subtituloBanner: "Gênero: Animação Aventura Comédia",
-        linkBanner: "https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download"
-    },
-    conteudo2: {
-        tituloBanner: "KENGAN ASHURA",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/1b64e998d51c7d69647c0722e5bd797c.jpg",
-        subtituloBanner: "Estúdio: Larx Entertainment\nGêneros: Ação Artes Marciais CGI",
-        linkBanner: "https://www.anitube.vip/anime/kengan-ashura-season-2-part-2"
-    }
-};
+const animesExtra = [
+    {conteudo1: {
+        tituloBanner: "BEASTARS",
+        imagemBanner: "https://animenew.com.br/wp-content/uploads/2024/03/GJPN2t8XQAAZ-2m-jpg.webp",
+        subtituloBanner: "Gênero: Drama Romance Fantasia",
+        linkBanner: "https://www.netflix.com/br/title/81054847"
+    }}
+];

@@ -80,10 +80,10 @@ function butseg(){
         titulo.style.color = '#feffb3';
         subtitulo1.style.display = 'block';
         subtitulo2.style.display = 'block';
-        subtitulo3.style.display = 'none';
+        subtitulo3.style.display = 'block';
         tituloconteudo1.style.display = 'block';
         tituloconteudo2.style.display = 'block';
-        tituloconteudo3.style.display = 'none';
+        tituloconteudo3.style.display = 'block';
 
         //Inserindo intens dentro da section conteudo
 
@@ -100,12 +100,12 @@ function butseg(){
         subtitulo2.innerText = animesSegunda.conteudo2.subtituloBanner;
         link2.href = animesSegunda.conteudo2.linkBanner;
         
-        banner3.style.display = 'none'
-        // banner3.style.backgroundImage = 'url('+ imagensAnimesSegunda[0] + ')';
-        // banner3.style.display = 'block'
-        // tituloconteudo3.innerText = titulosanimesSegunda[2] 
-        // subtitulo3.innerText = subtitulosAnimesSegunda[2]
-        // link3.href = linkAnimesSegunda[2];
+        banner3.style.display = 'block';
+        banner3.style.backgroundImage = 'url('+ animesSegunda.conteudo3.imagemBanner + ')';
+        banner3.style.display = 'block'
+        tituloconteudo3.innerText = animesSegunda.conteudo3.tituloBanner 
+        subtitulo3.innerText = animesSegunda.conteudo3.subtituloBanner
+        link3.href = animesSegunda.conteudo3.linkBanner
         
         
 
@@ -415,14 +415,6 @@ function butextra(){
     let subtituloExtra = document.querySelectorAll('[id^="subtitulo-extra-"]');
     let linkExtra = document.querySelectorAll('[id^="link-extra-"]');
     
-    
-    const imagensAnimesExtra=["https://image.tmdb.org/t/p/w342/yWLGhF6Rvv7oWC9ozzO0rvfQwYt.jpg", "https://www.anitube.vip/media/categories/video/1b64e998d51c7d69647c0722e5bd797c.jpg"];
-    
-    const tituloanimesExtra = ["(Des)encanto", "KENGAN ASHURA"]
-
-    const subtitulosAnimesExtra=["Gênero: Animação Aventura Comédia", "Estúdio: Larx Entertainment\nGêneros: Ação Artes Marciais CGI"];
-    
-    const linkAnimesExtra = ["https://comandotorrents.to/desencanto-1a-temporada-completa-torrent-2018-dual-audio-web-dl-720p-download", "https://www.anitube.vip/anime/kengan-ashura-season-2-part-2"];
     //Comando de repetição para mostra todos os conteudos extra sem precisar de muitas linhas.
     let contador = 0
     for(let i = 0; i < 6; i++){
@@ -453,17 +445,18 @@ function butextra(){
         tituloconteudo3.style.display = 'none'
 
         
-        for (let i = 0; i < imagensAnimesExtra.length; i++){
+        for (let i = 0; i < animesExtra.length; i++){
             if(tituloAExtra.length >= 0){
                 bannerExtra[i].style.display = 'block';
                 tituloAExtra[i].style.display = 'block'
                 subtituloExtra[i].style.display = "block"; 
 
-                bannerExtra[i].style.backgroundImage ='url(' + animesExtra['conteudo' + (i + 1)].imagemBanner + ')';
-                tituloAExtra[i].textContent = animesExtra['conteudo' + (i + 1)].tituloBanner;
-                
-                subtituloExtra[i].textContent = animesExtra['conteudo' + (i + 1)].subtituloBanner; 
-                linkExtra[i].href = animesExtra['conteudo' + (i + 1)].linkBanner;
+                const conteudoKey = `conteudo${i + 1}`;
+
+                bannerExtra[i].style.backgroundImage = `url(${animesExtra[i][conteudoKey].imagemBanner})`;
+                tituloAExtra[i].textContent = animesExtra[i][conteudoKey].tituloBanner;
+                subtituloExtra[i].textContent = animesExtra[i][conteudoKey].subtituloBanner;
+                linkExtra[i].href = animesExtra[i][conteudoKey].linkBanner; 
             }
         }
 
@@ -472,7 +465,7 @@ function butextra(){
             menu.style.display = 'none'
         }
 
-        taAparecendo +=1
+        taAparecendo += 1
     }else{
         conteudo.style.display = 'none'
         taAparecendo = 0;
