@@ -5,10 +5,10 @@ function getSeason() {
 
     // Definição das datas de início e término das estações
     const seasons = [
-        { name: "inverno", start: new Date(year, 11, 21), end: new Date(year, 2, 20) },  // Inverno: 21 de Dez - 20 de Mar
+        { name: "inverno", start: new Date(year, 11, 20), end: new Date(year, 2, 20) },  // Inverno: 21 de Dez - 20 de Mar
         { name: "primavera", start: new Date(year, 2, 21), end: new Date(year, 5, 20) },   // Primavera: 21 de Mar - 20 de Jun
         { name: "verao", start: new Date(year, 5, 21), end: new Date(year, 8, 20) },   // Verão: 21 de Jun - 20 de Set
-        { name: "outono", start: new Date(year, 8, 21), end: new Date(year, 11, 20) }   // Outono: 21 de Set - 20 de Dez
+        { name: "outono", start: new Date(year, 8, 21), end: new Date(year, 11, 19) }   // Outono: 21 de Set - 20 de Dez
     ];
 
     // Ajuste para a última data do inverno
