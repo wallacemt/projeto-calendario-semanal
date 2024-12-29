@@ -80,10 +80,8 @@ function butseg(){
         titulo.style.color = '#feffb3';
         subtitulo1.style.display = 'block';
         subtitulo2.style.display = 'block';
-        subtitulo3.style.display = 'block';
         tituloconteudo1.style.display = 'block';
         tituloconteudo2.style.display = 'block';
-        tituloconteudo3.style.display = 'block';
 
         //Inserindo intens dentro da section conteudo
 
@@ -100,17 +98,10 @@ function butseg(){
         subtitulo2.innerText = animesSegunda.conteudo2.subtituloBanner;
         link2.href = animesSegunda.conteudo2.linkBanner;
         
-        banner3.style.display = 'block';
-        banner3.style.backgroundImage = 'url('+ animesSegunda.conteudo3.imagemBanner + ')';
-        banner3.style.display = 'block'
-        tituloconteudo3.innerText = animesSegunda.conteudo3.tituloBanner 
-        subtitulo3.innerText = animesSegunda.conteudo3.subtituloBanner
-        link3.href = animesSegunda.conteudo3.linkBanner
+        banner3.style.display = 'none'
+        subtitulo3.innerText = ''
+        tituloconteudo3.style.display = 'none'
         
-        
-
-
-
         conteudo.style.display = 'block'
         conteudoExtra.style.display = 'none';
         if(window.innerWidth <= 800 && taAparecendo === 0){
@@ -383,17 +374,21 @@ function butdom(){
         subtitulo1.innerText = animesDomingo.conteudo1.subtituloBanner;
         link1.href = animesDomingo.conteudo1.linkBanner;
 
-        banner2.style.backgroundImage = 'url(' + animesDomingo.conteudo2.imagemBanner + ')';
-        banner2.style.display = 'block';
-        tituloconteudo2.innerText = animesDomingo.conteudo2.tituloBanner;
-        subtitulo2.innerText = animesDomingo.conteudo2.subtituloBanner;
-        link2.href = animesDomingo.conteudo2.linkBanner;
+        // banner2.style.backgroundImage = 'url(' + animesDomingo.conteudo2.imagemBanner + ')';
+        // banner2.style.display = 'block';
+        // tituloconteudo2.innerText = animesDomingo.conteudo2.tituloBanner;
+        // subtitulo2.innerText = animesDomingo.conteudo2.subtituloBanner;
+        // link2.href = animesDomingo.conteudo2.linkBanner;
 
         
         banner3.style.display = 'none'
         subtitulo3.innerText = ''
         tituloconteudo3.style.display = 'none' 
         
+        banner2.style.display = 'none'
+        subtitulo2.innerText = ''
+        tituloconteudo2.style.display = 'none' 
+
         conteudo.style.display = 'block'
         conteudoExtra.style.display = 'none';
         
