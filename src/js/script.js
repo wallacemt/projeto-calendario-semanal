@@ -466,3 +466,4 @@ function butextra(){
         taAparecendo = 0;
     }
 }
+

@@ -2,24 +2,22 @@
 function getSeason() {
     const date = new Date();
     const year = date.getFullYear();
+    const month = date.getMonth();
 
-    // Definição das datas de início e término das estações
+    // Defini o das datas de in cio e t rmino das esta es
     const seasons = [
-        { name: "inverno", start: new Date(year, 11, 20), end: new Date(year, 2, 20) },  // Inverno: 21 de Dez - 20 de Mar
-        { name: "primavera", start: new Date(year, 2, 21), end: new Date(year, 5, 20) },   // Primavera: 21 de Mar - 20 de Jun
-        { name: "verao", start: new Date(year, 5, 21), end: new Date(year, 8, 20) },   // Verão: 21 de Jun - 20 de Set
-        { name: "outono", start: new Date(year, 8, 21), end: new Date(year, 11, 19) }   // Outono: 21 de Set - 20 de Dez
+        { name: "inverno", start: 0, end: 2 },  // Inverno: Dez - Mar o
+        { name: "primavera", start: 2, end: 5 },   // Primavera: Mar o - Junho
+        { name: "verao", start: 5, end: 8 },   // Ver o: Junho - Setembro
+        { name: "outono", start: 8, end: 11 }   // Outono: Setembro - Dezembro
     ];
 
-    // Ajuste para a última data do inverno
-    seasons[0].end.setFullYear(year + 1);
-
     for (let season of seasons) {
-        if (date >= season.start && date <= season.end) {
+        if (month >= season.start && month < season.end) {
             return season.name;
         }
     }
-    // Caso a data não corresponda a nenhuma estação (fica com o padrao)
+    // Caso a data n o corresponda a nenhuma est a o (fica com o padr o)
     return 'padrao';
 }
 
