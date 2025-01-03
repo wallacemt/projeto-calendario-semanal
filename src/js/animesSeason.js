@@ -54,7 +54,7 @@ const animesQuinta = {
         tituloBanner: "Magic Maker: Isekai Mahou no Tsukurikata",
         imagemBanner: "https://i0.wp.com/www.otakupt.com/wp-content/uploads/2024/11/Magic-Maker-Isekai-Mahou-no-Tsukurikata-anime-visual-2-1-scaled.jpg",
         subtituloBanner: "Estúdio: Studio Deen\nGêneros: Fantasia",
-        linkBanner: "https://www.anitube.us/anime/nageki-no-bourei-wa-intai-shitai"
+        linkBanner: "https://www.anitube.vip/anime/magic-maker-isekai-mahou-no-tsukurikata"
     }
 };
 
