@@ -18,7 +18,7 @@ const animesTerca = {
         tituloBanner: "Kono Kaisha ni Suki na Hito ga Imasu",
         imagemBanner: "https://preview.redd.it/ril1qoafgzh91.jpg?auto=webp&s=b2e424994d33dd14f27c5b558147e1f862af8167",
         subtituloBanner: "Estúdio: Millepensee\nGêneros: Comédia, Romance",
-        linkBanner: "#"
+        linkBanner: "https://www.anitube.vip/download/anime/kono-kaisha-ni-suki-na-hito-ga-imasu"
     },
     conteudo2: {
         tituloBanner: "Okinawa de Suki ni Natta Ko",
