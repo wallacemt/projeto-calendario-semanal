@@ -75,7 +75,7 @@ const animesSexta = {
 const animesSabado = {
     conteudo1: {
         tituloBanner: "Ore dake Level Up na Ken Season 2: Arise from the Shadow",
-        imagemBanner: "https://preview.redd.it/ta2u6enmiya51.png?auto=webp&s=99ff57f5b7bd59d09749f3f3f53bdca086cccb10",
+        imagemBanner: "https://www.anitube.vip/anime/9b40692eece4e4030af754138555be0435a215d1",
         subtituloBanner: "Estúdio: A-1 Pictures\nGêneros: Ação Aventura Fantasia",
         linkBanner: "https://www.anitube.vip/anime/ore-dake-level-up-na-ken-season-2-arise-from-the-shadow"
     },
