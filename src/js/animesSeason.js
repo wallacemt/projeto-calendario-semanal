@@ -75,9 +75,9 @@ const animesSexta = {
 const animesSabado = {
     conteudo1: {
         tituloBanner: "Ore dake Level Up na Ken Season 2: Arise from the Shadow",
-        imagemBanner: "https://www.anitube.vip/anime/9b40692eece4e4030af754138555be0435a215d1",
+        imagemBanner: "https://www.anitube.vip/media/categories/video/a24002ac19798dd540b423ffe79c6726.jpg",
         subtituloBanner: "Estúdio: A-1 Pictures\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/ore-dake-level-up-na-ken-season-2-arise-from-the-shadow"
+        linkBanner: "https://www.anitube.vip/anime/2fb91a215b53e7b3d3416c707b39a990f835820e"
     },
     conteudo2: {
         tituloBanner: "Dr. Stone: Science Future",
