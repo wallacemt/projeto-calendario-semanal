@@ -4,12 +4,11 @@ function getSeason() {
     const year = date.getFullYear();
     const month = date.getMonth();
 
-    // Defini o das datas de in cio e t rmino das esta es
     const seasons = [
-        { name: "inverno", start: 0, end: 2 },  // Inverno: Dez - Mar o
-        { name: "primavera", start: 2, end: 5 },   // Primavera: Mar o - Junho
-        { name: "verao", start: 5, end: 8 },   // Ver o: Junho - Setembro
-        { name: "outono", start: 8, end: 11 }   // Outono: Setembro - Dezembro
+        { name: "inverno", start: 0, end: 2 },  
+        { name: "primavera", start: 2, end: 5 },   
+        { name: "verao", start: 5, end: 8 },   
+        { name: "outono", start: 8, end: 11 }   
     ];
 
     for (let season of seasons) {
@@ -17,7 +16,6 @@ function getSeason() {
             return season.name;
         }
     }
-    // Caso a data n o corresponda a nenhuma est a o (fica com o padr o)
     return 'padrao';
 }
 

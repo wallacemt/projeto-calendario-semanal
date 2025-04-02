@@ -1,104 +1,122 @@
 const animesSegunda = {
     conteudo1:{
-        tituloBanner: "Guild no Uketsukejou desu ga",
-        imagemBanner: "https://animefire.plus/img/animes/guild-no-uketsukejou-desu-ga-zangyou-wa-iya-nanode-boss-wo-solo-toubatsu-shiyou-to-omoimasu-large.webp",
-        subtituloBanner: "Estúdio: CloverWorks \nGêneros: Ação Aventura Comédia Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/guild-no-uketsukejou-desu-ga-zangyou-wa-iya-nanode-boss-wo-solo-toubatsu-shiyou-to-omoimasu"
+        tituloBanner: "Witch Watch",
+        imagemBanner: "https://m.media-amazon.com/images/M/MV5BYzI5MDUxMmMtNTM5ZC00Yzg2LTllNGItMjg1Yzc2MGRhZWYyXkEyXkFqcGc@._V1_.jpg",
+        subtituloBanner: "Estúdio:  Bibury Animation Studios \n\nGêneros: Comédia Shounnen Supernatural",
+        linkBanner: "https://smartanimes.com/anime/witch-watch"
     },
     conteudo2:{
-        tituloBanner: "S-Rank Monster no Behemoth dakedo",
-        imagemBanner: "https://www.intoxianime.com/wp-content/uploads/2024/07/GRkCPxTbsAAh_yR-748x1024.jpeg",
-        subtituloBanner: "Estúdio: Zero-G, Saber Works\nGêneros:Ação Aventura Comédia Ecchi Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/s-rank-monster-no-behemoth-dakedo-neko-to-machigawarete-elf-musume-no-pet-toshite-kurashitemasu"
+        tituloBanner: "Saikyou no Ousama",
+        imagemBanner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx183161-ONITwH8ojpaE.png",
+        subtituloBanner: "Estúdio:  Studio A-CAT \n\nGêneros: Fantasy, Reincarnation",
+        linkBanner: "https://smartanimes.com/anime/saikyou-no-ousama-nidome-no-jinsei-wa-nani-wo-suru"
     }
 }
 
 const animesTerca = {
-    conteudo1: {
-        tituloBanner: "Kono Kaisha ni Suki na Hito ga Imasu",
-        imagemBanner: "https://preview.redd.it/ril1qoafgzh91.jpg?auto=webp&s=b2e424994d33dd14f27c5b558147e1f862af8167",
-        subtituloBanner: "Estúdio: Millepensee\nGêneros: Comédia, Romance",
-        linkBanner: "https://www.anitube.vip/download/anime/kono-kaisha-ni-suki-na-hito-ga-imasu"
-    },
     conteudo2: {
-        tituloBanner: "Okinawa de Suki ni Natta Ko",
-        imagemBanner: "https://a.storyblok.com/f/178900/931x1320/62d47b31aa/okinawa-de-suki-ni-natta-ko-ga-hogen-sugite-tsura-sugiru-key-visual.jpg",
-        subtituloBanner: "Estúdio: Millepensee\nGêneros: Comédia, Romance",
-        linkBanner: "https://www.anitube.vip/anime/okinawa-de-suki-ni-natta-ko-ga-hougen-sugite-tsurasugiru"
+        tituloBanner: "Yandere Dark Elf",
+        imagemBanner: "https://www.anitube.vip/media/categories/video/837af0d6889e135f57064fdb3abee5fe.jpg",
+        subtituloBanner: "Estúdio: Elias\n\nGêneros: Comédia, Fantasia",
+        linkBanner: "https://www.anitube.vip/anime/chotto-dake-ai-ga-omoi-dark-elf-ga-isekai-kara-oikaketekita"
+    },
+    conteudo1:{
+        tituloBanner: "Aharen-san wa Hakarenai Season 2",
+        imagemBanner: "https://a.storyblok.com/f/178900/1072x1500/dea85a608e/aharen-san-wa-hakarenai-key-visual.jpg",
+        subtituloBanner: "Estúdio:  Felix Film \n\nGêneros: Comedy, Love Status Quo, Romance, School, Shounen",
+        linkBanner: "https://smartanimes.com/anime/aharen-san-wa-hakarenai-season-2"
     }
 }
 
 const animesQuarta = {
     conteudo1: {
-        tituloBanner: "Übel Blatt",
-        imagemBanner: "https://a.storyblok.com/f/178900/750x1039/e410a35639/ubel_blatt_key_art.jpg",
-        subtituloBanner: "Estúdio: Satelight, Staple Entertainment\nGêneros: Ação Aventura Ecchi Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/ubel-blatt"
+        tituloBanner: "Wind Breaker Season 2",
+        imagemBanner: "https://a.storyblok.com/f/178900/1064x1506/f3ef268371/wind-breaker-season-2-key-visual-en.jpg",
+        subtituloBanner: "Estúdio: Satelight, Staple Entertainment\n\nGêneros: Action, Delinquents, School",
+        linkBanner: "https://smartanimes.com/anime/wind-breaker-season-2"
     },
     conteudo2: {
         tituloBanner: "Fuguushoku Kanteishi ga Jitsu wa Saikyou Datta",
-        imagemBanner: "https://a.storyblok.com/f/178900/750x1069/6e242fbce7/even_given_the_worthless_appraiser_class_im_actually_the_strongest_key_art.jpg",
-        subtituloBanner: "Estúdio:Okuruto Noboru\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/fuguushoku-kanteishi-ga-jitsu-wa-saikyou-datta"
+        imagemBanner: "https://cdn.animenewsnetwork.com/thumbnails/max600x600/cms/news.8/221448/rock-is-a-lady-modesty-lilisa.jpg",
+        subtituloBanner: "Estúdio: Bandai Namco Pictures\n\nGêneros: Comedy Music School Seinen",
+        linkBanner: "http://smartanimes.com/anime/rock-wa-lady-no-tashinami-deshite"
     }
 };
 
 const animesQuinta = {
     conteudo1: {
-        tituloBanner: "A-Rank Party wo Ridatsu shita",
-        imagemBanner: "https://www.nautiljon.com/images/manga_volumes/12/02/a_rank_party_wo_ridatsu_shita_ore_wa_moto_oshiego_tachi_to_meikyuu_shinbu_wo_mezasu_2972620.webp",
-        subtituloBanner: "Estúdio: Bandai Namco Pictures\nGêneros:Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/a-rank-party-wo-ridatsu-shita-ore-wa-moto-oshiego-tachi-to-meikyuu-shinbu-wo-mezasu"
+        tituloBanner: "Kijin Gentoushou",
+        imagemBanner: "https://www.intoxianime.com/wp-content/uploads/2025/04/GnXwka8a8AAIKq2-724x1024.jpg",
+        subtituloBanner: "Estúdio: Yokohama Animation Laboratory\n\nGêneros:Action, Adventure, Fantasy, Historical",
+        linkBanner: "https://smartanimes.com/anime/kijin-gentoushou"
     },
     conteudo2: {
-        tituloBanner: "Magic Maker: Isekai Mahou no Tsukurikata",
-        imagemBanner: "https://i0.wp.com/www.otakupt.com/wp-content/uploads/2024/11/Magic-Maker-Isekai-Mahou-no-Tsukurikata-anime-visual-2-1-scaled.jpg",
-        subtituloBanner: "Estúdio: Studio Deen\nGêneros: Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/magic-maker-isekai-mahou-no-tsukurikata"
+        tituloBanner: "Lazarus",
+        imagemBanner: "https://external-preview.redd.it/-a-qnliPNmV_H3ovXuU2Ek_yfpQrI66X9cLOtQEdEMs.jpg?auto=webp&s=2c92340a84a91d15a3aeb8ceb6bd17f1eddec378",
+        subtituloBanner: "Estúdio: MAPPA\n\nGêneros: Sci-Fi",
+        linkBanner: "https://smartanimes.com/anime/lazarus"
     }
 };
 
 const animesSexta = {
     conteudo1: {
-        tituloBanner: "Sakamoto Days",
-        imagemBanner: "https://m.media-amazon.com/images/I/81keqrZAVYL.jpg",
-        subtituloBanner: "Estúdio: TMS Entertainment\nGêneros:Ação Comédia",
-        linkBanner: "https://www.anitube.vip/anime/sakamoto-days"
+        tituloBanner: "The Super Cube",
+        imagemBanner: "https://m.media-amazon.com/images/M/MV5BMzc0NzlhZWEtYjgzMS00MDVmLWFiYWItZTAyYjA0Yzg2ZjIzXkEyXkFqcGc@._V1_.jpg",
+        subtituloBanner: "Estúdio: TMS Entertainment\n\nGêneros:Action, Adventure, Fantasy",
+        linkBanner: "https://smartanimes.com/anime/the-super-cube"
     },
     conteudo2: {
-        tituloBanner: "Izure Saikyou no Renkinjutsushi?",
-        imagemBanner: "https://static.wixstatic.com/media/dd83a7_7cedb6f09c7a4088bdf85269ff4514d6~mv2.jpg/v1/fill/w_568,h_804,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/dd83a7_7cedb6f09c7a4088bdf85269ff4514d6~mv2.jpg",
-        subtituloBanner: "Estúdio: Studio Comet\nGêneros: Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/izure-saikyou-no-renkinjutsushi"
+        tituloBanner: "Tu Bian Yingxiong X",
+        imagemBanner: "https://a.storyblok.com/f/178900/750x1060/b6b3c8c6e8/tobeherox_kv2.png",
+        subtituloBanner: "Estúdio:  LAN Studio, Paper Plane Animation Studio\n\nGêneros:Action Super Power",
+        linkBanner: "https://smartanimes.com/anime/tu-bian-yingxiong-x"
     }
 };
 const animesSabado = {
     conteudo1: {
-        tituloBanner: "Ore dake Level Up na Ken Season 2: Arise from the Shadow",
-        imagemBanner: "https://www.anitube.vip/media/categories/video/a24002ac19798dd540b423ffe79c6726.jpg",
-        subtituloBanner: "Estúdio: A-1 Pictures\nGêneros: Ação Aventura Fantasia",
-        linkBanner: "https://www.anitube.vip/anime/2fb91a215b53e7b3d3416c707b39a990f835820e"
+        tituloBanner: "Enen no Shouboutai: San no Shou",
+        imagemBanner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx149118-AOQb0xuTssGl.jpg",
+        subtituloBanner: "Estúdio: David Production\n\nGêneros: Action, Fantasy, Sci-Fi, Shounen, Urban Fantasy",
+        linkBanner: "https://smartanimes.com/anime/enen-no-shouboutai-san-no-shou"
     },
     conteudo2: {
-        tituloBanner: "Dr. Stone: Science Future",
-        imagemBanner: "https://a.storyblok.com/f/178900/960x1357/d42021c586/dr-stone-science-future-kv.jpeg",
-        subtituloBanner: "Estúdio: TMS Entertainment\nGêneros: Aventura Comédia Sci-Fi",
-        linkBanner: "https://www.anitube.vip/anime/dr-stone-science-future"
+        tituloBanner: "Devil May Cry (2025)",
+        imagemBanner: "https://m.media-amazon.com/images/M/MV5BMjJiZjUxYzEtY2IxZC00MGRmLTg5Y2EtMDhmN2IyYTljYjhhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+        subtituloBanner: "Estúdio: TMS Entertainment\n\nGêneros: Fantasia",
+        linkBanner: "https://www.netflix.com/br/title/81506915"
     }
 };
 const animesDomingo = {
     conteudo1: {
         tituloBanner: "One Piece🏴‍☠️",
         imagemBanner: "https://assets.gamearena.gg/wp-content/uploads/2023/07/29231448/One-Piece-Vol-106.jpg.webp",
-        subtituloBanner: "Autor: Eiichiro Oda\nDireção: Konosuke Uda\nEstúdio: Toei Animation\nStatus: Infinito\nGêneros: Ação Aventura Comédia Drama Fantasia Shounen Superpoder",
+        subtituloBanner: "Autor: Eiichiro Oda\n\nDireção: Konosuke Uda\n\nEstúdio: Toei Animation\n\nStatus: Infinito\n\nGêneros: Ação Aventura Comédia Drama Fantasia Shounen Superpoder",
         linkBanner: "https://www.anitube.vip/anime/807a39145f9b086e788f33c9e1cd52197ff1ee33"
     },
 };
 const animesExtra = [
     {conteudo1: {
-        tituloBanner: "BEASTARS",
-        imagemBanner: "https://animenew.com.br/wp-content/uploads/2024/03/GJPN2t8XQAAZ-2m-jpg.webp",
-        subtituloBanner: "Gênero: Drama Romance Fantasia",
-        linkBanner: "https://www.netflix.com/br/title/81054847"
-    }}
+        tituloBanner: "Vigilante: Boku no Hero Academia Illegals",
+        imagemBanner: "https://gqcanimes.com.br/wp-content/uploads/2025/01/My-Hero-Academia-Vigilantes-anime.webp",
+        subtituloBanner: "Gênero: Action, Shounen, Super Power",
+        linkBanner: "https://smartanimes.com/anime/vigilante-boku-no-hero-academia-illegals"
+    }},
+    {conteudo2: {
+        tituloBanner: "Moonrise",
+        imagemBanner: "https://m.media-amazon.com/images/M/MV5BODc1MDBiNzctM2EwMy00NmI0LWEyMGMtNTAyYjNlOGZjZjYzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+        subtituloBanner: "Gênero: Sci-Fi, Space",
+        linkBanner: "https://smartanimes.com/anime/moonrise"
+    }},
+    {conteudo3: {
+        tituloBanner: "Kono Subarashii OVA",
+        imagemBanner: "https://static.wikia.nocookie.net/konosuba/images/6/64/Konosuba_Densetsu_no_Joshou_BD_Box_Cover.jpg",
+        subtituloBanner: "Gênero: Adventure, Comedy, Fantasy, Isekai, Parody",
+        linkBanner: "https://smartanimes.com/anime/kono-subarashii-sekai-ni-shukufuku-wo-2-kono-subarashii-geijutsu-ni-shukufuku-wo"
+    }},
+    {conteudo4: {
+        tituloBanner: "Haite Kudasai, Takamine-san",
+        imagemBanner: "https://preview.redd.it/ql58q9j9erh51.jpg?width=640&crop=smart&auto=webp&s=64a97ee4e579d00c523cc745e77f4229bccd4d32",
+        subtituloBanner: "Gênero: Comedy, Ecchi, Romance, School, Shounen",
+        linkBanner: "https://smartanimes.com/anime/haite-kudasai-takamine-san"
+    }},
 ];

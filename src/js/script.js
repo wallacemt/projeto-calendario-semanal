@@ -55,7 +55,6 @@ function carregarSem(){
         document.addEventListener('DOMContentLoaded', butdom());
         
     }
-
 }
 
 let taAparecendo = 0
