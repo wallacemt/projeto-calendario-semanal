@@ -21,8 +21,7 @@ const animesTerca = {
     imagemBanner:
       "https://external-preview.redd.it/my-dress-up-darling-season-2-key-visual-2025-v0-WhwVaS8qKLkeqHNaL_CayjVzLYODCY_rNl42pTt4v8k.jpg?auto=webp&s=1d1e11c2a65fd49ee6d09805787a906c39b05392",
     subtituloBanner: "Estúdio: Elias\n\nGêneros: Comédia, Fantasia",
-    linkBanner:
-      "https://external-preview.redd.it/my-dress-up-darling-season-2-key-visual-2025-v0-WhwVaS8qKLkeqHNaL_CayjVzLYODCY_rNl42pTt4v8k.jpg?auto=webp&s=1d1e11c2a65fd49ee6d09805787a906c39b05392",
+    linkBanner: "https://smartanimes.com/anime/sono-bisque-doll-wa-koi-wo-suru-season-2",
   },
   conteudo2: {
     tituloBanner: "Dekichau Made Kon",
