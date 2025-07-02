@@ -24,10 +24,10 @@ const animesTerca = {
     linkBanner: "https://smartanimes.com/anime/sono-bisque-doll-wa-koi-wo-suru-season-2",
   },
   conteudo2: {
-    tituloBanner: "Dekichau Made Kon",
-    imagemBanner: "https://nami.news/wordpress/wp-content/uploads/2025/05/Dekichau-Made-Kon-Illustration.jpeg",
+    tituloBanner: "Kaoru Hana wa Rin to Saku",
+    imagemBanner: "https://www.intoxianime.com/wp-content/uploads/2024/04/Kaoru-Hana-wa-rin-to-Saku.jpg",
     subtituloBanner: "Estúdio:  Felix Film \n\nGêneros: Comedy, Love Status Quo, Romance, School, Shounen",
-    linkBanner: "https://www.muitohentai.com/info/dekichau-made-kon/",
+    linkBanner: "https://smartanimes.com/anime/kaoru-hana-wa-rin-to-saku",
   },
 };
 
