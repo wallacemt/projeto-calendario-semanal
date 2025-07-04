@@ -53,7 +53,7 @@ const animesQuinta = {
     imagemBanner:
       "https://m.media-amazon.com/images/M/MV5BMWQ1MTc5ZDYtODVlMy00OWZjLWFiYjAtNDQ4MTc3ODRiNmE1XkEyXkFqcGc@._V1_.jpg",
     subtituloBanner: "Estúdio: Yokohama Animation Laboratory\n\nGêneros:Action, Adventure, Fantasy, Historical",
-    linkBanner: "https://nube-anime.com/",
+    linkBanner: "https://smartanimes.com/anime/jigoku-sensei-nube-2025",
   },
   conteudo2: {
     tituloBanner: "Tougen Anki",
