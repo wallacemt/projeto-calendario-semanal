@@ -4,7 +4,7 @@ const animesSegunda = {
     imagemBanner:
       "https://img.animeschedule.net/production/assets/public/img/anime/jpg/default/jidou-hanbaiki-ni-umarekawatta-ore-wa-meikyuu-wo-samayou-2nd-season-3d00725d44.jpg",
     subtituloBanner: "Estúdio: AXsiZ, Studio Gokumi \n\nGêneros: Comedy Fantasy Isekai Reincarnation",
-    linkBanner: "https://smartanimes.com/anime/jidou-hanbaiki-ni-umarekawatta-ore-wa-meikyuu-wo-samayou-2nd-season",
+    linkBanner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx169440-MhlOxaIyASRu.jpg",
   },
   conteudo2: {
     tituloBanner: "Grand Blue Season 2",
