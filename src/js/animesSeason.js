@@ -1,94 +1,99 @@
 const animesSegunda = {
   conteudo1: {
-    tituloBanner: "Ganglion",
+    tituloBanner: "Jigoku Sensei Nube (2025) Part 2",
     imagemBanner:
-      "https://a.storyblok.com/f/178900/725x1024/3f432e49c3/ganglion_key_art.png",
-    subtituloBanner: "Estúdio: Maf \n\nGêneros: Comedy Action",
-    linkBanner: "https://smartanimes.net/anime/ganglion",
+      "https://animefire.io/img/animes/jigoku-sensei-nube-2025-part-2-large.webp",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/jigoku-sensei-nube-2025-part-2/",
   },
   conteudo2: {
-    tituloBanner: "Sawaranaide Kotesashi-Kun",
+    tituloBanner: "Dead Account",
     imagemBanner:
-      "https://i0.wp.com/multianime.com.mx/wp-content/uploads/2025/06/Dont-Touch-Kotesashi-presenta-primer-visual-y-elenco-completo-comedia-romantica-estudiantil-con-masajes-y-atletas-llega-en-octubre-2025.jpg?fit=990%2C1400&ssl=1",
-    subtituloBanner: "Estúdio: Quad \n\nGêneros: Ecchi, Harem School, Sports",
-    linkBanner: "https://smartanimes.net/anime/sawaranaide-kotesashi-kun",
+      "https://a.storyblok.com/f/178900/728x1030/3c00e7a2bf/dead-account-teaser-visual.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/dead-account/",
   },
 };
 
 const animesTerca = {
   conteudo1: {
-    tituloBanner: "Chanto Suenai",
+    tituloBanner: "Toumei Otoko to Ningen Onna: Sonouchi Fuufu ni Naru Futari",
     imagemBanner:
-      "https://www.animeclick.it/immagini/anime/Chanto_Suenai_Kyuuketsuki-chan/cover/Chanto_Suenai_Kyuuketsuki-chan-cover.jpg",
-    subtituloBanner: "Estúdio: Feel\n\nGêneros: Comedy, School Shounen Supernatural, Vampire",
-    linkBanner: "https://smartanimes.net/anime/chanto-suenai",
+      "https://www.intoxianime.com/wp-content/uploads/2024/11/GdYb2seacAA1oZZ.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/toumei-otoko-to-ningen-onna-sonouchi-fuufu-ni-naru-futari/",
   },
   conteudo2: {
-    tituloBanner: "Bukiyou no Senpai",
-    imagemBanner: "https://www.intoxianime.com/wp-content/uploads/2025/07/GwOpQMNWwAI59iP-725x1024.jpg",
-    subtituloBanner: "Estúdio:  Elle \n\nGêneros:Adult Cast, Comedy, Romance Seinen, Workplace",
-    linkBanner: "https://smartanimes.net/anime/bukiyou-na-senpai",
+    tituloBanner: "Osananajimi to wa Love Comedy ni Naranai",
+    imagemBanner: "https://a.storyblok.com/f/178900/1460x2064/64ff36f279/osananajimi-to-wa-lovecome-ni-naranai-teaser-visual-3.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/osananajimi-to-wa-love-comedy-ni-naranai/",
   },
 };
 
 const animesQuarta = {
   conteudo1: {
-    tituloBanner: "Ansatsusha de Aru Ore",
+    tituloBanner: "Golden Kamuy Final Season",
     imagemBanner:
-      "https://www.intoxianime.com/wp-content/uploads/2025/07/GwIKjYUX0AA15gy-724x1024.jpg",
-    subtituloBanner: "Estúdio: Sunrise, Staple Entertainment\n\nGêneros: Action, Adventure, Fantasy, Isekai",
-    linkBanner: "https://smartanimes.net/anime/ansatsusha-de-aru-ore",
+      "https://a.storyblok.com/f/178900/2898x4096/646a219fad/2523df5c73630eeaac5c09df2793898f1663325305_main.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/golden-kamuy-final-season/",
   },
   conteudo2: {
-    tituloBanner: "Kekkon Yubiwa Monogatari II",
-    imagemBanner: "https://animotaku.fr/wp-content/uploads/2023/01/anime-Tales-of-Wedding-Rings-visuel-cle.jpeg",
-    subtituloBanner: "Estúdio:  Staple Entertainment\n\nGêneros:Action, Ecchi, Fantasy, Harem, Isekai, Romance, Seinen",
-    linkBanner: "https://smartanimes.net/anime/kekkon-yubiwa-monogatari-II",
+    tituloBanner: "Vigilante: Boku no Hero Academia Illegals 2nd",
+    imagemBanner: "https://m.media-amazon.com/images/I/618W-x885cL._AC_UF1000,1000_QL80_.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/vigilante-boku-no-hero-academia-illegals-2nd-season/",
+  },
+  conteudo3: {
+    tituloBanner: "Majutsushi Kunon wa Mieteiru",
+    imagemBanner: "https://www.intoxianime.com/wp-content/uploads/2025/01/GiB359DbIAAd6e0.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/majutsushi-kunon-wa-mieteiru/",
   },
 };
 
 const animesQuinta = {
   conteudo1: {
-    tituloBanner: "Ao No Orchestra II",
-    imagemBanner: "https://a.storyblok.com/f/178900/1064x1505/87cef67d75/blue-orchestra-season-2-teaser-visual.jpg",
-    subtituloBanner: "Estúdio: MAPPA\n\nGêneros: Drama, Music, Performing Arts, School",
-    linkBanner: "https://smartanimes.net/anime/ao-no-orchestra-season-2",
+    tituloBanner: "Shibou Yuugi de Meshi wo Kuu.",
+    imagemBanner: "https://animefire.io/img/animes/shibou-yuugi-de-meshi-wo-kuu-large.webp",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/shibou-yuugi-de-meshi-wo-kuu/",
   },
   conteudo2: {
-    tituloBanner: "SI-VIS The sound",
-    imagemBanner:
-      "https://a.storyblok.com/f/178900/960x1358/23860f6090/si-vis-teaser-visual.png",
-    subtituloBanner: "Estúdio: VOLON\n\nGêneros:Music, Super Power",
-    linkBanner: "https://smartanimes.net/anime/si-vis-the-sound",
+    tituloBanner: "https://www.intoxianime.com/wp-content/uploads/2025/03/GmsPHq5aQAA8gAC-723x1024.jpg",
+    imagemBanner:"https://www.intoxianime.com/wp-content/uploads/2025/03/GmsPHq5aQAA8gAC-723x1024.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/mato-seihei-no-slave-2/",
   },
 };
 
 const animesSexta = {
   conteudo1: {
-    tituloBanner: "Fumetsu no Anata III",
-    imagemBanner: "https://cupulatrovao.com.br/wp-content/uploads/2021/02/Fumetsu-no-Anata-e-Personagens-principais-1-scaled.jpg",
-    subtituloBanner: "Estúdio: Drive\n\nGêneros:Adventure, Drama, Shounen, Supernatural",
-    linkBanner: "https://smartanimes.net/anime/fumetsu-no-anata-e-season-3",
+    tituloBanner: "Sousou no Frieren 2nd Season",
+    imagemBanner: "https://animefire.io/img/animes/sousou-no-frieren-2nd-season-large.webp",
+    subtituloBanner: "__",
+    linkBanner: "http://smartanimes.net/anime/sousou-no-frieren-2nd-season/",
   },
   conteudo2: {
-    tituloBanner: "Watashi wo Tabetai, Hitodenashi",
-    imagemBanner: "https://www.intoxianime.com/wp-content/uploads/2025/06/GuZFLJhaIAA8p2A-1024x1024.jpg",
-    subtituloBanner: "Estúdio: Lings\n\nGêneros:Drama, Girls Love, Seinen, Supernatural",
-    linkBanner: "https://smartanimes.net/anime/watashi-wo-tabetai-hitodenashi",
+    tituloBanner: "Jujutsu Kaisen 3rd Season",
+    imagemBanner: "https://animecultivated.com/wp-content/uploads/2025/11/jjk-culling-game-season-3-new-key-visual-683x1024.webp",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/jujutsu-kaisen-3rd-season/",
   },
 };
 const animesSabado = {
   conteudo1: {
-    tituloBanner: "Spy x Family 3nd",
-    imagemBanner:"https://a.storyblok.com/f/178900/2000x2827/95e0ce87bd/spy-x-family-season-3-anya-key-visual.jpg",
-    subtituloBanner: "Estúdio: CloverWorks, Wit Studio\n\nGêneros:Action,  Childcare, Comedy, Shounen, Super Power",
-    linkBanner: "https://smartanimes.net/anime/spy-x-family-season-3",
+    tituloBanner: "Jigokuraku 2nd Season",
+    imagemBanner:"https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2025%2F11%2F30%2Fhells-paradise-jigokuraku-season-2-anime-release-date-key-visual-0001.jpg?",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/jigokuraku-2nd-season/",
   },
   conteudo2: {
-    tituloBanner: "Boku no Hero Academia: Final Season",
-    imagemBanner: "https://a.storyblok.com/f/178900/2000x3000/dc7138cbd6/my-hero-academia-final-season-key-art.png",
-    subtituloBanner: "Estúdio: TMS Entertainment\n\nGêneros: Action, School, Shounen, Super Power",
-    linkBanner: "https://smartanimes.net/anime/boku-no-hero-academia-final-season",
+    tituloBanner: "Enen no Shouboutai: San no Shou Part 2",
+    imagemBanner: "https://wbijam.pl/wp-content/uploads/2025/08/Enen-no-Shouboutai-San-no-Shou-Part-2.jpg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.net/anime/enen-no-shouboutai-san-no-shou-part-2/",
   },
 };
 const animesDomingo = {
@@ -99,27 +104,15 @@ const animesDomingo = {
       "Autor: Eiichiro Oda\n\nDireção: Konosuke Uda\n\nEstúdio: Toei Animation\n\nStatus: Infinito\n\nGêneros: Ação Aventura Comédia Drama Fantasia Shounen Superpoder",
     linkBanner: "https://smartanimes.net/anime/one-piece",
   },
-  conteudo2: {
-    tituloBanner: "One Punch Man III",
-    imagemBanner: "https://uploads.jovemnerd.com.br/wp-content/uploads/2022/08/one_punch_man_cartaz__8bt820-760x1009.jpg",
-    subtituloBanner:
-      "Autor: Eiichiro Oda\n\nDireção: Konosuke Uda\n\nEstúdio:: J.C.Staff\n\n\nGêneros:, Adult Cast, Comedy, Parody Seinen, Super Power",
-    linkBanner: "https://smartanimes.net/anime/one-punch-man-3",
-  },
 };
 const animesExtra = [
   {
     conteudo1: {
-      tituloBanner: "Shumatsu No Valkyrie III",
-      imagemBanner: "https://http2.mlstatic.com/D_NQ_NP_714292-MLB74120966690_012024-O-livro-fisico-shuumatsu-no-valkyrie-record-of-ragnarok-17.webp",
-      subtituloBanner: "Gênero: Action, Shounen, Super Power",
-      linkBanner: "https://www.netflix.com/br/title/81281579",
+      tituloBanner: "",
+      imagemBanner: "",
+      subtituloBanner: "__",
+      linkBanner: "",
     },
-    conteudo2: {
-      tituloBanner: "Sanda",
-      imagemBanner: "https://a.storyblok.com/f/178900/1272x1800/23658b1514/sanda-key-visual.jpg",
-      subtituloBanner: "Gênero: Action, Shounen, Super Power",
-      linkBanner: "http://smartanimes.net/anime/sanda",
-    },
+   
   },
 ];

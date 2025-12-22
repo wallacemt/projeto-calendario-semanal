@@ -22,7 +22,7 @@ let link3 = document.getElementById("link-3");
 function carregarSem() {
   let dataAtual = new Date();
 
-  let diaSem = dataAtual.getDay();
+  let diaSem = 0;
 
   let diasDaSemana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
 
@@ -151,15 +151,16 @@ function butqua() {
     conteudo.style.display = "block";
     titulo.innerText = "Animes de Quarta-Feira" + emojiTemp(num);
     titulo.style.color = "#feffb3";
+
     subtitulo1.style.display = "block";
     subtitulo2.style.display = "block";
+    subtitulo3.style.display = "block";
 
-    subtitulo3.style.display = "none";
 
     tituloconteudo1.style.display = "block";
     tituloconteudo2.style.display = "block";
+    tituloconteudo3.style.display = "block";
 
-    tituloconteudo3.style.display = "none";
 
     //Inserindo intens dentro da section
     banner1.style.display = "block";
@@ -168,18 +169,17 @@ function butqua() {
     subtitulo1.innerText = animesQuarta.conteudo1.subtituloBanner;
     link1.href = animesQuarta.conteudo1.linkBanner;
 
-    banner2.style.backgroundImage = "url(" + animesQuarta.conteudo2.imagemBanner + ")";
     banner2.style.display = "block";
+    banner2.style.backgroundImage = "url(" + animesQuarta.conteudo2.imagemBanner + ")";
     tituloconteudo2.innerText = animesQuarta.conteudo2.tituloBanner;
     subtitulo2.innerText = animesQuarta.conteudo2.subtituloBanner;
     link2.href = animesQuarta.conteudo2.linkBanner;
 
-    banner3.style.display = "none";
-    // banner3.style.backgroundImage = 'url(' + imagensAnimesQuarta[0] + ')';
-    // banner3.style.display = 'block'
-    // tituloconteudo3.innerText = titulosanimesQuarta[2]
-    // subtitulo3.innerText = subtitulosAnimesQuarta[2]
-    // link3.href = linkAnimesQuarta[2];
+    banner3.style.display = "block";
+    banner3.style.backgroundImage = 'url(' + animesQuarta.conteudo3.imagemBanner + ')';
+    tituloconteudo3.innerText = animesQuarta.conteudo3.tituloBanner
+    subtitulo3.innerText =animesQuarta.conteudo3.subtituloBanner
+    link3.href = animesQuarta.conteudo3.linkBanner;
 
     conteudo.style.display = "block";
     conteudoExtra.style.display = "none";
@@ -340,9 +340,12 @@ function butdom() {
     titulo.innerText = "Animes de Domingo" + emojiTemp(num);
     titulo.style.color = "#feffb3";
     subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
+    subtitulo2.style.display = "none";
+
+
     tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
+
+    tituloconteudo2.style.display = "none";
     //Inserindo intens dentro da section conteudo
     banner1.style.display = "block";
     banner1.style.backgroundImage = "url(" + animesDomingo.conteudo1.imagemBanner + ")";
@@ -350,15 +353,15 @@ function butdom() {
     subtitulo1.innerText = animesDomingo.conteudo1.subtituloBanner;
     link1.href = animesDomingo.conteudo1.linkBanner;
 
-    banner2.style.backgroundImage = "url(" + animesDomingo.conteudo2.imagemBanner + ")";
-    banner2.style.display = "block";
-    tituloconteudo2.innerText = animesDomingo.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesDomingo.conteudo2.subtituloBanner;
-    link2.href = animesDomingo.conteudo2.linkBanner;
+    // banner2.style.backgroundImage = "url(" + animesDomingo.conteudo2.imagemBanner + ")";
+    banner2.style.display = "none";
+    // tituloconteudo2.innerText = animesDomingo.conteudo2.tituloBanner;
+    // subtitulo2.innerText = animesDomingo.conteudo2.subtituloBanner;
+    // link2.href = animesDomingo.conteudo2.linkBanner;
 
     banner3.style.display = "none";
-    subtitulo3.innerText = "";
-    tituloconteudo3.style.display = "none";
+    // subtitulo3.innerText = "";
+    // tituloconteudo3.style.display = "none";
 
     // banner2.style.display = 'none'
     // subtitulo2.innerText = ''
