@@ -22,7 +22,7 @@ let link3 = document.getElementById("link-3");
 function carregarSem() {
   let dataAtual = new Date();
 
-  let diaSem = 0;
+  let diaSem = dataAtual.getDay();
 
   let diasDaSemana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
 
@@ -156,11 +156,9 @@ function butqua() {
     subtitulo2.style.display = "block";
     subtitulo3.style.display = "block";
 
-
     tituloconteudo1.style.display = "block";
     tituloconteudo2.style.display = "block";
     tituloconteudo3.style.display = "block";
-
 
     //Inserindo intens dentro da section
     banner1.style.display = "block";
@@ -176,9 +174,9 @@ function butqua() {
     link2.href = animesQuarta.conteudo2.linkBanner;
 
     banner3.style.display = "block";
-    banner3.style.backgroundImage = 'url(' + animesQuarta.conteudo3.imagemBanner + ')';
-    tituloconteudo3.innerText = animesQuarta.conteudo3.tituloBanner
-    subtitulo3.innerText =animesQuarta.conteudo3.subtituloBanner
+    banner3.style.backgroundImage = "url(" + animesQuarta.conteudo3.imagemBanner + ")";
+    tituloconteudo3.innerText = animesQuarta.conteudo3.tituloBanner;
+    subtitulo3.innerText = animesQuarta.conteudo3.subtituloBanner;
     link3.href = animesQuarta.conteudo3.linkBanner;
 
     conteudo.style.display = "block";
@@ -341,7 +339,6 @@ function butdom() {
     titulo.style.color = "#feffb3";
     subtitulo1.style.display = "block";
     subtitulo2.style.display = "none";
-
 
     tituloconteudo1.style.display = "block";
 
