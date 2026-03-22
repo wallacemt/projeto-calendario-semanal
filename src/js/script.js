@@ -18,36 +18,35 @@ let tituloconteudo3 = document.getElementById("titulo-conteudo-3");
 let subtitulo3 = document.getElementById("subtitulo-3");
 let link3 = document.getElementById("link-3");
 
-//funcao que carrega o conteudo correspondente ao dia da semana
+const cardsConteudo = [
+  { banner: banner1, titulo: tituloconteudo1, subtitulo: subtitulo1, link: link1 },
+  { banner: banner2, titulo: tituloconteudo2, subtitulo: subtitulo2, link: link2 },
+  { banner: banner3, titulo: tituloconteudo3, subtitulo: subtitulo3, link: link3 },
+];
+
+// Funcao que carrega o conteudo correspondente ao dia da semana
 function carregarSem() {
-  let dataAtual = new Date();
+  let diaSem = new Date().getDay();
 
-  let diaSem = dataAtual.getDay();
-
-  let diasDaSemana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
-
-  console.log(diaSem);
-
-  console.log("Hoje è " + diasDaSemana[diaSem] + " boa diverssão.");
-
-  if (diasDaSemana[diaSem] == "Segunda") {
-    document.addEventListener("DOMContentLoaded", butseg());
-  } else if (diasDaSemana[diaSem] == "Terça") {
-    document.addEventListener("DOMContentLoaded", butter());
-  } else if (diasDaSemana[diaSem] == "Quarta") {
-    document.addEventListener("DOMContentLoaded", butqua());
-  } else if (diasDaSemana[diaSem] == "Quinta") {
-    document.addEventListener("DOMContentLoaded", butqui());
-  } else if (diasDaSemana[diaSem] == "Sexta") {
-    document.addEventListener("DOMContentLoaded", butsex());
-  } else if (diasDaSemana[diaSem] == "Sabado") {
-    document.addEventListener("DOMContentLoaded", butsab());
+  if (diaSem === 1) {
+    butseg();
+  } else if (diaSem === 2) {
+    butter();
+  } else if (diaSem === 3) {
+    butqua();
+  } else if (diaSem === 4) {
+    butqui();
+  } else if (diaSem === 5) {
+    butsex();
+  } else if (diaSem === 6) {
+    butsab();
   } else {
-    document.addEventListener("DOMContentLoaded", butdom());
+    butdom();
   }
 }
 
 let taAparecendo = 0;
+
 function menu() {
   let menu = document.getElementById("menu");
   if (menu.style.display == "block") {
@@ -59,324 +58,97 @@ function menu() {
   }
 }
 
-function butseg() {
+function getConteudosDoDia(animesDia) {
+  return Object.keys(animesDia)
+    .filter((key) => key.startsWith("conteudo"))
+    .sort((a, b) => Number(a.replace("conteudo", "")) - Number(b.replace("conteudo", "")))
+    .map((key) => animesDia[key]);
+}
+
+function limparCardsPrincipais() {
+  cardsConteudo.forEach((card) => {
+    card.banner.style.display = "none";
+    card.titulo.style.display = "none";
+    card.subtitulo.style.display = "none";
+    card.titulo.innerText = "";
+    card.subtitulo.innerText = "";
+    card.link.removeAttribute("href");
+    card.banner.style.backgroundImage = "";
+  });
+}
+
+function esconderMenuNoMobile() {
+  if (window.innerWidth <= 800 && taAparecendo === 0) {
+    let menu = document.getElementById("menu");
+    menu.style.display = "none";
+  }
+}
+
+function renderizarDia(animesDia, tituloDia) {
+  conteudo.style.display = "block";
+  conteudoExtra.style.display = "none";
+
+  titulo.innerText = tituloDia + emojiTemp(num);
+  titulo.style.color = "#feffb3";
+
+  limparCardsPrincipais();
+
+  let conteudosDia = getConteudosDoDia(animesDia);
+  let limite = Math.min(conteudosDia.length, cardsConteudo.length);
+
+  for (let i = 0; i < limite; i++) {
+    let anime = conteudosDia[i];
+    let card = cardsConteudo[i];
+
+    card.banner.style.display = "block";
+    card.titulo.style.display = "block";
+    card.subtitulo.style.display = "block";
+
+    card.banner.style.backgroundImage = "url(" + anime.imagemBanner + ")";
+    card.titulo.innerText = anime.tituloBanner;
+    card.subtitulo.innerText = anime.subtituloBanner;
+    card.link.href = anime.linkBanner;
+  }
+
+  esconderMenuNoMobile();
+}
+
+function alternarConteudoDia(animesDia, tituloDia) {
   if (taAparecendo == 0) {
-    //Area de cabeçalho
-    conteudo.style.display = "block";
-    titulo.innerText = "Animes de Segunda-Feira" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
-    tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
-
-    //Inserindo intens dentro da section conteudo
-
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesSegunda.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesSegunda.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesSegunda.conteudo1.subtituloBanner;
-    link1.href = animesSegunda.conteudo1.linkBanner;
-
-    banner2.style.backgroundImage = "url(" + animesSegunda.conteudo2.imagemBanner + ")";
-    banner2.style.display = "block";
-    tituloconteudo2.innerText = animesSegunda.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesSegunda.conteudo2.subtituloBanner;
-    link2.href = animesSegunda.conteudo2.linkBanner;
-
-    banner3.style.display = "none";
-    subtitulo3.innerText = "";
-    tituloconteudo3.style.display = "none";
-
-    conteudo.style.display = "block";
-    conteudoExtra.style.display = "none";
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
+    renderizarDia(animesDia, tituloDia);
     taAparecendo += 1;
   } else {
     conteudo.style.display = "none";
     taAparecendo = 0;
   }
+}
+
+function butseg() {
+  alternarConteudoDia(animesSegunda, "Animes de Segunda-Feira");
 }
 
 function butter() {
-  if (taAparecendo == 0) {
-    //Area de cabeçalho
-    conteudo.style.display = "block";
-    titulo.innerText = "Animes de Terça-Feira" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
-    tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
-
-    //Inserindo intens dentro da section conteudo
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesTerca.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesTerca.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesTerca.conteudo1.subtituloBanner;
-    link1.href = animesTerca.conteudo1.linkBanner;
-
-    banner2.style.backgroundImage = "url(" + animesTerca.conteudo2.imagemBanner + ")";
-    banner2.style.display = "block";
-    tituloconteudo2.innerText = animesTerca.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesTerca.conteudo2.subtituloBanner;
-    link2.href = animesTerca.conteudo2.linkBanner;
-
-    conteudo.style.display = "block";
-
-    conteudoExtra.style.display = "none";
-
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
-
-    banner3.style.display = "none";
-    subtitulo3.innerText = "";
-    tituloconteudo3.style.display = "none";
-
-    taAparecendo += 1;
-  } else {
-    conteudo.style.display = "none";
-    taAparecendo = 0;
-  }
+  alternarConteudoDia(animesTerca, "Animes de Terca-Feira");
 }
 
 function butqua() {
-  if (taAparecendo == 0) {
-    //Area de cabeçalho
-    conteudo.style.display = "block";
-    titulo.innerText = "Animes de Quarta-Feira" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
-    subtitulo3.style.display = "block";
-
-    tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
-    tituloconteudo3.style.display = "block";
-
-    //Inserindo intens dentro da section
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesQuarta.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesQuarta.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesQuarta.conteudo1.subtituloBanner;
-    link1.href = animesQuarta.conteudo1.linkBanner;
-
-    banner2.style.display = "block";
-    banner2.style.backgroundImage = "url(" + animesQuarta.conteudo2.imagemBanner + ")";
-    tituloconteudo2.innerText = animesQuarta.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesQuarta.conteudo2.subtituloBanner;
-    link2.href = animesQuarta.conteudo2.linkBanner;
-
-    banner3.style.display = "block";
-    banner3.style.backgroundImage = "url(" + animesQuarta.conteudo3.imagemBanner + ")";
-    tituloconteudo3.innerText = animesQuarta.conteudo3.tituloBanner;
-    subtitulo3.innerText = animesQuarta.conteudo3.subtituloBanner;
-    link3.href = animesQuarta.conteudo3.linkBanner;
-
-    conteudo.style.display = "block";
-    conteudoExtra.style.display = "none";
-
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
-    taAparecendo += 1;
-  } else {
-    conteudo.style.display = "none";
-    taAparecendo = 0;
-  }
+  alternarConteudoDia(animesQuarta, "Animes de Quarta-Feira");
 }
 
 function butqui() {
-  //butqui kkkkkkkk lembra Butiquim kkkkk
-  if (taAparecendo == 0) {
-    //Area de cabeçalho
-    conteudo.style.display = "inline";
-
-    titulo.innerHTML = "Animes de Quinta-Feira" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
-
-    subtitulo3.style.display = "none";
-
-    tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
-
-    tituloconteudo3.style.display = "none";
-
-    //Inserindo intens dentro da section conteudo
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesQuinta.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesQuinta.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesQuinta.conteudo1.subtituloBanner;
-    link1.href = animesQuinta.conteudo1.linkBanner;
-
-    banner2.style.backgroundImage = "url(" + animesQuinta.conteudo2.imagemBanner + ")";
-    banner2.style.display = "block";
-    tituloconteudo2.innerText = animesQuinta.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesQuinta.conteudo2.subtituloBanner;
-    link2.href = animesQuinta.conteudo2.linkBanner;
-
-    banner3.style.display = "none";
-    // banner3.style.backgroundImage = 'url('+ imagensAnimesQuinta[2] + ')';
-    // banner3.style.display = 'block'
-    // tituloconteudo3.innerText = titulosanimesQuinta[2]
-    // subtitulo3.innerText = subtitulosAnimesQuinta[2]
-    // link3.href = linkAnimesQuinta[2];
-
-    conteudo.style.display = "block";
-    conteudoExtra.style.display = "none";
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
-    taAparecendo += 1;
-  } else {
-    conteudo.style.display = "none";
-    taAparecendo = 0;
-  }
+  alternarConteudoDia(animesQuinta, "Animes de Quinta-Feira");
 }
 
 function butsex() {
-  if (taAparecendo == 0) {
-    //Area de cabeçalho
-    conteudo.style.display = "inline";
-    titulo.innerText = "Animes de Sexta-Feira" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
-    tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
-
-    //Inserindo intens dentro da section conteudo
-
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesSexta.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesSexta.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesSexta.conteudo1.subtituloBanner;
-    link1.href = animesSexta.conteudo1.linkBanner;
-
-    banner2.style.backgroundImage = "url(" + animesSexta.conteudo2.imagemBanner + ")";
-    banner2.style.display = "block";
-    tituloconteudo2.innerText = animesSexta.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesSexta.conteudo2.subtituloBanner;
-    link2.href = animesSexta.conteudo2.linkBanner;
-
-    conteudo.style.display = "block";
-
-    banner3.style.display = "none";
-    subtitulo3.innerText = "";
-    tituloconteudo3.style.display = "none";
-
-    conteudoExtra.style.display = "none";
-
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
-    taAparecendo += 1;
-  } else {
-    //Logica para esconder o conteudo quando clicar de novo
-    conteudo.style.display = "none";
-    taAparecendo = 0;
-  }
+  alternarConteudoDia(animesSexta, "Animes de Sexta-Feira");
 }
+
 function butsab() {
-  if (taAparecendo == 0) {
-    //Area de cabeçalho
-
-    conteudo.style.display = "inline";
-    titulo.innerText = "Animes de Sabado" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "block";
-    tituloconteudo1.style.display = "block";
-    tituloconteudo2.style.display = "block";
-    //Inserindo intens dentro da section conteudo
-
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesSabado.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesSabado.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesSabado.conteudo1.subtituloBanner;
-    link1.href = animesSabado.conteudo1.linkBanner;
-
-    banner2.style.backgroundImage = "url(" + animesSabado.conteudo2.imagemBanner + ")";
-    banner2.style.display = "block";
-    tituloconteudo2.innerText = animesSabado.conteudo2.tituloBanner;
-    subtitulo2.innerText = animesSabado.conteudo2.subtituloBanner;
-    link2.href = animesSabado.conteudo2.linkBanner;
-
-    banner3.style.display = "none";
-    subtitulo3.innerText = "";
-    tituloconteudo3.style.display = "none";
-
-    conteudo.style.display = "block";
-    conteudoExtra.style.display = "none";
-
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
-    taAparecendo += 1;
-  } else {
-    //Logica para esconder o conteudo quando clicar de novo
-    conteudo.style.display = "none";
-    taAparecendo = 0;
-  }
+  alternarConteudoDia(animesSabado, "Animes de Sabado");
 }
+
 function butdom() {
-  if (taAparecendo == 0) {
-    //Area de cabeçalho
-    conteudo.style.display = "inline";
-    titulo.innerText = "Animes de Domingo" + emojiTemp(num);
-    titulo.style.color = "#feffb3";
-    subtitulo1.style.display = "block";
-    subtitulo2.style.display = "none";
-
-    tituloconteudo1.style.display = "block";
-
-    tituloconteudo2.style.display = "none";
-    //Inserindo intens dentro da section conteudo
-    banner1.style.display = "block";
-    banner1.style.backgroundImage = "url(" + animesDomingo.conteudo1.imagemBanner + ")";
-    tituloconteudo1.innerText = animesDomingo.conteudo1.tituloBanner;
-    subtitulo1.innerText = animesDomingo.conteudo1.subtituloBanner;
-    link1.href = animesDomingo.conteudo1.linkBanner;
-
-    // banner2.style.backgroundImage = "url(" + animesDomingo.conteudo2.imagemBanner + ")";
-    banner2.style.display = "none";
-    // tituloconteudo2.innerText = animesDomingo.conteudo2.tituloBanner;
-    // subtitulo2.innerText = animesDomingo.conteudo2.subtituloBanner;
-    // link2.href = animesDomingo.conteudo2.linkBanner;
-
-    banner3.style.display = "none";
-    // subtitulo3.innerText = "";
-    // tituloconteudo3.style.display = "none";
-
-    // banner2.style.display = 'none'
-    // subtitulo2.innerText = ''
-    // tituloconteudo2.style.display = 'none'
-
-    conteudo.style.display = "block";
-    conteudoExtra.style.display = "none";
-
-    if (window.innerWidth <= 800 && taAparecendo === 0) {
-      let menu = document.getElementById("menu");
-      menu.style.display = "none";
-    }
-    taAparecendo += 1;
-  } else {
-    //Logica para esconder o conteudo quando clicar de novo
-    conteudo.style.display = "none";
-    taAparecendo = 0;
-  }
+  alternarConteudoDia(animesDomingo, "Animes de Domingo");
 }
 function butextra() {
   let bannerExtra = document.querySelectorAll('[id^="conteudo-extra-"]');
