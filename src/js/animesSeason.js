@@ -6,14 +6,6 @@ const animesSegunda = {
     subtituloBanner: "__",
     linkBanner: "https://smartanimes.net/anime/rooster-fighter/",
   },
-  conteudo2: {
-    tituloBanner: "Ingoku Danchi",
-    imagemBanner:
-      "https://preview.redd.it/ingoku-danchi-perverts-apartment-complex-new-key-visual-v0-7n1hw7ka8ghg1.jpeg?auto=webp&s=57536ba5991c2b3f13b061dc3460eed3fff8b276",
-    subtituloBanner: "__",
-    linkBanner:
-      "https://www.google.com/search?q=ingoku+danchi+assistir&sca_esv=e5620ef2793957f5&rlz=1C1ONGR_enBR1147BR1147&aep=1&biw=1920&bih=911&sxsrf=ANbL-n7GJqU4vyG8YxrEfst9wihZWXRslg%3A1774201853607&ei=_SvAaa3WJKj25OUP1Znt-AQ&oq=Ingoku+Danchi+as&gs_lp=Egxnd3Mtd2l6LXNlcnAiEEluZ29rdSBEYW5jaGkgYXMqAggAMgUQIRigATIFECEYoAEyBBAhGBVIxA1QAFgAcAB4AJABAJgBmwKgAakEqgEDMi0yuAEByAEA-AEBmAICoAK6BJgDAJIHAzItMqAHlAWyBwMyLTK4B7oEwgcFMC4xLjHIBweACAA&sclient=gws-wiz-serp",
-  },
 };
 
 const animesTerca = {
