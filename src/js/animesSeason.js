@@ -1,85 +1,80 @@
 const animesSegunda = {
   conteudo1: {
-    tituloBanner: "Rooster Fighter",
+    tituloBanner: "Grand Blue III",
     imagemBanner:
-      "https://sm.ign.com/ign_br/image/e/exclusive-/exclusive-rooster-fighter-anime-revealed-sdcc-2024_n41g.jpg",
+      "https://a.storyblok.com/f/178900/700x996/88b1727690/grand-blue-dreaming-season-3-visual.jpg",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/rooster-fighter/",
+    linkBanner: "https://smartanimes.com/anime/grand-blue-season-3/",
+  },
+  conteudo2: {
+    tituloBanner: "Ushiro no Shoumen Kamui-san",
+    imagemBanner:
+      "https://nami.news/wordpress/wp-content/uploads/2026/04/Ushiro-no-Shoumen-Kamui-san-Anime-Visual-scaled.jpeg",
+    subtituloBanner: "__",
+    linkBanner: "https://smartanimes.com/?s=Ushiro+no+Shoumen+Kamui-san",
   },
 };
 
 const animesTerca = {
   conteudo1: {
-    tituloBanner: "Ponkotsu Fuuki Iin to Skirt-take ga Futekisetsu na JK no Hanashi",
-    imagemBanner: "https://a.storyblok.com/f/178900/800x1132/fd1e5af7ab/ponsuka-teaser-visual.jpg",
+    tituloBanner: "Otome Kaijuu Caraméliser",
+    imagemBanner: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1615498324i/57103039.jpg",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/ponkotsu-fuuki-iin-to-skirt-take-ga-futekisetsu-na-jk-no-hanashi/",
+    linkBanner: "https://smartanimes.com/anime/otome-kaijuu-carameliser/",
   },
   conteudo2: {
-    tituloBanner: "Yowayowa Sensei",
-    imagemBanner: "https://a.storyblok.com/f/178900/674x900/aaf2010d3e/yowayowa_sensei_celebratory_art.jpg",
+    tituloBanner: "Tenmaku no Jaadugar",
+    imagemBanner: "https://preview.redd.it/lets-talk-about-jaadugar-a-witch-in-mongolia-tenmaku-no-v0-vz1x621pgz3h1.jpg?width=640&crop=smart&auto=webp&s=7bbcf5ebff370e252985683246ae9b908c62f372",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/yowayowa-sensei/",
+    linkBanner: "https://smartanimes.com/anime/tenmaku-no-jaadugar/",
   },
 };
 
 const animesQuarta = {
   conteudo1: {
-    tituloBanner: "Yomi no Tsugai",
-    imagemBanner: "https://static.wikia.nocookie.net/yomi-no-tsugai/images/8/8c/Yomi_no_Tsugai_Key_Visual_2.png",
+    tituloBanner: "Clevatess II",
+    imagemBanner: "https://a.storyblok.com/f/178900/1064x1506/4ec0c7b214/clevatess-season-2-key-visual.jpg ",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/yomi-no-tsugai/",
+    linkBanner: "https://smartanimes.com/anime/clevatess-ii-majuu-no-ou-to-itsuwari-no-yuusha-denshou/",
   },
   conteudo2: {
-    tituloBanner: "Jidouhanbaiki ni Umarekawatta 3nd",
+    tituloBanner: "Tetsunabe no Jan!",
     imagemBanner:
-      "https://media.fstatic.com/qWLPUeyPSDzeNy92zBKvd4QCbMc=/322x478/smart/filters:format(webp)/media/movies/covers/2023/05/Fw5Kj0HX0AIjl66.jpg",
+      "https://instagram.fssa12-2.fna.fbcdn.net/v/t51.82787-15/629629403_17944234842108367_8417994225817729067_n.webp?_nc_cat=110&ig_cache_key=MzgzMzIzODM1NjEyMjA1MzkzNg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6IkZFRUQueHBpZHMuMTQ1MC5zZHIucmVndWxhcl9waG90by5DMyJ9&_nc_ohc=rLblUC2AifQQ7kNvwG7W0lb&_nc_oc=AdoUdwzD1t2R3ht_vfu3Kzt7A0xUe7z_-oH5OcmBM1Vo8eZuFJv30WsSsfJv0uZg22I&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.fssa12-2.fna&_nc_gid=PuA1da-XYIH0pD9fSnB7Cw&_nc_ss=7a22e&oh=00_Af-L60H4zWLr9vhH0QMavUimWrFlpViaK741wS8KYdqg6A&oe=6A41C245",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/jidou-hanbaiki-ni-umarekawatta-ore-wa-meikyuu-wo-samayou-3rd-season/",
+    linkBanner: "https://smartanimes.com/anime/tetsunabe-no-jan/",
   },
 };
 
 const animesQuinta = {
   conteudo1: {
-    tituloBanner: "Tsue to Tsurugi no Wistoria 2nd Season",
+    tituloBanner: "Black Torch",
     imagemBanner:
-      "https://i0.wp.com/www.otakupt.com/wp-content/uploads/2024/09/Wistoria-Wand-and-Sword-anime-climax-tease-scaled.jpg",
+      "https://a.storyblok.com/f/178900/1296x1728/07a018a75d/black-torch-kv.jpg ",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/tsue-to-tsurugi-no-wistoria-season-2/",
+    linkBanner: "https://smartanimes.com/anime/black-torch/",
   },
-  conteudo2: {
-    tituloBanner: "The Beginning After The End 2nd Season",
-    imagemBanner:
-      "https://preview.redd.it/the-beginning-after-the-end-season-2-key-visual-v0-rc3fvvzbidog1.jpeg?auto=webp&s=8685c336dc8969ea78f107c104ccb13e9f7f37e9",
-    subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/the-beginning-after-the-end-season-2/",
-  },
+  
 };
 
 const animesSexta = {
   conteudo1: {
-    tituloBanner: "Kill Ao",
+    tituloBanner: "Dogulwang",
     imagemBanner:
-      "https://scontent.fssa12-2.fna.fbcdn.net/v/t39.30808-6/646535938_1607762944682490_6168855646698791619_n.jpg?stp=dst-jpg_s720x720_tt6&_nc_cat=108&ccb=1-7&_nc_sid=13d280&_nc_ohc=vAQEJySXFqAQ7kNvwGvobli&_nc_oc=AdoMtV5Aaq-2PtJkzCaLrKIserKjr0onVScC4qGfBN6tyTRms_KppAcGNfN_mNcvfsk&_nc_zt=23&_nc_ht=scontent.fssa12-2.fna&_nc_gid=6TJbMi7fArYM-oI4slGsjw&_nc_ss=7a32e&oh=00_AfzGlMa4Pai-_nniDLwk9zbP1-07L5-7f7QGQ6yB1_XQ_Q&oe=69C609A1",
+      "https://eiotaku.com.br/wp-content/uploads/2026/06/bx110462-okQFIoSFvb4L.webp",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/kill-ao/",
+    linkBanner: "https://smartanimes.com/anime/dogulwang/",
   },
 };
 const animesSabado = {
   conteudo1: {
-    tituloBanner: "Dorohedoro 2nd",
+    tituloBanner: "Bleach: Sennen Kessen-hen – Kashin-tan",
     imagemBanner:
-      "https://preview.redd.it/dorohedoro-season-2-key-visual-v0-nixlf66y19uf1.jpeg?width=640&crop=smart&auto=webp&s=af158701a88bd7d73b85833372bfa53027447aba",
+      "https://u.livechart.me/anime/11469/poster_image/b2dc0fee4b8da7650fffbadf7011236d.webp/large.jpg",
     subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/dorohedoro-season-2/",
+    linkBanner: "https://smartanimes.com/anime/bleach-sennen-kessen-hen-kashin-tan/",
   },
-  conteudo2: {
-    tituloBanner: "Dr. Stone: Science Future Part 3",
-    imagemBanner:
-      "https://a.storyblok.com/f/178900/849x1200/e6d574dac5/dr-stone-science-future-season-2-climax-visual.png",
-    subtituloBanner: "__",
-    linkBanner: "https://smartanimes.net/anime/dr-stone-science-future-part-3",
-  },
+ 
 };
 const animesDomingo = {
   conteudo1: {
