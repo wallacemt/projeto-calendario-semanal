@@ -1,12 +1,17 @@
 {
   "name": "aniweek",
-  "module": "index.ts",
-  "type": "module",
   "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "bun run --filter '*' --if-present --parallel dev",
+    "build": "bun run --filter '*' build",
+    "lint": "bun run --filter '*' --if-present lint",
+    "typecheck": "bun run --filter '*' --if-present typecheck",
+    "test": "bun run --filter '*' --if-present test"
   },
-  "peerDependencies": {
-    "typescript": "^5"
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.3"
   }
 }

@@ -4,3 +4,16 @@ old
 .serena
 .vscode
 tmp
+
+# build output
+dist/
+*.tsbuildinfo
+
+# env
+.env
+.env.local
+
+# logs
+*.log
+
+.DS_Store

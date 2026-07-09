@@ -1,15 +1,12 @@
-# shared
+# @aniweek/shared
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
+Contratos compartilhados entre `apps/api` e `apps/web`: enums (`Season`, `Weekday`, `EntryStatus`)
+e seus schemas Zod correspondentes. Fonte única de verdade — DTOs de cada feature são adicionados
+aqui conforme a feature é implementada (não antecipar).
 
 ```bash
-bun run index.ts
+bun run build       # emite dist/ (ESM + .d.ts)
+bun run typecheck
 ```
 
-This project was created using `bun init` in bun v1.3.14. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Consumido via workspace: `"@aniweek/shared": "workspace:*"`.

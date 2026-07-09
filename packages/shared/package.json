@@ -1,12 +1,24 @@
 {
-  "name": "shared",
-  "module": "index.ts",
-  "type": "module",
+  "name": "@aniweek/shared",
+  "version": "0.0.1",
   "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "peerDependencies": {
-    "typescript": "^5"
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.3"
   }
 }
