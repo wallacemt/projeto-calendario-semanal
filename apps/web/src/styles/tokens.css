@@ -1,0 +1,43 @@
+/* CSS custom properties trocáveis em runtime (ADR-09). Tema default + 1 bloco
+   por estação, selecionados via [data-season] no <html> (ver stores/theme.ts). */
+
+:root {
+  --color-primary: #6d28d9;
+  --color-secondary: #db2777;
+  --color-bg: #0f0f14;
+  --color-surface: #1a1a22;
+  --color-text: #f4f4f5;
+  --season-bg-image: none;
+}
+
+[data-season='spring'] {
+  --color-primary: #4ade80;
+  --color-secondary: #f472b6;
+  --color-bg: #f0fdf4;
+  --color-surface: #ffffff;
+  --color-text: #14532d;
+}
+
+[data-season='summer'] {
+  --color-primary: #38bdf8;
+  --color-secondary: #fbbf24;
+  --color-bg: #ecfeff;
+  --color-surface: #ffffff;
+  --color-text: #0c4a6e;
+}
+
+[data-season='fall'] {
+  --color-primary: #ea580c;
+  --color-secondary: #b45309;
+  --color-bg: #1c1210;
+  --color-surface: #2a1a15;
+  --color-text: #fde8d7;
+}
+
+[data-season='winter'] {
+  --color-primary: #38bdf8;
+  --color-secondary: #a5b4fc;
+  --color-bg: #0b1220;
+  --color-surface: #131c2e;
+  --color-text: #e0f2fe;
+}

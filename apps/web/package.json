@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@aniweek/shared": "workspace:*",
-    "vue": "^3.5.39"
+    "@tailwindcss/vite": "^4.3.2",
+    "pinia": "^3.0.4",
+    "tailwindcss": "^4.3.2",
+    "vue": "^3.5.39",
+    "vue-router": "^5.1.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",
