@@ -12,3 +12,46 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
+enum AuthProvider {
+  GOOGLE
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  username      String   @unique
+  passwordHash  String?
+  avatarUrl     String?  @default("https://djitwkagdqgbhanenonk.supabase.co/storage/v1/object/public/aniweek/avatar.png")
+  bio           String?
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  // calendars Calendar[]
+  // watched   WatchedAnime[]
+  // themes    Theme[]
+
+  refreshTokens RefreshToken[]
+  oauthAccounts OAuthAccount[]
+}
+
+model OAuthAccount {
+  id                String       @id @default(cuid())
+  userId            String
+  provider          AuthProvider
+  providerAccountId String
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

@@ -17,3 +17,6 @@ dist/
 *.log
 
 .DS_Store
+storyboards
+.claude
+CLAUDE.md

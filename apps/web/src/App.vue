@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" >
 import { onMounted } from 'vue'
 import { Season } from '@aniweek/shared'
 import { useThemeStore } from './stores/theme'

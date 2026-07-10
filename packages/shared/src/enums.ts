@@ -23,3 +23,8 @@ export enum EntryStatus {
   COMPLETED = "COMPLETED",
   DROPPED = "DROPPED",
 }
+
+
+export enum AuthProvider {
+  GOOGLE = "GOOGLE",
+}

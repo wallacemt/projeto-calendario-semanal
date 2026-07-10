@@ -1,6 +1,7 @@
 # The Blueprint — AnimeWeek
 
 ## Metadata
+
 - Projeto:            AnimeWeek (`wallacemt/aniweek`)
 - Data:               2026-07-06
 - Arquiteto:          Morpheus Agent
@@ -34,6 +35,7 @@ assumia para uma equipe de 5 — granularidade de tarefas, infra simples, escopo
 ## 2. Requisitos
 
 ### Funcionais (herdados de proposta.md, agrupados)
+
 - **RF-01** Auth: registro (email/username/senha), login, refresh, logout.
 - **RF-02** Perfil: ver/editar, avatar, estatísticas, deletar conta.
 - **RF-03** Busca de animes via Jikan (MyAnimeList), com cache.
@@ -47,6 +49,7 @@ assumia para uma equipe de 5 — granularidade de tarefas, infra simples, escopo
 - **RF-11** (Fase 3) Compartilhar calendário (view-only), seguir usuários, notificações (SSE), comentários/reações, descoberta.
 
 ### Não-funcionais
+
 - **RNF-01 Escala:** app pessoal / comunidade pequena. Alvo realista: dezenas–centenas de usuários. **Não** projetar para milhões (YAGNI). Postgres single-node + Redis atende toda a fase 1–3.
 - **RNF-02 Latência:** < 300ms nas rotas próprias (excluindo latência do Jikan, que é mascarada por cache).
 - **RNF-03 Jikan rate limit:** respeitar o limite público (~3 req/s, ~60 req/min). O backend é o **único** consumidor do Jikan; o browser nunca chama Jikan direto. Ver ADR-06.
@@ -60,53 +63,63 @@ assumia para uma equipe de 5 — granularidade de tarefas, infra simples, escopo
 ## 3. Architecture Decision Records (ADRs)
 
 ### ADR-01 — Monorepo com Bun workspaces
+
 - **Contexto:** frontend Vue + backend Nest + tipos compartilhados (DTOs, enums de estação/dia). Dev solo.
 - **Opções:** (A) dois repos separados; (B) monorepo Bun/turbo.
 - **Decisão:** **Monorepo** `bun workspaces`. `apps/api`, `apps/web`, `packages/shared` (tipos/enums/contratos Zod). Sem Turborepo por ora (YAGNI — dois apps não precisam de cache de build distribuído; adicionar se o build incomodar). Bun escolhido no lugar de pnpm por instalação/execução mais rápidas; validar cedo no M0 pacotes com binário nativo (ex.: preferir `bcryptjs` a `bcrypt` se houver atrito) e o target do Prisma engine.
 - **Consequências:** +commits atômicos front+back, +tipos compartilhados sem publicar pacote, +1 CI. Deploy precisa buildar o app certo (resolvido com Dockerfile por app / root de build no provedor).
 
 ### ADR-02 — Manter a stack da proposta, com versões corrigidas
+
 - **Contexto:** proposta fixou Vue 3 + Nest + Postgres + Prisma. Usuário já domina backends estruturados (Spring/Django/Nest-like) e Next no front — Vue é escolha deliberada dele.
 - **Decisão:** **manter** Vue 3 + NestJS + PostgreSQL + Prisma + Redis, **corrigindo as versões** (proposta estava 1 major atrás em Nest e 2 em Prisma). Ver §4.
 - **Consequências:** respeita a intenção do dono; ganha APIs atuais (Prisma 7, Nest 11, Tailwind 4). Custo: Tailwind v4 mudou config para CSS-first — documentado.
 
 ### ADR-03 — Modelo de "branch de estação" = Calendar keyed por (season, year) + cópia explícita
+
 - **Contexto:** `init.md`/`proposta.md` falam em "gerar uma nova branch do calendário" mas **nunca definem o modelo relacional**. Este é o núcleo do produto e estava indefinido.
 - **Opções:** (A) versionamento tipo git com árvore de commits; (B) um `Calendar` por `(user, season, year)` + operação explícita de importar entradas da estação anterior.
 - **Decisão:** **(B).** "Branch" aqui não é versionamento — é **um calendário por temporada**. `Calendar` tem `season` + `year` com `UNIQUE(userId, season, year)`. Trazer animes adiante = endpoint que copia `CalendarEntry` da temporada anterior para a nova (com ou sem progresso). Ver §7.
 - **Consequências:** modelo simples e óbvio; sem máquina de estados complexa. A "continuação de anime" é apenas uma cópia de entrada preservando `currentEpisode`. Trade-off: não há histórico de "merge"/diff entre estações — desnecessário para o domínio.
 
 ### ADR-04 — Refresh token em cookie httpOnly; access token em memória
+
 - **Contexto:** proposta manda "armazenar token no localStorage" — vetor de XSS clássico (qualquer script rouba o token).
 - **Decisão:** **access token JWT curto (15min) em memória (Pinia)**, **refresh token (7d) em cookie `httpOnly` + `Secure` + `SameSite=Strict`**. Rota `POST /auth/refresh` lê o cookie. CSRF mitigado por SameSite + double-submit onde necessário.
 - **Consequências:** +segurança real. Custo: precisa CORS com `credentials`, e o front não "vê" o refresh token (correto). Substitui a instrução de localStorage da proposta.
 
 ### ADR-05 — Verificação de email é "soft" no MVP
+
 - **Contexto:** confirmação de email por SMTP (nodemailer) adiciona fricção e infra para um MVP solo.
 - **Decisão:** registro cria conta **utilizável imediatamente**; envio de email de verificação via **Resend** (free tier, DX melhor que SMTP cru) com flag `emailVerified`. Recursos sensíveis (compartilhar/social, Fase 3) exigem `emailVerified=true`. Reset de senha usa o mesmo canal.
 - **Consequências:** MVP não trava em setup de email. Verificação vira gate só onde importa.
 
 ### ADR-06 — Camada anticorrupção para o Jikan (cache + rate limiter no backend)
+
 - **Contexto:** Jikan é público, sem key, com rate limit real. Chamar do browser vaza o limite entre usuários e expõe a fragilidade.
 - **Decisão:** `JikanModule` no backend é o único consumidor. Fila/limiter (token bucket ~2 req/s de margem) + Redis cache: **busca 1h**, **detalhe de anime 24h** (metadados quase estáticos). 429 → backoff exponencial. Mapear a resposta Jikan para um DTO próprio `AnimeDto` (anticorrupção — não vazar o shape do Jikan para o front nem para o banco).
 - **Consequências:** resiliência a instabilidade do Jikan; front sempre fala com a nossa API. Custo: uma camada de mapeamento — justificada.
 
 ### ADR-07 — Storage de imagem atrás de uma porta (`StorageService`) → **Supabase Storage**
+
 - **Contexto:** avatares e backgrounds de tema. Decisão do dono: usar **Supabase Storage** (não Cloudinary).
 - **Decisão:** interface `StorageService` (`upload`, `delete`, `getPublicUrl`) com impl concreta **Supabase Storage** (`@supabase/supabase-js`, service-role key só no backend). Buckets: `avatars` (público) e `theme-backgrounds` (público). A porta mantém troca futura (R2/Cloudinary) sem tocar em módulos de negócio.
 - **Consequências:** +1 dependência (`@supabase/supabase-js`) + 1 interface. Usamos só o Storage do Supabase — Auth/DB do Supabase **não** são usados (auth é própria, DB é Postgres+Prisma). A service-role key nunca vai ao front.
 
 ### ADR-08 — Reuso de assets do protótipo legado
+
 - **Contexto:** `old/src/img/backEstacoes/` tem `spring.jpg`, `summer.jpg`, `autumn.jpg`, `winter.png`; o legado tem menu seg→dom + aba **extra** (backlog).
 - **Decisão:** **reusar os 4 backgrounds** como temas sazonais default (seed). **Reusar o conceito de "extra/backlog"** como um valor de `weekday` (entrada sem dia fixo). Ícones de dia (`seg.png`..`dom.png`) opcionalmente reaproveitados no seletor de dia.
 - **Consequências:** identidade visual de continuidade + menos trabalho de asset. `winter.png` (1.5MB) deve ser otimizado/convertido para webp no seed.
 
 ### ADR-09 — Fundamento de tema já no MVP (CSS variables), CRUD de temas na Fase 2
+
 - **Contexto:** personalização é feature de paixão do dono (init.md). Full CRUD é Fase 2, mas o **fundamento** (design tokens via CSS custom properties) é barato e evita retrabalho.
 - **Decisão:** MVP já renderiza cores/background por **CSS variables** trocáveis em runtime, com os 4 temas sazonais seed. `Theme` persistido + editor completo entram na Fase 2 sem refatorar o front.
 - **Consequências:** front "theme-ready" desde o dia 1; Fase 2 só liga o CRUD à camada que já existe.
 
 ### ADR-10 — Deploy: imagens Docker → GHCR → VPS com Portainer (CI/CD)
+
 - **Contexto:** decisão do dono. Sem Railway/Vercel. VPS próprio rodando **Portainer**; deploy por imagem de container.
 - **Decisão:**
   - **Dockerfile por app** — `apps/api/Dockerfile` (Nest build multi-stage → runtime Node 22 slim) e `apps/web/Dockerfile` (Vite build → servir estático com nginx). `.dockerignore` por app.
@@ -118,6 +131,7 @@ assumia para uma equipe de 5 — granularidade de tarefas, infra simples, escopo
 - **Consequências:** pipeline reprodutível e portável (imagens OCI). Custo: manter 2 Dockerfiles + 1 stack file + secrets no Portainer. Migração ghcr→outro registry é troca de string.
 
 ### ADR-11 — OAuth (Google + GitHub) já no MVP, além de email/senha
+
 - **Contexto:** decisão do dono — social login desde o M1, não adiado.
 - **Decisão:** `AuthModule` suporta 3 caminhos: local (email/senha, ADR-04/05) + **Passport OAuth2**: `passport-google-oauth20` e `passport-github2`. Fluxo: `GET /auth/oauth/:provider` → redirect provider → `GET /auth/oauth/:provider/callback` → upsert `User` por email → emite os mesmos access token (memória) + refresh (cookie httpOnly) do fluxo local.
   - **Vinculação de conta:** email do provider já existente → vincula ao `User` existente (não cria duplicado). `User.passwordHash` vira **opcional** (conta pode ser só-OAuth). Nova tabela `OAuthAccount` (provider, providerAccountId, userId).
@@ -128,29 +142,29 @@ assumia para uma equipe de 5 — granularidade de tarefas, infra simples, escopo
 
 ## 4. Stack (versões verificadas via context7 — 2026-07-06)
 
-| Camada | Tecnologia | Versão | Justificativa |
-|---|---|---|---|
-| Runtime | Node.js | 22 LTS | LTS atual, suportado por Nest 11. |
-| Backend | NestJS | **11.x** | Proposta dizia 10 (major desatualizado). Estrutura opinativa ajuda dev solo. |
-| ORM | Prisma | **7.x** | Proposta dizia 5 (2 majors atrás). |
-| DB | PostgreSQL | 16+ | Relacional, JSONB p/ campos flexíveis (gêneros). |
-| Cache/fila | Redis | 7.x | Cache Jikan + rate limiting. |
-| Validação | Zod | 3.x | Contratos compartilhados em `packages/shared` (front+back). |
-| Front | Vue | **3.5.x** | Escolha do dono (Composition API). |
-| Build front | Vite | 6.x | Padrão Vue atual. |
-| Estado | Pinia | 2.x | Store oficial Vue. |
-| Router | Vue Router | 4.x | Oficial. |
-| CSS | Tailwind CSS | **v4** | Proposta dizia v3. v4 = CSS-first + `@tailwindcss/vite`. |
-| Drag & drop | **VueDraggablePlus** | 0.6.x | **Correção:** proposta usava `@dnd-kit/core`, que é **React-only**. VueDraggablePlus é SortableJS + Vue 3 + `v-model` tipado. |
-| Gráficos | Chart.js (via `vue-chartjs`) | 4.x | Métricas Fase 2. |
-| Datas | date-fns | 3.x | Cálculo de semana/estação. |
-| Email | Resend | — | ADR-05. |
-| OAuth | passport-google-oauth20 + passport-github2 | 2.x / 0.1.x | ADR-11 — social login no MVP. |
-| Imagem | **Supabase Storage** (`@supabase/supabase-js`, atrás de porta) | 2.x | ADR-07 — só o Storage do Supabase. |
-| Container | Docker + GHCR + Portainer | — | ADR-10 — deploy em VPS próprio. |
-| Testes API | Jest + Supertest | — | Padrão que o Nest já gera (não brigar com a ferramenta). |
-| Testes front | Vitest + Vue Test Utils | — | Padrão Vite/Vue. |
-| E2E (opcional, Fase 2+) | Playwright | — | Já disponível no ambiente. |
+| Camada                  | Tecnologia                                                              | Versão         | Justificativa                                                                                                                                     |
+| ----------------------- | ----------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime                 | Node.js                                                                 | 22 LTS          | LTS atual, suportado por Nest 11.                                                                                                                 |
+| Backend                 | NestJS                                                                  | **11.x**  | Proposta dizia 10 (major desatualizado). Estrutura opinativa ajuda dev solo.                                                                      |
+| ORM                     | Prisma                                                                  | **7.x**   | Proposta dizia 5 (2 majors atrás).                                                                                                               |
+| DB                      | PostgreSQL                                                              | 16+             | Relacional, JSONB p/ campos flexíveis (gêneros).                                                                                                |
+| Cache/fila              | Redis                                                                   | 7.x             | Cache Jikan + rate limiting.                                                                                                                      |
+| Validação             | Zod                                                                     | 3.x             | Contratos compartilhados em`packages/shared` (front+back).                                                                                      |
+| Front                   | Vue                                                                     | **3.5.x** | Escolha do dono (Composition API).                                                                                                                |
+| Build front             | Vite                                                                    | 6.x             | Padrão Vue atual.                                                                                                                                |
+| Estado                  | Pinia                                                                   | 2.x             | Store oficial Vue.                                                                                                                                |
+| Router                  | Vue Router                                                              | 4.x             | Oficial.                                                                                                                                          |
+| CSS                     | Tailwind CSS                                                            | **v4**    | Proposta dizia v3. v4 = CSS-first +`@tailwindcss/vite`.                                                                                         |
+| Drag & drop             | **VueDraggablePlus**                                              | 0.6.x           | **Correção:** proposta usava `@dnd-kit/core`, que é **React-only**. VueDraggablePlus é SortableJS + Vue 3 + `v-model` tipado. |
+| Gráficos               | Chart.js (via`vue-chartjs`)                                           | 4.x             | Métricas Fase 2.                                                                                                                                 |
+| Datas                   | date-fns                                                                | 3.x             | Cálculo de semana/estação.                                                                                                                     |
+| Email                   | Resend                                                                  | —              | ADR-05.                                                                                                                                           |
+| OAuth                   | passport-google-oauth20 + passport-github2                              | 2.x / 0.1.x     | ADR-11 — social login no MVP.                                                                                                                    |
+| Imagem                  | **Supabase Storage** (`@supabase/supabase-js`, atrás de porta) | 2.x             | ADR-07 — só o Storage do Supabase.                                                                                                              |
+| Container               | Docker + GHCR + Portainer                                               | —              | ADR-10 — deploy em VPS próprio.                                                                                                                 |
+| Testes API              | Jest + Supertest                                                        | —              | Padrão que o Nest já gera (não brigar com a ferramenta).                                                                                       |
+| Testes front            | Vitest + Vue Test Utils                                                 | —              | Padrão Vite/Vue.                                                                                                                                 |
+| E2E (opcional, Fase 2+) | Playwright                                                              | —              | Já disponível no ambiente.                                                                                                                      |
 
 > Verificação pendente que o Neo deve refazer no `install`: patch exato de cada lib no momento do setup (versões evoluem). As **majors** acima estão confirmadas.
 
@@ -337,6 +351,7 @@ model Theme {                         // Fase 2 (ADR-09)
 ```
 
 **Semântica de "trazer animes adiante" (`import-previous`):**
+
 1. Descobrir a estação anterior a `(season, year)` do calendário alvo (ordem WINTER→SPRING→SUMMER→FALL; ao voltar de WINTER, ano-1).
 2. Ler `CalendarEntry` do calendário anterior — por padrão só `status != COMPLETED` (animes ainda em andamento — o caso de "continuação").
 3. Para cada selecionada, criar nova `CalendarEntry` no alvo: mesmo `animeId`, `weekday`, `position`; `currentEpisode` preservado (default) ou zerado (opção "resetar progresso"); `status` → `WATCHING`.
@@ -414,6 +429,7 @@ Erros padronizados via `HttpExceptionFilter` global: `{ statusCode, message, cod
 ---
 
 ## 11. Escalabilidade / Performance
+
 - Board lido por índice `(calendarId, weekday, position)`. Reorder = update de `position` das entradas afetadas em transação.
 - Cache Jikan absorve o custo externo. Sem N+1: `include` controlado no Prisma.
 - Paginação por cursor na busca e no museu. Nada de projetar sharding/microserviços (YAGNI — RNF-01).
@@ -421,12 +437,14 @@ Erros padronizados via `HttpExceptionFilter` global: `{ statusCode, message, cod
 ---
 
 ## 12. Dependências externas e falhas
+
 - **Jikan:** instável/rate-limited → cache + backoff + degradação graciosa (servir do cache local `Anime` se o Jikan cair).
 - **Cloudinary/Resend:** falha de upload/email não deve derrubar o fluxo principal (email de verificação é assíncrono/retryable).
 
 ---
 
 ## 13. Deploy (decidido — ADR-10)
+
 - **Dev:** `docker-compose up` sobe **só** `postgres` + `redis`; `api` e `web` rodam via `bun dev`.
 - **Build de imagem:** `apps/api/Dockerfile` (multi-stage Nest → Node 22 slim) e `apps/web/Dockerfile` (Vite build → nginx estático).
 - **CI (`ci.yml`):** em PR → `install → lint → typecheck → test`.
@@ -443,6 +461,7 @@ Mapa das fases da proposta para milestones de GitHub (granularidade solo). Cada 
 > Ordenação por **dependência/entrega vertical** (M0→M5 primeiro). Sem datas/estimativas de semana — ritmo próprio do dono.
 
 **FASE 1 — MVP**
+
 - **M0 · Fundação** — scaffold inicial dos apps via CLI oficial + padrão de pastas (M0.0), monorepo Bun, `apps/api` (Nest 11), `apps/web` (Vue 3 + Vite + Tailwind v4), `packages/shared`, docker-compose dev (pg+redis), Prisma init + seed dos 4 temas sazonais (ADR-08/09). **Infra de deploy (ADR-10):** Dockerfiles api+web, `deploy/portainer-stack.yml`, `ci.yml` + `deploy.yml` (build→push ghcr→webhook Portainer).
 - **M1 · Auth** — register/login/refresh/logout, cookie httpOnly, throttler, verify-email + reset (Resend), **OAuth Google+GitHub (ADR-11)** com `OAuthAccount` e account-linking. Front: telas de login/registro + botões social + Pinia auth + interceptor.
 - **M2 · Perfil** — GET/PATCH/DELETE me, avatar via StorageService, stats básicas.
@@ -451,17 +470,20 @@ Mapa das fases da proposta para milestones de GitHub (granularidade solo). Cada 
 - **M5 · Drag-and-Drop & Progresso** — VueDraggablePlus, move/reorder persistido, progresso de episódio.
 
 **FASE 2 — Personalização & Estações**
+
 - **M6 · Estações & Import** — navegação entre estações, `import-previous` (continuação de anime).
 - **M7 · Temas** — Theme CRUD, editor de cores + background, aplicar por estação (liga na base CSS-vars do MVP).
 - **M8 · Métricas & Museu** — mark-watched, WatchedAnime, galeria/timeline, estatísticas + gráficos.
 
 **FASE 3 — Social**
+
 - **M9 · Compartilhamento** — share view-only + permissões + revogação.
 - **M10 · Social & Notificações** — follow, SSE, notificações, comentários/reações, descoberta.
 
 ---
 
 ## 15. Critérios de aceitação (base para o Agent Smith) — destaques
+
 - **AC-01** Refresh token NÃO acessível via JS (cookie httpOnly) — verificável no browser.
 - **AC-02** Browser nunca faz request direto ao Jikan (só à API própria).
 - **AC-03** `UNIQUE(userId, season, year)` impede 2º calendário na mesma temporada (409).
@@ -472,9 +494,11 @@ Mapa das fases da proposta para milestones de GitHub (granularidade solo). Cada 
 - **AC-08** Deletar conta faz cascade (calendars/entries/watched/tokens).
 
 ## 16. Fora de escopo (MVP)
+
 - App nativo (mobile/desktop). Recomendação de animes por ML. Sentry/LogRocket antes da Fase 3. Auth/DB do Supabase (usamos só o Storage). *(OAuth saiu do "fora de escopo" — agora está no MVP, ADR-11.)*
 
 ## 17. Decisões resolvidas (confirmadas pelo dono — 2026-07-06)
+
 1. **Hosting** — ✅ **VPS próprio + Portainer**, deploy por imagem Docker via CI/CD (build→push GHCR→webhook Portainer). ADR-10.
 2. **Storage de imagem** — ✅ **Supabase Storage** atrás da porta `StorageService`. ADR-07.
 3. **Estratégia de fase** — ✅ **sequencial** (Fase 1→2→3), com base de tema (CSS-vars) já no MVP. ADR-09.
@@ -486,14 +510,18 @@ Mapa das fases da proposta para milestones de GitHub (granularidade solo). Cada 
 ---
 
 ## Handoff
+
 - Artefato gerado:   `docs/blueprint.md`
 - Status:            **Aprovado** — 5 decisões resolvidas (§17). Milestones+issues criados no GitHub.
 - Próximo agente:    Neo Agent (implementação) — começar por **M0 · Fundação**
 - Ação requerida:    Implementar M0 (fundação + infra de deploy ADR-10). `auth` (incl. OAuth) e
-                     `jikan` passam pelo **Lawliet Agent** antes de fechar a Fase 1.
+  `jikan` passam pelo **Lawliet Agent** antes de fechar a Fase 1.
 - Notas:             Correções/decisões relevantes vs. `proposta.md`:
-                     (a) `@dnd-kit`→VueDraggablePlus, (b) localStorage→cookie httpOnly,
-                     (c) versões Nest11/Prisma7/Tailwind4, (d) modelo de branch de estação (ADR-03),
-                     (e) deploy VPS+Portainer+GHCR (ADR-10), (f) OAuth Google+GitHub no MVP (ADR-11),
-                     (g) Supabase Storage atrás da porta (ADR-07).
+  (a) `@dnd-kit`→VueDraggablePlus, (b) localStorage→cookie httpOnly,
+  (c) versões Nest11/Prisma7/Tailwind4, (d) modelo de branch de estação (ADR-03),
+  (e) deploy VPS+Portainer+GHCR (ADR-10), (f) OAuth Google+GitHub no MVP (ADR-11),
+  (g) Supabase Storage atrás da porta (ADR-07).
+
+```
+
 ```
