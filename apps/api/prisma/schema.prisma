@@ -16,6 +16,7 @@ datasource db {
 
 enum AuthProvider {
   GOOGLE
+  GITHUB
 }
 
 model User {

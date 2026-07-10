@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- LSF-2026-004: o token de reset de senha vai na query string do link
+         do email (?token=...). Sem isso, um link/imagem de terceiro nessa
+         página vazaria a URL completa (com o token) no header Referer da
+         requisição para esse terceiro. -->
+    <meta name="referrer" content="no-referrer" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>web</title>
