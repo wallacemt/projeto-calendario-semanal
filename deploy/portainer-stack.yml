@@ -1,67 +1,55 @@
 # Stack de produção para o Portainer (ADR-10). Imagens publicadas pelo CI
-# (M0.5) em ghcr.io/wallacemt/aniweek-{api,web}. Todas as variáveis abaixo são
-# configuradas como Environment variables do stack no Portainer — nada aqui é
-# secreto nem versionado com valor real.
+# (M0.5) em docker.io/wallacestm/aniweek-{api,web}. Todas as variáveis abaixo
+# são configuradas como Environment variables do stack no Portainer — nada
+# aqui é secreto nem versionado com valor real.
 services:
-  api:
-    image: ghcr.io/wallacemt/aniweek-api:latest
+  rt-aniweek-api:
+    image: wallacestm/aniweek-api:latest
+    container_name: rt-aniweek-api
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-      REDIS_URL: redis://redis:6379
+      FRONTEND_URL: ${FRONTEND_URL}
+      DATABASE_URL: ${DATABASE_URL}
+
+      REDIS_URL: ${REDIS_URL}
       JWT_SECRET: ${JWT_SECRET}
+
+      JWT_AUX_SECRET: ${JWT_AUX_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      JWT_REFRESH_EXPIRES_IN_DAYS: ${JWT_REFRESH_EXPIRES_IN_DAYS}
+
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+
       SUPABASE_URL: ${SUPABASE_URL}
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+
       RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
     ports:
       - '${API_PORT:-3000}:3000'
-    depends_on:
-      - postgres
-      - redis
     networks:
-      - aniweek
+     - rt-network
 
-  web:
-    image: ghcr.io/wallacemt/aniweek-web:latest
+  rt-aniweek:
+    image: wallacestm/aniweek-web:latest
+    container_name: rt-aniweek
     restart: unless-stopped
     ports:
       - '${WEB_PORT:-8080}:80'
+    environment:
+      VITE_API_URL: ${VITE_API_URL} 
     depends_on:
       - api
     networks:
-      - aniweek
+      - rt-network
 
-  postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - aniweek
-
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
-    volumes:
-      - redis_data:/data
-    networks:
-      - aniweek
-
-volumes:
-  postgres_data:
-  redis_data:
 
 networks:
-  aniweek:
-    driver: bridge
+  rt-network:
+    external: true
