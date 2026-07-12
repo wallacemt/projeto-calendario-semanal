@@ -4,6 +4,7 @@ import LoginView from '../features/auth/views/LoginView.vue'
 import OAuthCallbackView from '../features/auth/views/OAuthCallbackView.vue'
 import RegisterView from '../features/auth/views/RegisterView.vue'
 import ResetPasswordView from '../features/auth/views/ResetPasswordView.vue'
+import VerifyEmailView from '../features/auth/views/VerifyEmailView.vue'
 import { useAuthStore } from '../stores/auth'
 import HomeView from '../views/HomeView.vue'
 
@@ -21,19 +22,18 @@ export const router = createRouter({
     { path: '/register', name: 'register', component: RegisterView },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPasswordView },
     { path: '/reset-password', name: 'reset-password', component: ResetPasswordView },
+    { path: '/verify-email', name: 'verify-email', component: VerifyEmailView },
     { path: '/oauth-callback', name: 'oauth-callback', component: OAuthCallbackView },
   ],
 })
 
-// Memoiza a restauração de sessão por carregamento de página: o access token
-// só existe em memória (ADR-04), então cada reload precisa trocar o cookie
-// de refresh por um novo antes da primeira navegação decidir se redireciona.
-let sessionRestored: Promise<void> | null = null
-
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
-  sessionRestored ??= auth.restoreSession()
-  await sessionRestored
+  // Memoizado dentro da própria store (ver stores/auth.ts) — o boot do
+  // App.vue (loading global) chama o mesmo restoreSession() em paralelo, e
+  // os dois precisam compartilhar a mesma promise em voo, não disparar dois
+  // refresh concorrentes.
+  await auth.restoreSession()
 
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath } }

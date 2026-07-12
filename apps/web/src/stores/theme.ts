@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { Season } from '@aniweek/shared'
+import { calendarApi } from '../features/calendar/api'
 import spring from '../assets/seasons/spring.jpg'
 import summer from '../assets/seasons/summer.jpg'
 import fall from '../assets/seasons/fall.jpg'
@@ -25,6 +26,19 @@ export const useThemeStore = defineStore('theme', {
         '--season-bg-image',
         `url(${seasonBackgrounds[season]})`,
       )
+    },
+
+    // Chamado no boot (App.vue): troca o default local (SPRING) pela estação
+    // real vinda da API — GET /calendars/current-season (data-only, mesma
+    // convenção de mês pra qualquer usuário; não é a estação do hemisfério
+    // dele, é a estação da indústria de anime — ver ADR-03).
+    async fetchCurrentSeason(): Promise<void> {
+      try {
+        const { season } = await calendarApi.getCurrentSeason()
+        this.setSeason(season)
+      } catch {
+        // API fora do ar não trava o boot — fica no default local.
+      }
     },
   },
 })

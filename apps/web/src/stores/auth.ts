@@ -3,6 +3,11 @@ import type { LoginInput, RegisterInput } from '@aniweek/shared'
 import { authApi, type PublicUser } from '../features/auth/api'
 import { setAccessToken, setRefreshHandler } from '../lib/http'
 
+// Módulo-escopo (não state do Pinia): sobrevive a re-renders mas reseta
+// naturalmente num reload real de página, que é exatamente o momento em que
+// uma nova restauração faz sentido.
+let restoreSessionPromise: Promise<void> | null = null
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as PublicUser | null,
@@ -42,10 +47,19 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    // Chamado uma vez pelo guard global do router (ver router/index.ts) a
-    // cada carregamento de página: o access token vive só em memória, então
-    // um reload sempre começa "deslogado" até essa restauração via cookie.
-    async restoreSession(): Promise<void> {
+    // Chamada tanto pelo guard global do router quanto pelo boot do App.vue
+    // (loading global) — memoizada aqui, não no chamador: os dois lados
+    // precisam do MESMO restore em voo, nunca de dois. Dois refresh
+    // concorrentes mandariam o mesmo cookie de refresh duas vezes; a
+    // detecção de reuso do backend (rotação de refresh) veria a segunda
+    // chamada como reuso de um token já consumido e revogaria a sessão
+    // inteira no primeiro carregamento de página.
+    restoreSession(): Promise<void> {
+      restoreSessionPromise ??= this.restoreSessionOnce()
+      return restoreSessionPromise
+    },
+
+    async restoreSessionOnce(): Promise<void> {
       const accessToken = await this.refresh()
       if (!accessToken) return
       try {
