@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { forgotPasswordSchema } from '@aniweek/shared'
 import { authApi } from '../api'
+import AuthShell from '../components/AuthShell.vue'
+import AuthTextField from '../components/AuthTextField.vue'
+import AuthButton from '../components/AuthButton.vue'
 
 const email = ref('')
 const error = ref<string | null>(null)
@@ -33,42 +36,54 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 p-6">
-    <h1 class="text-2xl font-bold" :style="{ color: 'var(--color-text)' }">Esqueci minha senha</h1>
+  <AuthShell heroSubtitle="Sem estresse: te mandamos um link seguro pra voltar a acessar sua conta.">
+    <template #hero-title>Acontece até<br />no melhor arco.</template>
+
+    <div class="font-mono mb-2.5 text-[11.5px] tracking-[0.12em] text-(--brand-primary)">
+      RECUPERAR ACESSO
+    </div>
+    <h1 class="font-display mb-2 text-[28px] font-extrabold text-(--ink-text)">
+      Esqueci minha senha
+    </h1>
 
     <template v-if="sent">
-      <p class="text-sm" :style="{ color: 'var(--color-text)' }">
-        Se existir uma conta com senha para esse email, enviamos um link de redefinição.
+      <p class="mb-6 text-[14.5px] text-(--ink-text-muted)">
+        Se existir uma conta com senha para esse e-mail, enviamos um link de redefinição — confira
+        também a caixa de spam.
       </p>
-      <RouterLink :to="{ name: 'login' }" class="text-center text-sm underline">
+      <RouterLink :to="{ name: 'login' }" class="text-(--brand-primary) hover:text-(--brand-secondary) text-[13.5px]">
         Voltar para o login
       </RouterLink>
     </template>
 
-    <form v-else class="flex flex-col gap-3" @submit.prevent="onSubmit">
-      <input
-        v-model="email"
-        type="email"
-        required
-        placeholder="Email"
-        class="rounded border px-3 py-2 outline-none"
-        :style="{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }"
-      />
+    <template v-else>
+      <p class="mb-6 text-[14.5px] text-(--ink-text-muted)">
+        Informe o e-mail da sua conta e enviamos um link de redefinição.
+      </p>
 
-      <p v-if="error" class="text-sm text-red-500">{{ error }}</p>
+      <form class="flex flex-col gap-4" novalidate @submit.prevent="onSubmit">
+        <AuthTextField
+          id="email"
+          v-model="email"
+          label="E-mail"
+          type="email"
+          autocomplete="email"
+          placeholder="voce@email.com"
+          required
+        />
 
-      <button
-        type="submit"
-        :disabled="loading"
-        class="rounded px-3 py-2 font-medium disabled:opacity-60"
-        :style="{ backgroundColor: 'var(--color-primary)', color: 'var(--color-surface)' }"
-      >
-        {{ loading ? 'Enviando...' : 'Enviar link de redefinição' }}
-      </button>
+        <p v-if="error" class="text-sm text-(--ink-error)">{{ error }}</p>
 
-      <RouterLink :to="{ name: 'login' }" class="text-center text-sm underline">
-        Voltar para o login
-      </RouterLink>
-    </form>
-  </div>
+        <AuthButton type="submit" :loading="loading" class="mt-1">
+          {{ loading ? 'Enviando...' : 'Enviar link de redefinição' }}
+        </AuthButton>
+      </form>
+
+      <p class="mt-6 text-center text-[13.5px] text-(--ink-text-muted)">
+        <RouterLink :to="{ name: 'login' }" class="text-(--brand-primary) hover:text-(--brand-secondary)">
+          Voltar para o login
+        </RouterLink>
+      </p>
+    </template>
+  </AuthShell>
 </template>

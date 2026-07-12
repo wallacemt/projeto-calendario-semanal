@@ -4,6 +4,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { resetPasswordSchema } from '@aniweek/shared'
 import { authApi } from '../api'
 import { HttpError } from '../../../lib/http'
+import AuthShell from '../components/AuthShell.vue'
+import AuthTextField from '../components/AuthTextField.vue'
+import AuthButton from '../components/AuthButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -53,40 +56,46 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 p-6">
-    <h1 class="text-2xl font-bold" :style="{ color: 'var(--color-text)' }">Redefinir senha</h1>
+  <AuthShell heroSubtitle="Escolha uma senha nova para voltar a acessar seu calendário.">
+    <template #hero-title>Uma senha nova,<br />o mesmo calendário.</template>
 
-    <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
-      <input
+    <div class="font-mono mb-2.5 text-[11.5px] tracking-[0.12em] text-(--brand-primary)">
+      NOVA SENHA
+    </div>
+    <h1 class="font-display mb-2 text-[28px] font-extrabold text-(--ink-text)">Redefinir senha</h1>
+    <p class="mb-6 text-[14.5px] text-(--ink-text-muted)">Escolha uma senha com pelo menos 8 caracteres.</p>
+
+    <form class="flex flex-col gap-4" novalidate @submit.prevent="onSubmit">
+      <AuthTextField
+        id="password"
         v-model="password"
         type="password"
+        label="Nova senha"
+        autocomplete="new-password"
+        placeholder="Mínimo 8 caracteres"
         required
-        placeholder="Nova senha (mín. 8 caracteres)"
-        class="rounded border px-3 py-2 outline-none"
-        :style="{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }"
       />
-      <input
+      <AuthTextField
+        id="confirm-password"
         v-model="confirmPassword"
         type="password"
+        label="Confirmar nova senha"
+        autocomplete="new-password"
+        placeholder="Repita a senha"
         required
-        placeholder="Confirmar nova senha"
-        class="rounded border px-3 py-2 outline-none"
-        :style="{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }"
       />
 
-      <p v-if="error" class="text-sm text-red-500">{{ error }}</p>
+      <p v-if="error" class="text-sm text-(--ink-error)">{{ error }}</p>
 
-      <button
-        type="submit"
-        class="rounded px-3 py-2 font-medium disabled:opacity-60"
-        :style="{ backgroundColor: 'var(--color-primary)', color: 'var(--color-surface)' }"
-      >
+      <AuthButton type="submit" :loading="loading" class="mt-1">
         {{ loading ? 'Salvando...' : 'Redefinir senha' }}
-      </button>
+      </AuthButton>
+    </form>
 
-      <RouterLink :to="{ name: 'login' }" class="text-center text-sm underline">
+    <p class="mt-6 text-center text-[13.5px] text-(--ink-text-muted)">
+      <RouterLink :to="{ name: 'login' }" class="text-(--brand-primary) hover:text-(--brand-secondary)">
         Voltar para o login
       </RouterLink>
-    </form>
-  </div>
+    </p>
+  </AuthShell>
 </template>

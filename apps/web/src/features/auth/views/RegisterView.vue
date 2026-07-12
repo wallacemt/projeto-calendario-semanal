@@ -4,6 +4,14 @@ import { useRouter } from 'vue-router'
 import { registerSchema } from '@aniweek/shared'
 import { useAuthStore } from '../../../stores/auth'
 import { HttpError } from '../../../lib/http'
+import AuthShell from '../components/AuthShell.vue'
+import AuthTextField from '../components/AuthTextField.vue'
+import AuthButton from '../components/AuthButton.vue'
+import AuthProviderButton from '../components/AuthProviderButton.vue'
+import IconGoogle from '../components/icons/IconGoogle.vue'
+import IconGithub from '../components/icons/IconGithub.vue'
+
+const API_URL = import.meta.env.VITE_API_URL
 
 const email = ref('')
 const username = ref('')
@@ -37,52 +45,79 @@ async function onSubmit() {
     loading.value = false
   }
 }
+
+function loginWithProvider(provider: 'google' | 'github') {
+  window.location.href = `${API_URL}/auth/oauth/${provider}`
+}
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 p-6">
-    <h1 class="text-2xl font-bold" :style="{ color: 'var(--color-text)' }">Criar conta</h1>
+  <AuthShell heroSubtitle="Crie sua conta, monte seu calendário semanal e acompanhe cada episódio — grátis.">
+    <template #hero-title>Comece a organizar<br />sua temporada.</template>
 
-    <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
-      <input
-        v-model="email"
-        type="email"
-        required
-        placeholder="Email"
-        class="rounded border px-3 py-2 outline-none"
-        :style="{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }"
-      />
-      <input
+    <div class="font-mono mb-2.5 text-[11.5px] tracking-[0.12em] text-(--brand-primary)">
+      CRIAR CONTA
+    </div>
+    <h1 class="font-display mb-2 text-[28px] font-extrabold text-(--ink-text)">Crie sua conta</h1>
+    <p class="mb-6 text-[14.5px] text-(--ink-text-muted)">Leva menos de um minuto.</p>
+
+    <div class="mb-5 flex gap-3">
+      <AuthProviderButton label="Google" @click="loginWithProvider('google')">
+        <template #icon><IconGoogle /></template>
+      </AuthProviderButton>
+      <AuthProviderButton label="GitHub" @click="loginWithProvider('github')">
+        <template #icon><IconGithub /></template>
+      </AuthProviderButton>
+    </div>
+
+    <div class="mb-5 flex items-center gap-3">
+      <div class="h-px flex-1 bg-white/8" />
+      <span class="font-sans text-[11px] tracking-[0.06em] text-(--ink-text-faint) uppercase">
+        ou com e-mail
+      </span>
+      <div class="h-px flex-1 bg-white/8" />
+    </div>
+
+    <form class="flex flex-col gap-4" novalidate @submit.prevent="onSubmit">
+      <AuthTextField
+        id="username"
         v-model="username"
-        type="text"
+        label="Nome de usuário"
+        autocomplete="username"
+        placeholder="wallacemt"
         required
-        placeholder="Usuário"
-        class="rounded border px-3 py-2 outline-none"
-        :style="{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }"
       />
-      <input
+      <AuthTextField
+        id="email"
+        v-model="email"
+        label="E-mail"
+        type="email"
+        autocomplete="email"
+        placeholder="voce@email.com"
+        required
+      />
+      <AuthTextField
+        id="password"
         v-model="password"
         type="password"
+        label="Senha"
+        autocomplete="new-password"
+        placeholder="Mínimo 8 caracteres"
         required
-        placeholder="Senha (mín. 8 caracteres)"
-        class="rounded border px-3 py-2 outline-none"
-        :style="{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }"
       />
 
-      <p v-if="error" class="text-sm text-red-500">{{ error }}</p>
+      <p v-if="error" class="text-sm text-(--ink-error)">{{ error }}</p>
 
-      <button
-        type="submit"
-        :disabled="loading"
-        class="rounded px-3 py-2 font-medium disabled:opacity-60"
-        :style="{ backgroundColor: 'var(--color-primary)', color: 'var(--color-surface)' }"
-      >
+      <AuthButton type="submit" :loading="loading" class="mt-1">
         {{ loading ? 'Criando...' : 'Criar conta' }}
-      </button>
+      </AuthButton>
     </form>
 
-    <RouterLink :to="{ name: 'login' }" class="text-center text-sm underline">
-      Já tenho uma conta
-    </RouterLink>
-  </div>
+    <p class="mt-6 text-center text-[13.5px] text-(--ink-text-muted)">
+      Já tem uma conta?
+      <RouterLink :to="{ name: 'login' }" class="text-(--brand-primary) hover:text-(--brand-secondary)">
+        Entrar
+      </RouterLink>
+    </p>
+  </AuthShell>
 </template>
