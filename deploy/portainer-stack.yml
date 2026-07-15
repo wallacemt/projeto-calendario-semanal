@@ -36,16 +36,18 @@ services:
     networks:
      - rt-network
 
+  # VITE_API_URL não é configurável aqui: o Vite embute essa URL no bundle
+  # estático em tempo de build (ver .github/workflows/deploy.yml e
+  # apps/web/Dockerfile), então uma env var neste container não tem efeito
+  # nenhum — nginx só serve os arquivos já compilados.
   rt-aniweek:
     image: wallacestm/aniweek-web:latest
     container_name: rt-aniweek
     restart: unless-stopped
     ports:
       - '${WEB_PORT:-8080}:80'
-    environment:
-      VITE_API_URL: ${VITE_API_URL} 
     depends_on:
-      - api
+      - rt-aniweek-api
     networks:
       - rt-network
 

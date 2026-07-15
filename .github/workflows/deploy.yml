@@ -42,13 +42,12 @@ jobs:
           context: .
           file: apps/web/Dockerfile
           push: true
+          # VITE_API_URL é embutida no bundle estático nesse build — não dá
+          # pra trocar depois setando env var no container (ver Dockerfile).
+          build-args: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
           tags: |
             ${{ env.WEB_IMAGE }}:latest
             ${{ env.WEB_IMAGE }}:${{ github.sha }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
-
-      - name: Trigger Portainer redeploy
-        run: |
-          curl -fsSL -X POST "${{ secrets.PORTAINER_WEBHOOK_API }}"
-          curl -fsSL -X POST "${{ secrets.PORTAINER_WEBHOOK_WEB }}"
