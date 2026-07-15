@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { registerSchema } from '@aniweek/shared'
 import { useAuthStore } from '../../../stores/auth'
 import { HttpError } from '../../../lib/http'
+import { env } from '../../../lib/env'
 import AuthShell from '../components/AuthShell.vue'
 import AuthTextField from '../components/AuthTextField.vue'
 import AuthButton from '../components/AuthButton.vue'
@@ -11,7 +12,7 @@ import AuthProviderButton from '../components/AuthProviderButton.vue'
 import IconGoogle from '../components/icons/IconGoogle.vue'
 import IconGithub from '../components/icons/IconGithub.vue'
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = env.VITE_API_URL
 
 const email = ref('')
 const username = ref('')

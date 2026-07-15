@@ -3,7 +3,9 @@
 // pela store de auth) e repete a request uma única vez. Sem dependência
 // nova — fetch nativo é suficiente para o volume de chamadas do app.
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+import { env } from './env'
+
+const API_URL = env.VITE_API_URL
 
 export class HttpError extends Error {
   readonly status: number

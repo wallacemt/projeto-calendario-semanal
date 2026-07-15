@@ -13,6 +13,14 @@ RUN bun install --frozen-lockfile --ignore-scripts
 COPY packages/shared packages/shared
 COPY apps/web apps/web
 RUN bun run --filter @aniweek/shared build
+
+# VITE_API_URL precisa existir no ambiente de BUILD: o Vite substitui
+# import.meta.env.VITE_* por uma constante estática no bundle (esbuild
+# define), não é lido em runtime pelo nginx que serve os arquivos depois.
+# Setar essa var no container do nginx (ex.: docker run -e) não faz nada.
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 # type-check é gate de CI (M0.5), não do build de imagem — vite build sozinho
 # já faz strip de tipos via esbuild.
 RUN cd apps/web && bunx vite build
