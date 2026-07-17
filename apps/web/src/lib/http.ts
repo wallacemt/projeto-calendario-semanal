@@ -47,16 +47,21 @@ async function parseErrorMessage(res: Response): Promise<string> {
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, skipAuthRetry, headers, ...rest } = options
 
+  // FormData (upload de avatar) precisa que o browser gere o próprio
+  // Content-Type com boundary — setar 'application/json' (ou qualquer valor
+  // fixo) na mão quebra o parse multipart no servidor.
+  const isFormData = body instanceof FormData
+
   const res = await fetch(`${API_URL}${path}`, {
     ...rest,
     // Cookie de refresh httpOnly precisa viajar nas requests — ADR-04.
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...headers,
     },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
+    body: isFormData ? body : body !== undefined ? JSON.stringify(body) : undefined,
   })
 
   if (res.status === 401 && !skipAuthRetry && refreshHandler) {
@@ -77,4 +82,7 @@ export const http = {
   get: <T>(path: string, options?: RequestOptions) => request<T>(path, { ...options, method: 'GET' }),
   post: <T>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>(path, { ...options, method: 'POST', body }),
+  patch: <T>(path: string, body?: unknown, options?: RequestOptions) =>
+    request<T>(path, { ...options, method: 'PATCH', body }),
+  delete: <T>(path: string, options?: RequestOptions) => request<T>(path, { ...options, method: 'DELETE' }),
 }
