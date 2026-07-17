@@ -1,4 +1,4 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthProvider } from '../../generated/prisma/client';
 
@@ -68,7 +68,7 @@ describe('UsersService', () => {
       users.uploadAvatar('user-1', {
         buffer: notAnImage,
       } as Express.Multer.File),
-    ).rejects.toThrow(ConflictException);
+    ).rejects.toThrow(UnprocessableEntityException);
     expect(storage.upload).not.toHaveBeenCalled();
   });
 });

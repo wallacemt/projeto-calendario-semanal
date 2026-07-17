@@ -39,8 +39,17 @@ export const resetPasswordSchema = z.object({
   password: passwordSchema,
 });
 
+// Perfil (M2 — RF-02). Mesmo schema valida o PATCH no Nest e o form de
+// edição no front; username reaproveita usernameSchema (regra de unicidade
+// fica por conta do banco/service, Zod só valida formato).
+export const updateProfileSchema = z.object({
+  username: usernameSchema.optional(),
+  bio: z.string().max(280, "A bio deve ter no máximo 280 caracteres").optional(),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

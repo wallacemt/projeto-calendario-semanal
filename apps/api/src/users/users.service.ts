@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import type { UpdateProfileInput } from '@aniweek/shared';
 import sharp from 'sharp';
@@ -65,7 +66,9 @@ export class UsersService {
       .webp({ quality: 82 })
       .toBuffer()
       .catch(() => {
-        throw new ConflictException('Arquivo não é uma imagem válida');
+        throw new UnprocessableEntityException(
+          'Arquivo não é uma imagem válida',
+        );
       });
 
     const path = `${userId}.webp`;
