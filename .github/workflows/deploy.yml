@@ -42,10 +42,8 @@ jobs:
           context: .
           file: apps/web/Dockerfile
           push: true
-          # VITE_API_URL é embutida no bundle estático nesse build — não dá
-          # pra trocar depois setando env var no container (ver Dockerfile).
           build-args: |
-            VITE_API_URL=${{ vars.VITE_API_URL }}
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
           tags: |
             ${{ env.WEB_IMAGE }}:latest
             ${{ env.WEB_IMAGE }}:${{ github.sha }}
