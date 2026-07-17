@@ -9,8 +9,8 @@ const theme = useThemeStore()
   <!-- Marca compacta — só aparece abaixo do breakpoint onde o hero se esconde
        (ver AuthShell). O AuthHeroPanel já carrega a versão completa. -->
   <div class="mb-8 flex items-center gap-2 lg:hidden">
-    <img src="../../../assets/icon_with_no-bg.png" alt="" class="h-7 w-7 object-contain" />
-    <span class="font-display text-base font-extrabold text-(--ink-text)">AnimeWeek</span>
+    <img src="../../../assets/icon_with_text_and_bg.png" alt="" class="h-32 w-60 object-contain" />
+    <!-- <span class="font-display text-base font-extrabold text-(--ink-text)">AnimeWeek</span> -->
     <span class="ml-auto text-xs text-(--ink-text-muted)">
       {{ seasonMeta[theme.season].emoji }} {{ seasonMeta[theme.season].label }}
     </span>

@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 import { registerSchema } from '@aniweek/shared'
 import { useAuthStore } from '../../../stores/auth'
 import { HttpError } from '../../../lib/http'
+import { Eye, EyeOff } from 'lucide-vue-next'
+
 import { env } from '../../../lib/env'
 import AuthShell from '../components/AuthShell.vue'
 import AuthTextField from '../components/AuthTextField.vue'
@@ -19,7 +21,7 @@ const username = ref('')
 const password = ref('')
 const error = ref<string | null>(null)
 const loading = ref(false)
-
+const showPassword = ref(false)
 const auth = useAuthStore()
 const router = useRouter()
 
@@ -100,12 +102,24 @@ function loginWithProvider(provider: 'google' | 'github') {
       <AuthTextField
         id="password"
         v-model="password"
-        type="password"
+        :type="showPassword ? 'text' : 'password'"
         label="Senha"
         autocomplete="new-password"
         placeholder="Mínimo 8 caracteres"
         required
-      />
+      >
+      <template #trailing>
+          <button
+            type="button"
+            aria-label="Mostrar ou ocultar senha"
+            class="text-(--ink-text-faint) hover:text-(--ink-text)"
+            @click="showPassword = !showPassword"
+          >
+            <EyeOff v-if="showPassword" class="h-4 w-4" />
+            <Eye v-else class="h-4 w-4" />
+          </button>
+        </template>
+    </AuthTextField>
 
       <p v-if="error" class="text-sm text-(--ink-error)">{{ error }}</p>
 

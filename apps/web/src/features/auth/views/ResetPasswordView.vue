@@ -7,7 +7,7 @@ import { HttpError } from '../../../lib/http'
 import AuthShell from '../components/AuthShell.vue'
 import AuthTextField from '../components/AuthTextField.vue'
 import AuthButton from '../components/AuthButton.vue'
-
+import { Eye, EyeOff } from 'lucide-vue-next'
 const route = useRoute()
 const router = useRouter()
 
@@ -22,7 +22,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const error = ref<string | null>(null)
 const loading = ref(false)
-
+const showPassword = ref(false)
 async function onSubmit() {
   error.value = null
 
@@ -66,24 +66,20 @@ async function onSubmit() {
     <p class="mb-6 text-[14.5px] text-(--ink-text-muted)">Escolha uma senha com pelo menos 8 caracteres.</p>
 
     <form class="flex flex-col gap-4" novalidate @submit.prevent="onSubmit">
-      <AuthTextField
-        id="password"
-        v-model="password"
-        type="password"
-        label="Nova senha"
-        autocomplete="new-password"
-        placeholder="Mínimo 8 caracteres"
-        required
-      />
-      <AuthTextField
-        id="confirm-password"
-        v-model="confirmPassword"
-        type="password"
-        label="Confirmar nova senha"
-        autocomplete="new-password"
-        placeholder="Repita a senha"
-        required
-      />
+      <AuthTextField id="password" v-model="password" :type="showPassword ? 'text' : 'password'" label="Nova senha"
+        autocomplete="new-password" placeholder="Mínimo 8 caracteres" required>
+
+      </AuthTextField>
+      <AuthTextField id="confirm-password" v-model="confirmPassword" :type="showPassword ? 'text' : 'password'"
+        label="Confirmar nova senha" autocomplete="new-password" placeholder="Repita a senha" required>
+        <template #trailing>
+          <button type="button" aria-label="Mostrar ou ocultar senha"
+            class="text-(--ink-text-faint) hover:text-(--ink-text)" @click="showPassword = !showPassword">
+            <EyeOff v-if="showPassword" class="h-4 w-4" />
+            <Eye v-else class="h-4 w-4" />
+          </button>
+        </template>
+      </AuthTextField>
 
       <p v-if="error" class="text-sm text-(--ink-error)">{{ error }}</p>
 

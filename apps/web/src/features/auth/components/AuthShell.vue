@@ -10,7 +10,7 @@ defineProps<{ heroSubtitle: string }>()
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-[color:var(--ink-bg)]">
+  <div class="flex min-h-screen bg-(--ink-bg)">
     <AuthHeroPanel :subtitle="heroSubtitle">
       <slot name="hero-title" />
     </AuthHeroPanel>
