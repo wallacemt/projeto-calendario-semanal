@@ -56,3 +56,20 @@ model RefreshToken {
   createdAt DateTime  @default(now())
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+// Espelho local do Jikan (M3 — ADR-06). Uma linha por anime, upsertada só
+// quando alguém abre o detalhe (GET /animes/:malId) — a busca não persiste.
+model Anime {
+  id       String   @id @default(cuid())
+  malId    Int      @unique
+  title    String
+  imageUrl String?
+  synopsis String?
+  episodes Int?
+  genres   Json?
+  malUrl   String?
+  cachedAt DateTime @default(now())
+
+  // entries CalendarEntry[]
+  // watched WatchedAnime[]
+}

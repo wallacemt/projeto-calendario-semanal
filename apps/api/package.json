@@ -41,6 +41,7 @@
     "cookie-parser": "^1.4.7",
     "date-fns": "^4.4.0",
     "helmet": "^8.2.0",
+    "ioredis": "^5.11.1",
     "nestjs-pino": "^4.6.1",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",

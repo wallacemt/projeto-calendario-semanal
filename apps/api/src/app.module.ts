@@ -3,11 +3,13 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
+import { AnimesModule } from './animes/animes.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CalendarsModule } from './calendars/calendars.module';
 import { validateEnv } from './config/env.validation';
+import { RedisModule } from './common/redis/redis.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
@@ -30,9 +32,11 @@ import { UsersModule } from './users/users.module';
       throttlers: [{ name: 'default', ttl: 60_000, limit: 60 }],
     }),
     PrismaModule,
+    RedisModule,
     AuthModule,
     CalendarsModule,
     UsersModule,
+    AnimesModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
