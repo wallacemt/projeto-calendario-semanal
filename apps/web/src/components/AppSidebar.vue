@@ -66,11 +66,12 @@ function onGripUp() {
 const auth = useAuthStore()
 const route = useRoute()
 
-// "Descobrir"/"Museu"/"Estatísticas"/"Temas" ainda não têm rota (M6/M8/M10/M7)
-// — mostrados desabilitados em vez de linkar para uma tela que não existe.
+// "Museu"/"Estatísticas"/"Temas" ainda não têm rota (M8/M10/M7) — mostrados
+// desabilitados em vez de linkar para uma tela que não existe. "Descobrir"
+// ganhou rota própria na M3.
 const navItems = [
   { icon: Calendar, label: 'Calendário', to: { name: 'home' } },
-  { icon: Search, label: 'Descobrir', to: null },
+  { icon: Search, label: 'Descobrir', to: { name: 'discover' } },
   { icon: Landmark, label: 'Museu', to: null },
   { icon: BarChart3, label: 'Estatísticas', to: null },
   { icon: Palette, label: 'Temas', to: null },
@@ -139,7 +140,7 @@ const initial = computed(() => auth.user?.username?.[0]?.toUpperCase() ?? '?')
         v-if="auth.user?.avatarUrl"
         :src="auth.user.avatarUrl"
         alt=""
-        class="lg:h-8.5 lg:w-8.5   rounded-full object-cover"
+        class=" h-8.5  w-8.5   rounded-full object-cover"
       />
       <div
         v-else

@@ -5,6 +5,8 @@ import OAuthCallbackView from '../features/auth/views/OAuthCallbackView.vue'
 import RegisterView from '../features/auth/views/RegisterView.vue'
 import ResetPasswordView from '../features/auth/views/ResetPasswordView.vue'
 import VerifyEmailView from '../features/auth/views/VerifyEmailView.vue'
+import AnimeDetailView from '../features/discover/views/AnimeDetailView.vue'
+import DiscoverView from '../features/discover/views/DiscoverView.vue'
 import ProfileView from '../features/profile/views/ProfileView.vue'
 import { useAuthStore } from '../stores/auth'
 import HomeView from '../views/HomeView.vue'
@@ -20,6 +22,13 @@ export const router = createRouter({
   routes: [
     { path: '/', name: 'home', component: HomeView, meta: { requiresAuth: true } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
+    { path: '/discover', name: 'discover', component: DiscoverView, meta: { requiresAuth: true } },
+    {
+      path: '/discover/:malId',
+      name: 'anime-detail',
+      component: AnimeDetailView,
+      meta: { requiresAuth: true },
+    },
     { path: '/login', name: 'login', component: LoginView },
     { path: '/register', name: 'register', component: RegisterView },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPasswordView },
