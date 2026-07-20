@@ -8,14 +8,32 @@ import { useDebounce } from '../../../composables/useDebounce'
 import { HttpError } from '../../../lib/http'
 import { discoverApi } from '../api'
 import { useDiscoverStore } from '../store'
+import { useThemeStore } from "../../../stores/theme.ts"
+import { Season } from '@aniweek/shared'
 
 const route = useRoute()
 const router = useRouter()
 const store = useDiscoverStore()
 
+const seasonStore = useThemeStore()
 const anime = ref<AnimeFullDto | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+
+const herosBg: { id: Season; url: string }[] = [{
+  id: Season.SUMMER,
+  url: "https://djitwkagdqgbhanenonk.supabase.co/storage/v1/object/public/aniweek/anime-details-bg/summer.jpg"
+}, {
+  id: Season.FALL,
+  url: "https://djitwkagdqgbhanenonk.supabase.co/storage/v1/object/public/aniweek/anime-details-bg/authum.png"
+}, {
+  id: Season.WINTER,
+  url: "https://djitwkagdqgbhanenonk.supabase.co/storage/v1/object/public/aniweek/anime-details-bg/winter.png"
+}, {
+  id: Season.SPRING,
+  url: "https://djitwkagdqgbhanenonk.supabase.co/storage/v1/object/public/aniweek/anime-details-bg/spring.png"
+}]
+const seasonHeroBg = ref<{ id: string; url: string } | null>(herosBg[0])
 
 async function load() {
   const malId = Number(route.params.malId)
@@ -24,6 +42,7 @@ async function load() {
   anime.value = null
   try {
     anime.value = { ...await discoverApi.fullDetail(malId), relations: [] }
+    seasonHeroBg.value = herosBg.find(bg => bg.id === seasonStore.season) ?? herosBg[0]
   } catch (err) {
     error.value = err instanceof HttpError ? err.message : 'Erro ao carregar o anime'
   } finally {
@@ -133,8 +152,8 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
            usa a própria capa desfocada como backdrop em vez do gradiente
            abstrato do mockup, já que aqui temos arte real (não placeholder). -->
       <div class="relative mb-11 h-70 overflow-hidden rounded-2xl bg-white/5">
-        <img v-if="anime.imageUrl" :src="anime.imageUrl" :alt="anime.title"
-          class="absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-md" />
+        <img v-if="seasonHeroBg" :src="seasonHeroBg.url" :alt="anime.title"
+          class="absolute inset-0 h-full w-full object-cover opacity-90 blur-xs  " />
         <div class="absolute inset-0"
           style="background: linear-gradient(90deg, rgba(5, 6, 9, 0.35) 0%, rgba(5, 6, 9, 0.94) 100%)" />
         <div class="absolute bottom-0 left-8 flex items-end gap-6 pb-6">
