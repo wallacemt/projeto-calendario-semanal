@@ -87,7 +87,7 @@ function loginWithProvider(provider: 'google' | 'github') {
         v-model="username"
         label="Nome de usuário"
         autocomplete="username"
-        placeholder="wallacemt"
+        placeholder="seu-username"
         required
       />
       <AuthTextField
