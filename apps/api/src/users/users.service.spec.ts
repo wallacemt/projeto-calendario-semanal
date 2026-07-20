@@ -1,4 +1,7 @@
-import { ConflictException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  ConflictException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthProvider } from '../../generated/prisma/client';
 
