@@ -97,7 +97,11 @@ export const animeFullDtoSchema = animeDtoSchema.extend({
   titleJapanese: z.string().nullable(),
   trailerUrl: z.string().nullable(),
   trailerImageUrl: z.string().nullable(),
-  background: z.string().nullable(),
+  // Herança do Jikan: esse campo já se chamou "background" (a bio/trivia em
+  // texto livre que o MAL tem). A AniList não tem equivalente textual —
+  // o adapter (anime-api.service.ts) manda o `bannerImage` dela aqui, então
+  // o nome foi corrigido pra refletir o que o campo realmente é agora.
+  bannerImage: z.string().nullable(),
   source: z.string().nullable(),
   duration: z.string().nullable(),
   rating: z.string().nullable(),

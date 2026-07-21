@@ -27,14 +27,18 @@ const meta = computed(() => STATUS_META[props.entry.status])
 <template>
   <div
     class="group flex-shrink-0 overflow-hidden rounded-[13px] border"
-    style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.035)"
+    style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.035) "
   >
-    <div class="relative h-18.5 bg-white/5">
+    <div class="relative aspect-[2/3] bg-white/5">
       <img
         v-if="entry.anime.imageUrl"
         :src="entry.anime.imageUrl"
         :alt="entry.anime.title"
         class="h-full w-full object-cover"
+      />
+      <div
+        class="pointer-events-none absolute inset-0"
+        style="background: linear-gradient(to bottom, rgba(5, 6, 9, 0.5) 0%, transparent 22%, transparent 78%, rgba(5, 6, 9, 0.8) 100%)"
       />
       <button
         type="button"

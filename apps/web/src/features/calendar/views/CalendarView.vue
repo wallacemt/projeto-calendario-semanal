@@ -44,11 +44,21 @@ const weekDates = (() => {
   })
 })()
 
+// Accordion (atualização de design): só um dia fica expandido por vez, os
+// outros colapsam numa faixa estreita — abre em "hoje" por padrão pra não
+// obrigar o usuário a caçar o dia certo entre 8 colunas.
+function todayKey(): Weekday {
+  const day = new Date().getDay() // 0=dom..6=sáb
+  return DAY_DEFS[day === 0 ? 6 : day].key
+}
+const expandedDay = ref<Weekday>(todayKey())
+
 const days = computed(() =>
   DAY_DEFS.map((d, i) => ({
     ...d,
     date: d.isExtra ? 'Backlog' : weekDates[i],
     entries: calendar.board?.entries[d.key] ?? [],
+    isExpanded: d.key === expandedDay.value,
   })),
 )
 
@@ -69,51 +79,63 @@ function openAddModal(weekday: Weekday, label: string) {
       <p v-else-if="calendar.error" class="p-8 text-sm text-(--ink-error)">{{ calendar.error }}</p>
 
       <div v-else class="flex flex-1 gap-3 overflow-x-auto overflow-y-hidden p-6">
-        <div v-for="day in days" :key="day.key" class="flex min-w-37.5 flex-1 flex-col gap-2.5">
-          <div class="flex items-center justify-between px-0.5">
-            <div>
-              <div
-                class="font-mono text-[11px] font-bold tracking-wide"
-                :style="{ color: day.isExtra ? '#FBBF24' : '#B4B8C6' }"
-              >
-                {{ day.short }}
+        <div v-for="day in days" :key="day.key" class="flex  flex-col overflow-hidden rounded-[14px]" :style="{
+          flex: day.isExpanded ? '4 1 420px' : '0 0 4.5rem',
+          minWidth: day.isExpanded ? '340px' : '4.5rem',
+          cursor: day.isExpanded ? 'default' : 'pointer',
+          transition:
+            'flex-grow .45s cubic-bezier(.4,0,.2,1), flex-basis .45s cubic-bezier(.4,0,.2,1), min-width .45s cubic-bezier(.4,0,.2,1)',
+        }" @click="!day.isExpanded && (expandedDay = day.key)">
+          <!-- Expandido: dia atual (ou o último clicado) -->
+          <div v-if="day.isExpanded"
+            class="group flex h-full flex-col gap-2.5 overflow-auto max-h-full rounded-[14px]  p-3.5">
+            <div class="flex  items-center justify-between px-0.5">
+              <div>
+                <div class="font-mono text-[11px] font-bold tracking-wide"
+                  :style="{ color: day.isExtra ? '#FBBF24' : '#B4B8C6' }">
+                  {{ day.short }}
+                </div>
+                <div class="mt-0.5 text-[10px] text-(--ink-text-faint)">{{ day.date }}</div>
               </div>
-              <div class="mt-0.5 text-[10px] text-(--ink-text-faint)">{{ day.date }}</div>
+              <div
+                class="flex h-5 w-5 items-center justify-center rounded-md text-[10.5px] font-bold text-(--ink-text-muted)"
+                style="background: rgba(255, 255, 255, 0.06)">
+                {{ day.entries.length }}
+              </div>
             </div>
+
+            <div class="grid  flex-1 grid-cols-4 content-start gap-2.5 pb-1 ">
+              <EntryCard v-for="entry in day.entries" :key="entry.id" :entry="entry"
+                @remove="calendar.removeEntry(day.key, entry.id)" />
+            </div>
+
+            <button type="button"
+              class="h-9.5 flex-shrink-0 rounded-[10px] border border-dashed text-[11px] text-(--ink-text-faint) opacity-0 transition-opacity group-hover:opacity-100 hover:border-(--brand-secondary)/40 hover:text-(--brand-secondary)"
+              style="border-color: rgba(255, 255, 255, 0.15)"
+              @click="openAddModal(day.key, `${day.short}${day.isExtra ? '' : ` · ${day.date}`}`)">
+              + Adicionar
+            </button>
+          </div>
+
+          <!-- Colapsado: só a faixa com contagem + label vertical, clique expande -->
+          <div v-else
+            class="flex h-full flex-col items-center gap-3.5 rounded-[14px] border py-4 hover:border-(--brand-secondary)/35 hover:bg-(--brand-secondary)/8"
+            style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.02)">
             <div
-              class="flex h-5 w-5 items-center justify-center rounded-md text-[10.5px] font-bold text-(--ink-text-muted)"
-              style="background: rgba(255, 255, 255, 0.06)"
-            >
+              class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md text-[10px] font-bold text-(--ink-text-muted)"
+              style="background: rgba(255, 255, 255, 0.06)">
               {{ day.entries.length }}
             </div>
+            <div class="font-mono text-[11.5px] font-bold tracking-wider whitespace-nowrap"
+              :style="{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: day.isExtra ? '#FBBF24' : '#B4B8C6' }">
+              {{ day.short }} · {{ day.date }}
+            </div>
           </div>
-
-          <div class="flex flex-1 flex-col gap-2.5 overflow-y-auto pb-1">
-            <EntryCard
-              v-for="entry in day.entries"
-              :key="entry.id"
-              :entry="entry"
-              @remove="calendar.removeEntry(day.key, entry.id)"
-            />
-          </div>
-
-          <button
-            type="button"
-            class="h-9.5 flex-shrink-0 rounded-[10px] border border-dashed text-[11px] text-(--ink-text-faint) hover:border-(--brand-secondary)/40 hover:text-(--brand-secondary)"
-            style="border-color: rgba(255, 255, 255, 0.15)"
-            @click="openAddModal(day.key, `${day.short}${day.isExtra ? '' : ` · ${day.date}`}`)"
-          >
-            + Adicionar
-          </button>
         </div>
       </div>
     </div>
 
-    <AddEntryModal
-      v-if="addModalWeekday"
-      :weekday="addModalWeekday"
-      :weekday-label="addModalLabel"
-      @close="addModalWeekday = null"
-    />
+    <AddEntryModal v-if="addModalWeekday" :weekday="addModalWeekday" :weekday-label="addModalLabel"
+      @close="addModalWeekday = null" />
   </AppShell>
 </template>

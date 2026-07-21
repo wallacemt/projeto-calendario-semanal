@@ -197,14 +197,13 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
             </div>
           </div>
 
+          <div v-if="anime.bannerImage" class="-mx-1 overflow-hidden rounded-xl">
+            <img :src="anime.bannerImage" :alt="`Banner de ${anime.title}`" class="h-32 w-full object-cover" />
+          </div>
+
           <div v-if="anime.synopsis">
             <div class="mb-2 text-[13px] font-bold text-white">Sinopse</div>
             <p class="text-[13px] leading-relaxed text-(--ink-text-muted)">{{ anime.synopsis }}</p>
-          </div>
-
-          <div v-if="anime.background">
-            <div class="mb-2 text-[13px] font-bold text-white">Curiosidades</div>
-            <p class="text-[13px] leading-relaxed text-(--ink-text-muted)">{{ anime.background }}</p>
           </div>
 
           <div>

@@ -72,7 +72,7 @@ onMounted(async () => {
 
       <div class="relative flex flex-1 overflow-hidden">
         <div class="flex-1 overflow-y-auto p-8">
-          <div v-if="store.loading && store.searched"
+          <div v-if="store.loading"
             class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             <AnimeCardSkeleton v-for="n in 10" :key="n" />
           </div>
@@ -87,7 +87,7 @@ onMounted(async () => {
             <p class="max-w-85 text-[13px] leading-relaxed text-(--ink-text-faint)">{{ store.error }}</p>
           </div>
 
-          <div v-else-if="store.results.length === 0"
+          <div v-else-if="store.results.length === 0 && !store.loading"
             class="flex h-full flex-col items-center justify-center gap-4 py-20 text-center">
             <div class="flex h-22 w-22 items-center justify-center rounded-3xl border text-3xl"
               style="background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.08)">

@@ -32,7 +32,6 @@ export const useDiscoverStore = defineStore("discover", {
         return;
       }
       this.mode = "search";
-      this.searched = true;
       await this.fetchPage(1);
     },
 
@@ -101,6 +100,7 @@ export const useDiscoverStore = defineStore("discover", {
           err instanceof HttpError ? err.message : "Erro ao buscar animes";
       } finally {
         if (requestId === this.requestId) this.loading = false;
+        if( this.mode === "search") this.searched = false;
       }
     },
   },
