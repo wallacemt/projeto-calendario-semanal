@@ -19,6 +19,35 @@ enum AuthProvider {
   GITHUB
 }
 
+// ADR-03 — "branch de estação" é Calendar keyed por (season, year), não
+// versionamento tipo git. Weekday inclui BACKLOG = aba "extra" do legado
+// (ADR-08): entrada sem dia fixo na semana.
+enum Season {
+  WINTER
+  SPRING
+  SUMMER
+  FALL
+}
+
+enum Weekday {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
+  BACKLOG
+}
+
+enum EntryStatus {
+  PLANNED
+  WATCHING
+  PAUSED
+  COMPLETED
+  DROPPED
+}
+
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
@@ -29,7 +58,7 @@ model User {
   emailVerified Boolean  @default(false)
   createdAt     DateTime @default(now())
 
-  // calendars Calendar[]
+  calendars Calendar[]
   // watched   WatchedAnime[]
   // themes    Theme[]
 
@@ -70,6 +99,42 @@ model Anime {
   malUrl   String?
   cachedAt DateTime @default(now())
 
-  // entries CalendarEntry[]
+  entries CalendarEntry[]
   // watched WatchedAnime[]
+}
+
+// "Branch de estação" (ADR-03) = 1 calendário por (user, season, year).
+// "Trazer animes adiante" entre estações (M6) é uma cópia explícita de
+// CalendarEntry para o Calendar novo, não uma operação de versionamento.
+model Calendar {
+  id        String   @id @default(cuid())
+  userId    String
+  season    Season
+  year      Int
+  createdAt DateTime @default(now())
+
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries CalendarEntry[]
+
+  @@unique([userId, season, year]) // AC-03: 1 calendário por temporada por usuário
+}
+
+// Card do board. Progresso vive AQUI (por entrada) — é o que permite a cópia
+// entre estações (M6) preservar ou resetar `currentEpisode` sem tocar em Anime.
+model CalendarEntry {
+  id             String      @id @default(cuid())
+  calendarId     String
+  animeId        String
+  weekday        Weekday
+  position       Int
+  currentEpisode Int         @default(0)
+  totalEpisodes  Int? // snapshot no momento da adição (§8 do blueprint)
+  status         EntryStatus @default(PLANNED)
+  createdAt      DateTime    @default(now())
+
+  calendar Calendar @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+  anime    Anime    @relation(fields: [animeId], references: [id])
+
+  @@unique([calendarId, animeId]) // sem anime duplicado no mesmo calendário
+  @@index([calendarId, weekday, position]) // leitura ordenada do board
 }

@@ -134,6 +134,20 @@ export const animeFullDtoSchema = animeDtoSchema.extend({
   ),
 });
 
+// Calendário semanal (M4 — RF-04/ADR-03). Mesmo schema valida o POST no Nest
+// e o formulário de "nova estação" no front.
+export const createCalendarSchema = z.object({
+  season: seasonSchema,
+  year: z.coerce.number().int().min(2000).max(2100),
+});
+
+// Adicionar entrada ao board (RF-05). weekday aceita BACKLOG (aba extra do
+// legado — ADR-08); o backend faz upsert do Anime via Jikan a partir do malId.
+export const addEntrySchema = z.object({
+  malId: z.number().int().positive(),
+  weekday: weekdaySchema,
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
@@ -144,3 +158,5 @@ export type AnimeDto = z.infer<typeof animeDtoSchema>;
 export type SearchAnimesQuery = z.infer<typeof searchAnimesQuerySchema>;
 export type PaginatedAnimeDto = z.infer<typeof paginatedAnimeDtoSchema>;
 export type AnimeFullDto = z.infer<typeof animeFullDtoSchema>;
+export type CreateCalendarInput = z.infer<typeof createCalendarSchema>;
+export type AddEntryInput = z.infer<typeof addEntrySchema>;

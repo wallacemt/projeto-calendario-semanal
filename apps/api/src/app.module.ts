@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { CalendarsModule } from './calendars/calendars.module';
 import { validateEnv } from './config/env.validation';
 import { RedisModule } from './common/redis/redis.module';
+import { EntriesModule } from './entries/entries.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
@@ -35,6 +36,7 @@ import { UsersModule } from './users/users.module';
     RedisModule,
     AuthModule,
     CalendarsModule,
+    EntriesModule,
     UsersModule,
     AnimesModule,
   ],
