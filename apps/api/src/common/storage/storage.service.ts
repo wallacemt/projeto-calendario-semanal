@@ -1,4 +1,4 @@
-// Porta de storage (ADR-06/07) — trocável por design, igual Jikan/Email.
+// Porta de storage (ADR-06/07) — trocável por design, igual a API de animes/Email.
 // Único ponto que sabe que existe um provedor de storage por trás; consumidores
 // (UsersModule hoje, ThemesModule no M7) dependem só desta abstração.
 export abstract class StorageService {
