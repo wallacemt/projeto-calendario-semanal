@@ -6,7 +6,7 @@ import type {
   SearchAnimesQuery,
 } from '@aniweek/shared';
 import { PrismaService } from '../prisma/prisma.service';
-import { JikanService } from '../jikan/jikan.service';
+import { AnimeApiService } from '../anime-api/anime-api.service';
 import type { Anime } from '../../generated/prisma/client';
 
 @Injectable()
@@ -14,16 +14,16 @@ export class AnimesService {
   private readonly logger = new Logger(AnimesService.name);
 
   constructor(
-    private readonly jikan: JikanService,
+    private readonly animeApi: AnimeApiService,
     private readonly prisma: PrismaService,
   ) {}
 
   search(input: SearchAnimesQuery): Promise<PaginatedAnimeDto> {
-    return this.jikan.searchAnime(input);
+    return this.animeApi.searchAnime(input);
   }
 
   getByCurrentSeason(page: number): Promise<PaginatedAnimeDto> {
-    return this.jikan.getByCurrentSeson(page);
+    return this.animeApi.getByCurrentSeason(page);
   }
 
   // Página de detalhe completo (M3): só leitura, não passa pelo espelho
@@ -31,15 +31,16 @@ export class AnimesService {
   // faz sentido inflar o schema com trailer/rank/studios por causa de uma
   // página de detalhe.
   getFullByMalId(malId: number): Promise<AnimeFullDto> {
-    return this.jikan.getAnimeFullById(malId);
+    return this.animeApi.getAnimeFullById(malId);
   }
 
   // Contrato do blueprint (§8): detalhe faz upsert em Anime (espelho local).
-  // Se o Jikan estiver fora do ar, degrada servindo o que já está em cache
-  // local em vez de derrubar a rota (§12 — "dependências externas e falhas").
+  // Se a API externa estiver fora do ar, degrada servindo o que já está em
+  // cache local em vez de derrubar a rota (§12 — "dependências externas e
+  // falhas").
   async getByMalId(malId: number): Promise<AnimeDto> {
     try {
-      const dto = await this.jikan.getAnimeById(malId);
+      const dto = await this.animeApi.getAnimeById(malId);
       await this.prisma.anime.upsert({
         where: { malId },
         create: toAnimeRow(dto),
@@ -50,7 +51,7 @@ export class AnimesService {
       const fallback = await this.prisma.anime.findUnique({ where: { malId } });
       if (!fallback) throw error;
       this.logger.warn(
-        `Jikan indisponível — servindo Anime#${malId} do cache local`,
+        `API de animes indisponível — servindo Anime#${malId} do cache local`,
       );
       return toAnimeDto(fallback);
     }

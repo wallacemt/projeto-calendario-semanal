@@ -19,7 +19,7 @@ export class AnimesController {
   constructor(private readonly animes: AnimesService) {}
 
   @Get('search')
-  @ApiOkResponse({ description: 'Busca animes no Jikan (cache 1h)' })
+  @ApiOkResponse({ description: 'Busca animes na API externa (cache 1h)' })
   search(
     @Query(new ZodValidationPipe(searchAnimesQuerySchema))
     query: SearchAnimesQuery,
@@ -52,7 +52,7 @@ export class AnimesController {
   @Get(':malId/full')
   @ApiOkResponse({
     description:
-      'Detalhe completo do anime (trailer, estúdios, rank etc — Jikan /full, cache 24h). Não faz upsert local.',
+      'Detalhe completo do anime (trailer, estúdios, rank etc, cache 24h). Não faz upsert local.',
   })
   getFullByMalId(@Param('malId', ParseIntPipe) malId: number) {
     return this.animes.getFullByMalId(malId);
