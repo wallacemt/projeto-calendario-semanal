@@ -4,6 +4,7 @@ import type { AnimeDto, Weekday } from '@aniweek/shared'
 import { Search, X } from 'lucide-vue-next'
 import { useDebounce } from '../../../composables/useDebounce'
 import { HttpError } from '../../../lib/http'
+import { useToastStore } from '../../../stores/toast'
 import { discoverApi } from '../../discover/api'
 import { useCalendarStore } from '../store'
 
@@ -11,12 +12,12 @@ const props = defineProps<{ weekday: Weekday; weekdayLabel: string }>()
 const emit = defineEmits<{ close: [] }>()
 
 const calendar = useCalendarStore()
+const toast = useToastStore()
 
 const query = ref('')
 const debouncedQuery = useDebounce(query, 400)
 const results = ref<AnimeDto[]>([])
 const loading = ref(false)
-const error = ref<string | null>(null)
 // malId em voo (não um bool global) — permite desabilitar só o botão
 // clicado, os outros resultados continuam clicáveis enquanto essa requisição roda.
 const addingMalId = ref<number | null>(null)
@@ -27,12 +28,11 @@ watch(debouncedQuery, async (value) => {
     return
   }
   loading.value = true
-  error.value = null
   try {
     const { data } = await discoverApi.search(value, 1, 'all')
     results.value = data
   } catch (err) {
-    error.value = err instanceof HttpError ? err.message : 'Erro ao buscar animes'
+    toast.push(err instanceof HttpError ? err.message : 'Erro ao buscar animes')
   } finally {
     loading.value = false
   }
@@ -40,12 +40,11 @@ watch(debouncedQuery, async (value) => {
 
 async function addAnime(anime: AnimeDto) {
   addingMalId.value = anime.malId
-  error.value = null
   try {
     await calendar.addEntry(props.weekday, anime.malId)
     emit('close')
   } catch (err) {
-    error.value = err instanceof HttpError ? err.message : 'Erro ao adicionar anime'
+    toast.push(err instanceof HttpError ? err.message : 'Erro ao adicionar anime')
   } finally {
     addingMalId.value = null
   }
@@ -82,8 +81,6 @@ async function addAnime(anime: AnimeDto) {
           />
         </div>
       </div>
-
-      <p v-if="error" class="px-4 pb-2 text-[12px] text-(--ink-error)">{{ error }}</p>
 
       <div class="flex-1 overflow-y-auto px-4 pb-4">
         <p v-if="loading" class="py-8 text-center text-[12.5px] text-(--ink-text-faint)">Buscando...</p>

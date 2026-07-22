@@ -3,23 +3,23 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { LoaderCircle } from 'lucide-vue-next'
 import { HttpError } from '../../../lib/http'
+import { useToastStore } from '../../../stores/toast'
 import { useProfileStore } from '../store'
 
 const emit = defineEmits<{ close: [] }>()
 
 const store = useProfileStore()
 const router = useRouter()
+const toast = useToastStore()
 const deleting = ref(false)
-const error = ref<string | null>(null)
 
 async function confirmDelete() {
   deleting.value = true
-  error.value = null
   try {
     await store.deleteAccount()
     await router.push({ name: 'login' })
   } catch (err) {
-    error.value = err instanceof HttpError ? err.message : 'Não foi possível deletar a conta.'
+    toast.push(err instanceof HttpError ? err.message : 'Não foi possível deletar a conta.')
     deleting.value = false
   }
 }
@@ -38,7 +38,6 @@ async function confirmDelete() {
         <p class="mb-5 text-[13px] leading-[1.6] text-(--ink-text-muted)">
           Isso remove permanentemente seu calendário, progresso e estatísticas. Essa ação não pode ser desfeita.
         </p>
-        <p v-if="error" class="mb-4 text-[13px] text-(--ink-error)">{{ error }}</p>
         <div class="flex justify-end gap-3">
           <button
             type="button"

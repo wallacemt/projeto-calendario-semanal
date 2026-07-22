@@ -3,15 +3,20 @@ import { ref } from 'vue'
 import { updateProfileSchema } from '@aniweek/shared'
 import { Pencil } from 'lucide-vue-next'
 import { HttpError } from '../../../lib/http'
+import { useToastStore } from '../../../stores/toast'
 import type { Profile } from '../api'
 import { useProfileStore } from '../store'
 
 const props = defineProps<{ profile: Profile }>()
 
 const store = useProfileStore()
+const toast = useToastStore()
 const editing = ref(false)
 const username = ref(props.profile.username)
 const bio = ref(props.profile.bio ?? '')
+// Só erro de validação (Zod) — fica perto do campo porque é acionável ali
+// mesmo. Falha de API (rede, 409, etc.) vai pro toast (não tem campo pra
+// apontar).
 const error = ref<string | null>(null)
 const saving = ref(false)
 
@@ -40,7 +45,7 @@ async function save() {
     await store.update(parsed.data)
     editing.value = false
   } catch (err) {
-    error.value = err instanceof HttpError ? err.message : 'Não foi possível salvar.'
+    toast.push(err instanceof HttpError ? err.message : 'Não foi possível salvar.')
   } finally {
     saving.value = false
   }

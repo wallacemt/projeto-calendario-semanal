@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { AnimeDto } from "@aniweek/shared";
 import { HttpError } from "../../lib/http";
+import { useToastStore } from "../../stores/toast";
 import { discoverApi, type AnimeFilter } from "./api";
 
 export const useDiscoverStore = defineStore("discover", {
@@ -92,12 +93,23 @@ export const useDiscoverStore = defineStore("discover", {
         this.page = page;
       } catch (err) {
         if (requestId !== this.requestId) return;
-        // Jikan pode ficar fora do ar (§12 do blueprint) — sem isso, um 503
-        // vira silenciosamente "nenhum resultado encontrado", que é enganoso:
-        // o usuário acha que o termo não existe quando na verdade a busca nem rodou.
-        if (page === 1) this.results = [];
-        this.error =
+        const message =
           err instanceof HttpError ? err.message : "Erro ao buscar animes";
+        // page 1 sem nenhum resultado ainda em tela: não tem o que renderizar,
+        // então é a view (v-else-if="store.error") que mostra o estado de erro
+        // cheio. Jikan pode ficar fora do ar (§12 do blueprint) — sem isso, um
+        // 503 vira silenciosamente "nenhum resultado encontrado", que é
+        // enganoso: o usuário acha que o termo não existe quando na verdade a
+        // busca nem rodou.
+        //
+        // "Carregar mais" (page > 1) falhando não deve derrubar a grade que já
+        // está na tela — só avisa via toast e mantém os resultados anteriores.
+        if (page === 1) {
+          this.results = [];
+          this.error = message;
+        } else {
+          useToastStore().push(message);
+        }
       } finally {
         if (requestId === this.requestId) this.loading = false;
         if( this.mode === "search") this.searched = false;

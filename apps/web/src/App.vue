@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useThemeStore } from './stores/theme'
 import { useAuthStore } from './stores/auth'
 import AppLoader from './components/AppLoader.vue'
+import Toaster from './components/Toaster.vue'
 
 const theme = useThemeStore()
 const auth = useAuthStore()
@@ -25,4 +26,5 @@ onMounted(async () => {
   <!-- Sem nav global aqui: rotas autenticadas se envolvem no AppShell (sidebar)
        individualmente — ver components/AppShell.vue e HomeView/ProfileView. -->
   <RouterView v-else />
+  <Toaster />
 </template>

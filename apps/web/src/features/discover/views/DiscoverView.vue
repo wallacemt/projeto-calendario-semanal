@@ -77,7 +77,7 @@ onMounted(async () => {
             <AnimeCardSkeleton v-for="n in 10" :key="n" />
           </div>
 
-          <div v-else-if="store.error && store.results.length === 0"
+          <div v-else-if="store.error"
             class="flex h-full flex-col items-center justify-center gap-4 py-20 text-center">
             <div class="flex h-22 w-22 items-center justify-center rounded-3xl border text-3xl"
               style="background: rgba(248, 113, 113, 0.1); border-color: rgba(248, 113, 113, 0.25)">
@@ -109,10 +109,9 @@ onMounted(async () => {
                 :selected="store.selected?.malId === anime.malId" @select="store.select" />
             </div>
 
-            <div v-if="store.hasNextPage || (store.error && store.results.length > 0)"
+            <div v-if="store.hasNextPage"
               class="flex flex-col items-center gap-2 pt-8">
-              <p v-if="store.error" class="text-[12.5px] text-(--ink-text-faint)">{{ store.error }}</p>
-              <button v-if="store.hasNextPage" type="button" :disabled="store.loading"
+              <button type="button" :disabled="store.loading"
                 class="rounded-[10px] border px-5 py-2.5 text-sm text-(--ink-text-muted) disabled:opacity-50"
                 style="border-color: rgba(255, 255, 255, 0.12)" @click="store.loadMore">
                 {{ store.loading ? 'Carregando...' : 'Carregar mais' }}
