@@ -152,6 +152,19 @@ export const addEntrySchema = z.object({
   weekday: weekdaySchema,
 });
 
+// Drag-and-drop (M5 — RF-05/AC-05). position é o índice final na coluna de
+// destino (0-based) — o service recalcula os vizinhos a partir dele.
+export const moveEntrySchema = z.object({
+  weekday: weekdaySchema,
+  position: z.number().int().min(0),
+});
+
+// Progresso de episódio (M5 — AC-06). currentEpisode <= totalEpisodes é
+// validado no service (aqui só a forma: inteiro >= 0).
+export const updateProgressSchema = z.object({
+  currentEpisode: z.number().int().min(0),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
@@ -164,3 +177,5 @@ export type PaginatedAnimeDto = z.infer<typeof paginatedAnimeDtoSchema>;
 export type AnimeFullDto = z.infer<typeof animeFullDtoSchema>;
 export type CreateCalendarInput = z.infer<typeof createCalendarSchema>;
 export type AddEntryInput = z.infer<typeof addEntrySchema>;
+export type MoveEntryInput = z.infer<typeof moveEntrySchema>;
+export type UpdateProgressInput = z.infer<typeof updateProgressSchema>;
