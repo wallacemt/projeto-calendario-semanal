@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { X } from 'lucide-vue-next'
+import { Minus, Plus, X } from 'lucide-vue-next'
 import type { CalendarEntryResponse } from '../api'
 import { STATUS_META } from './entry-status-meta'
 
 const props = defineProps<{ entry: CalendarEntryResponse }>()
-defineEmits<{ remove: [] }>()
+const emit = defineEmits<{ remove: []; progress: [currentEpisode: number] }>()
 
 // totalEpisodes null = "em exibição" (ADR-06: episodes vem null do Jikan
 // pra animes ainda em transmissão) — não dá pra calcular % nesse caso.
@@ -22,11 +22,20 @@ const epLabel = computed(() =>
     : `Ep. ${props.entry.currentEpisode}/${props.entry.totalEpisodes}`,
 )
 const meta = computed(() => STATUS_META[props.entry.status])
+
+const atMax = computed(
+  () => !ongoing.value && props.entry.currentEpisode >= (props.entry.totalEpisodes as number),
+)
+function step(delta: number) {
+  const next = props.entry.currentEpisode + delta
+  if (next < 0) return
+  emit('progress', next)
+}
 </script>
 
 <template>
   <div
-    class="group flex-shrink-0 overflow-hidden rounded-[13px] border"
+    class="group flex-shrink-0 cursor-grab overflow-hidden rounded-[13px] border active:cursor-grabbing"
     style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.035) "
   >
     <div class="relative aspect-[2/3] bg-white/5">
@@ -43,7 +52,7 @@ const meta = computed(() => STATUS_META[props.entry.status])
       <button
         type="button"
         title="Remover do calendário"
-        class="absolute right-1.5 bottom-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-[5px] text-(--ink-text-muted) opacity-0 transition-opacity group-hover:opacity-100 hover:!bg-red-500/80 hover:!text-white"
+        class="absolute right-1.5 bottom-1.5 flex h-4.5 w-4.5 cursor-pointer items-center justify-center rounded-[5px] text-(--ink-text-muted) opacity-0 transition-opacity group-hover:opacity-100 hover:!bg-red-500/80 hover:!text-white"
         style="background: rgba(5, 6, 9, 0.75)"
         @click="$emit('remove')"
       >
@@ -54,7 +63,27 @@ const meta = computed(() => STATUS_META[props.entry.status])
       <div class="mb-1.5 line-clamp-2 min-h-7.25 text-[11.5px] leading-tight font-bold text-(--ink-text)">
         {{ entry.anime.title }}
       </div>
-      <div class="mb-1.25 text-[10px] text-(--ink-text-muted)">{{ epLabel }}</div>
+      <div class="mb-1.25 flex items-center gap-1 text-[10px] text-(--ink-text-muted)">
+        <button
+          type="button"
+          title="Episódio anterior"
+          class="flex h-3.5 w-3.5 flex-shrink-0 cursor-pointer items-center justify-center rounded text-(--ink-text-faint) hover:!bg-white/10 hover:!text-(--ink-text) disabled:cursor-not-allowed"
+          :disabled="entry.currentEpisode <= 0"
+          @click="step(-1)"
+        >
+          <Minus :size="9" />
+        </button>
+        <span class="truncate">{{ epLabel }}</span>
+        <button
+          type="button"
+          title="Próximo episódio"
+          class="flex h-3.5 w-3.5 flex-shrink-0 cursor-pointer items-center justify-center rounded text-(--ink-text-faint) hover:!bg-white/10 hover:!text-(--ink-text) disabled:cursor-not-allowed"
+          :disabled="atMax"
+          @click="step(1)"
+        >
+          <Plus :size="9" />
+        </button>
+      </div>
       <div v-if="!ongoing" class="mb-2 h-1 overflow-hidden rounded-full" style="background: rgba(255, 255, 255, 0.07)">
         <div class="h-full" :style="{ width: `${pct}%`, background: meta.bar }" />
       </div>

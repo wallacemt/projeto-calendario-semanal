@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Weekday } from '@aniweek/shared'
 import { HttpError } from '../../lib/http'
+import { useToastStore } from '../../stores/toast'
 import { calendarApi, type CalendarBoard } from './api'
 
 export const useCalendarStore = defineStore('calendar', {
@@ -54,7 +55,42 @@ export const useCalendarStore = defineStore('calendar', {
         await calendarApi.removeEntry(entryId)
       } catch (err) {
         list.splice(index, 0, removed)
-        this.error = err instanceof HttpError ? err.message : 'Erro ao remover entrada'
+        useToastStore().push(err instanceof HttpError ? err.message : 'Erro ao remover entrada')
+      }
+    },
+
+    // M5/AC-05: o VueDraggable já moveu o card entre os arrays na hora (é o
+    // v-model dele) — aqui só persiste. Se falhar, resincroniza com o
+    // servidor em vez de tentar desfazer o splice manualmente.
+    //
+    // Erro de ação (aqui, remove, updateProgress) vai pro toast, não pro
+    // `this.error` — esse campo é lido pela view só pra decidir entre
+    // "mostrar o board" e "mostrar tela de erro" (load() falhou, sem dado
+    // nenhum pra exibir). Se uma falha de reorder setasse `this.error`, o
+    // board inteiro já carregado sumiria da tela por causa de uma ação
+    // pontual que não tem nada a ver com "não consegui carregar o calendário".
+    async moveEntry(entryId: string, weekday: Weekday, position: number) {
+      try {
+        await calendarApi.moveEntry(entryId, { weekday, position })
+      } catch (err) {
+        useToastStore().push(err instanceof HttpError ? err.message : 'Erro ao mover entrada')
+        await this.load()
+      }
+    },
+
+    async updateProgress(weekday: Weekday, entryId: string, currentEpisode: number) {
+      if (!this.board) return
+      const entry = this.board.entries[weekday].find((e) => e.id === entryId)
+      if (!entry) return
+      const previous = { currentEpisode: entry.currentEpisode, status: entry.status }
+      entry.currentEpisode = currentEpisode
+      try {
+        const updated = await calendarApi.updateProgress(entryId, { currentEpisode })
+        entry.status = updated.status
+      } catch (err) {
+        entry.currentEpisode = previous.currentEpisode
+        entry.status = previous.status
+        useToastStore().push(err instanceof HttpError ? err.message : 'Erro ao atualizar progresso')
       }
     },
   },

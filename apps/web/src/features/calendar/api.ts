@@ -1,4 +1,12 @@
-import type { AddEntryInput, CreateCalendarInput, EntryStatus, Season, Weekday } from '@aniweek/shared'
+import type {
+  AddEntryInput,
+  CreateCalendarInput,
+  EntryStatus,
+  MoveEntryInput,
+  Season,
+  UpdateProgressInput,
+  Weekday,
+} from '@aniweek/shared'
 import { http } from '../../lib/http'
 
 export interface CurrentSeasonResponse {
@@ -38,4 +46,8 @@ export const calendarApi = {
   addEntry: (calendarId: string, input: AddEntryInput) =>
     http.post<CalendarEntryResponse>(`/calendars/${calendarId}/entries`, input),
   removeEntry: (entryId: string) => http.delete<void>(`/entries/${entryId}`),
+  moveEntry: (entryId: string, input: MoveEntryInput) =>
+    http.patch<CalendarEntryResponse>(`/entries/${entryId}/move`, input),
+  updateProgress: (entryId: string, input: UpdateProgressInput) =>
+    http.patch<CalendarEntryResponse>(`/entries/${entryId}/progress`, input),
 }

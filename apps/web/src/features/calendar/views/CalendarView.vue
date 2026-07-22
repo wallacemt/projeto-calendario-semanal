@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { Weekday } from '@aniweek/shared'
+import { VueDraggable, type DraggableEvent } from 'vue-draggable-plus'
 import AppShell from '../../../components/AppShell.vue'
 import AddEntryModal from '../components/AddEntryModal.vue'
 import EntryCard from '../components/EntryCard.vue'
@@ -70,6 +71,17 @@ function openAddModal(weekday: Weekday, label: string) {
   addModalWeekday.value = weekday
   addModalLabel.value = label
 }
+
+// M5/AC-05: VueDraggablePlus (SortableJS) já move o card entre os arrays via
+// v-model — o @end só precisa persistir onde ele parou. group="board"
+// compartilhado entre as 8 colunas (7 dias + backlog) é o que permite soltar
+// num dia diferente do de origem, não só reordenar dentro do mesmo dia.
+function onDragEnd(evt: DraggableEvent) {
+  const entryId = evt.item.dataset.entryId
+  const toWeekday = evt.to.dataset.weekday as Weekday | undefined
+  if (!entryId || !toWeekday || evt.newIndex == null) return
+  calendar.moveEntry(entryId, toWeekday, evt.newIndex)
+}
 </script>
 
 <template>
@@ -79,7 +91,7 @@ function openAddModal(weekday: Weekday, label: string) {
       <p v-else-if="calendar.error" class="p-8 text-sm text-(--ink-error)">{{ calendar.error }}</p>
 
       <div v-else class="flex flex-1 gap-3 overflow-x-auto overflow-y-hidden p-6">
-        <div v-for="day in days" :key="day.key" class="flex  flex-col overflow-hidden rounded-[14px]" :style="{
+        <div v-for="day in days" :key="day.key" class="relative flex  flex-col overflow-hidden rounded-[14px]" :style="{
           flex: day.isExpanded ? '4 1 420px' : '0 0 4.5rem',
           minWidth: day.isExpanded ? '340px' : '4.5rem',
           cursor: day.isExpanded ? 'default' : 'pointer',
@@ -104,10 +116,15 @@ function openAddModal(weekday: Weekday, label: string) {
               </div>
             </div>
 
-            <div class="grid  flex-1 grid-cols-4 content-start gap-2.5 pb-1 ">
-              <EntryCard v-for="entry in day.entries" :key="entry.id" :entry="entry"
-                @remove="calendar.removeEntry(day.key, entry.id)" />
-            </div>
+            <!-- group="board" compartilhado com as outras 7 colunas (M5/AC-05):
+                 é isso que deixa soltar um card num dia diferente do de origem. -->
+            <VueDraggable v-if="calendar.board" v-model="calendar.board.entries[day.key]" :group="{ name: 'board', pull: true, put: true }"
+              tag="div" class="grid  flex-1 grid-cols-4 content-start gap-2.5 pb-1 " :data-weekday="day.key"
+              @end="onDragEnd">
+              <EntryCard v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
+                :entry="entry" @remove="calendar.removeEntry(day.key, entry.id)"
+                @progress="calendar.updateProgress(day.key, entry.id, $event)" />
+            </VueDraggable>
 
             <button type="button"
               class="h-9.5 flex-shrink-0 rounded-[10px] border border-dashed text-[11px] text-(--ink-text-faint) opacity-0 transition-opacity group-hover:opacity-100 hover:border-(--brand-secondary)/40 hover:text-(--brand-secondary)"
@@ -131,6 +148,16 @@ function openAddModal(weekday: Weekday, label: string) {
               {{ day.short }} · {{ day.date }}
             </div>
           </div>
+
+          <!-- Overlay invisível: aceita drop mesmo colapsado (mesmo group das
+               colunas expandidas). Itens 0x0 só pra manter DOM em sincronia
+               1:1 com o array (o que o Sortable usa pra calcular índice). -->
+          <VueDraggable v-if="!day.isExpanded && calendar.board" v-model="calendar.board.entries[day.key]"
+            :group="{ name: 'board', pull: true, put: true }" tag="div" class="absolute inset-0 opacity-0"
+            :data-weekday="day.key" @end="onDragEnd">
+            <div v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
+              class="h-0 w-0 overflow-hidden" />
+          </VueDraggable>
         </div>
       </div>
     </div>
