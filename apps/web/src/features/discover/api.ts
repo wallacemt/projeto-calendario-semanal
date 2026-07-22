@@ -1,23 +1,33 @@
-import type { AnimeDto, AnimeFullDto, PaginatedAnimeDto } from '@aniweek/shared'
-import { http } from '../../lib/http'
+import type {
+  AnimeDto,
+  AnimeFullDto,
+  PaginatedAnimeDto,
+} from "@aniweek/shared";
+import { http } from "../../lib/http";
 
-export type AnimeFilter = 'all' | 'tv' | 'movie' | 'airing' | 'top'
+export type AnimeFilter = "all" | "tv" | "movie" | "airing" | "top";
 
 const FILTER_PARAMS: Record<AnimeFilter, Record<string, string>> = {
   all: {},
-  tv: { type: 'tv' },
-  movie: { type: 'movie' },
-  airing: { status: 'airing' },
-  top: { orderBy: 'score' },
-}
+  tv: { type: "tv" },
+  movie: { type: "movie" },
+  airing: { status: "airing" },
+  top: { orderBy: "score" },
+};
 
 export const discoverApi = {
   search: (query: string, page: number, filter: AnimeFilter) => {
-    const params = new URLSearchParams({ query, })
-    return http.get<PaginatedAnimeDto>(`/animes/search?${params}`)
+    const params = new URLSearchParams({
+      query,
+      page: String(page),
+      ...FILTER_PARAMS[filter],
+    }).toString();
+    return http.get<PaginatedAnimeDto>(`/animes/search?${params}`);
   },
   detail: (malId: number) => http.get<AnimeDto>(`/animes/${malId}`),
-  fullDetail: (malId: number) => http.get<AnimeFullDto>(`/animes/${malId}/full`),
+  fullDetail: (malId: number) =>
+    http.get<AnimeFullDto>(`/animes/${malId}/full`),
 
-  seasonNow: (page: number) => http.get<PaginatedAnimeDto>(`/animes/season/now?page=${page}`),
-}
+  seasonNow: (page: number) =>
+    http.get<PaginatedAnimeDto>(`/animes/season/now?page=${page}`),
+};

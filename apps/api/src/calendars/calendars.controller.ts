@@ -62,7 +62,8 @@ export class CalendarsController {
 
   @Post(':id/entries')
   @ApiCreatedResponse({
-    description: 'Adiciona um anime a um dia do board (upsert via API de animes).',
+    description:
+      'Adiciona um anime a um dia do board (upsert via API de animes).',
   })
   addEntry(
     @Param('id') id: string,
