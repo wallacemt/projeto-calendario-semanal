@@ -165,6 +165,42 @@ export const updateProgressSchema = z.object({
   currentEpisode: z.number().int().min(0),
 });
 
+// Import-previous (M6 — ADR-03/§7/AC-04). entryIds opcional restringe quais
+// entradas da temporada anterior trazer; sem ele, traz todas as
+// status != COMPLETED. resetProgress decide se currentEpisode é preservado
+// (default) ou zerado.
+export const importPreviousSchema = z.object({
+  entryIds: z.array(z.string()).optional(),
+  resetProgress: z.boolean().optional(),
+});
+
+// Edição manual do espelho local do anime (M6, fora do blueprint). Todos os
+// campos opcionais — o PATCH só atualiza o que vier no body. malId não entra
+// aqui: é a identidade externa (Jikan), não é editável.
+export const updateAnimeSchema = z.object({
+  title: z.string().min(1).optional(),
+  imageUrl: z.string().nullable().optional(),
+  synopsis: z.string().nullable().optional(),
+  episodes: z.number().int().positive().nullable().optional(),
+  genres: z.array(z.string()).optional(),
+  malUrl: z.string().nullable().optional(),
+  linkAccess: z.string().nullable().optional(),
+});
+
+// Edição manual de uma entrada do board (M6, fora do blueprint) — usado pelo
+// modal de editar card (weekday sem drag, progresso, status forçado). Ao
+// menos 1 campo precisa vir preenchido (refine), senão é um PATCH vazio.
+export const updateEntrySchema = z
+  .object({
+    weekday: weekdaySchema.optional(),
+    currentEpisode: z.number().int().min(0).optional(),
+    totalEpisodes: z.number().int().positive().nullable().optional(),
+    status: entryStatusSchema.optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Informe ao menos um campo para atualizar',
+  });
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
@@ -179,3 +215,6 @@ export type CreateCalendarInput = z.infer<typeof createCalendarSchema>;
 export type AddEntryInput = z.infer<typeof addEntrySchema>;
 export type MoveEntryInput = z.infer<typeof moveEntrySchema>;
 export type UpdateProgressInput = z.infer<typeof updateProgressSchema>;
+export type ImportPreviousInput = z.infer<typeof importPreviousSchema>;
+export type UpdateAnimeInput = z.infer<typeof updateAnimeSchema>;
+export type UpdateEntryInput = z.infer<typeof updateEntrySchema>;
