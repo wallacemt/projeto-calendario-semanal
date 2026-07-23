@@ -7,6 +7,7 @@ import {
 import type {
   AddEntryInput,
   MoveEntryInput,
+  UpdateEntryInput,
   UpdateProgressInput,
 } from '@aniweek/shared';
 import { PrismaService } from '../prisma/prisma.service';
@@ -149,7 +150,15 @@ export class EntriesService {
   ) {
     const entry = await this.findOwned(entryId, userId);
 
-    if (input.currentEpisode > entry.totalEpisodes!) {
+    // totalEpisodes null = "em exibição" (ex.: One Piece) — sem total
+    // conhecido não dá pra validar teto nenhum. Sem o guard != null,
+    // `currentEpisode > null` vira `currentEpisode > 0` em runtime (o `!`
+    // aqui do lado do totalEpisodes é só non-null assertion do TS, não
+    // existe depois de compilado) e qualquer progresso > 0 era rejeitado.
+    if (
+      entry.totalEpisodes != null &&
+      input.currentEpisode > entry.totalEpisodes
+    ) {
       throw new BadRequestException(
         'Episódio atual não pode passar do total de episódios',
       );
@@ -166,6 +175,60 @@ export class EntriesService {
       input.currentEpisode >= entry.totalEpisodes
     ) {
       data.status = EntryStatus.COMPLETED;
+    }
+
+    return this.prisma.calendarEntry.update({
+      where: { id: entryId },
+      data,
+      include: { anime: true },
+    });
+  }
+
+  // M6 (fora do blueprint): PATCH único pro modal de "editar card" (weekday
+  // sem drag, progresso, total de episódios, status forçado). Weekday
+  // reaproveita o reposicionamento transacional de move() (fim da coluna de
+  // destino) em vez de duplicar aquela lógica de deslocar vizinhos.
+  async updateDetails(
+    entryId: string,
+    userId: string,
+    input: UpdateEntryInput,
+  ) {
+    let entry = await this.findOwned(entryId, userId);
+
+    if (
+      input.weekday &&
+      (entry.weekday as string) !== (input.weekday as string)
+    ) {
+      const position = await this.prisma.calendarEntry.count({
+        where: { calendarId: entry.calendarId, weekday: input.weekday },
+      });
+      await this.move(entryId, userId, { weekday: input.weekday, position });
+      entry = await this.findOwned(entryId, userId);
+    }
+
+    const currentEpisode = input.currentEpisode ?? entry.currentEpisode;
+    const totalEpisodes =
+      input.totalEpisodes !== undefined
+        ? input.totalEpisodes
+        : entry.totalEpisodes;
+    if (totalEpisodes != null && currentEpisode > totalEpisodes) {
+      throw new BadRequestException(
+        'Episódio atual não pode passar do total de episódios',
+      );
+    }
+
+    const data: Prisma.CalendarEntryUpdateInput = {};
+    if (input.currentEpisode !== undefined)
+      data.currentEpisode = input.currentEpisode;
+    if (input.totalEpisodes !== undefined)
+      data.totalEpisodes = input.totalEpisodes;
+    if (input.status !== undefined) data.status = input.status;
+
+    if (Object.keys(data).length === 0) {
+      return this.prisma.calendarEntry.findUniqueOrThrow({
+        where: { id: entryId },
+        include: { anime: true },
+      });
     }
 
     return this.prisma.calendarEntry.update({

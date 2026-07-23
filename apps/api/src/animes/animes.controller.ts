@@ -1,15 +1,19 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Query,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import {
   searchAnimesQuerySchema,
+  updateAnimeSchema,
   type SearchAnimesQuery,
+  type UpdateAnimeInput,
 } from '@aniweek/shared';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { AnimesService } from './animes.service';
@@ -56,5 +60,16 @@ export class AnimesController {
   })
   getFullByMalId(@Param('malId', ParseIntPipe) malId: number) {
     return this.animes.getFullByMalId(malId);
+  }
+
+  // id local (Anime.id via CalendarEntry.anime), não malId — edição mexe no
+  // espelho, não na identidade externa (M6, fora do blueprint).
+  @Patch(':id')
+  @ApiOkResponse({ description: 'Edita o espelho local do anime (M6).' })
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateAnimeSchema)) body: UpdateAnimeInput,
+  ) {
+    return this.animes.update(id, body);
   }
 }

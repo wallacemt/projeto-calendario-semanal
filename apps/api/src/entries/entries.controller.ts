@@ -10,8 +10,10 @@ import {
 import { ApiNoContentResponse, ApiOkResponse } from '@nestjs/swagger';
 import {
   moveEntrySchema,
+  updateEntrySchema,
   updateProgressSchema,
   type MoveEntryInput,
+  type UpdateEntryInput,
   type UpdateProgressInput,
 } from '@aniweek/shared';
 import { EntriesService } from './entries.service';
@@ -49,5 +51,18 @@ export class EntriesController {
     body: UpdateProgressInput,
   ) {
     return this.entries.updateProgress(id, user.id, body);
+  }
+
+  // M6 (fora do blueprint): PATCH único do modal de editar card.
+  @Patch(':id')
+  @ApiOkResponse({
+    description: 'Edita weekday/progresso/total/status de uma entrada (M6).',
+  })
+  update(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthenticatedUser,
+    @Body(new ZodValidationPipe(updateEntrySchema)) body: UpdateEntryInput,
+  ) {
+    return this.entries.updateDetails(id, user.id, body);
   }
 }

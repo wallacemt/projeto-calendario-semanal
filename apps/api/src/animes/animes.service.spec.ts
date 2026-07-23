@@ -1,12 +1,15 @@
+import { NotFoundException } from '@nestjs/common';
 import { AnimesService } from './animes.service';
 
 // Cobre a única regra não-trivial do módulo: degradação graciosa quando o
 // Jikan está fora do ar (§12 do blueprint — servir o espelho local em vez de
-// derrubar a rota).
+// derrubar a rota). M6 (fora do blueprint) soma o guard de manuallyEdited.
 
 function buildAnimesService() {
   const jikan = { getAnimeById: jest.fn(), searchAnime: jest.fn() };
-  const prisma = { anime: { upsert: jest.fn(), findUnique: jest.fn() } };
+  const prisma = {
+    anime: { upsert: jest.fn(), findUnique: jest.fn(), update: jest.fn() },
+  };
   const animes = new AnimesService(jikan as never, prisma as never);
   return { animes, jikan, prisma };
 }
@@ -38,5 +41,47 @@ describe('AnimesService', () => {
     prisma.anime.findUnique.mockResolvedValue(null);
 
     await expect(animes.getByMalId(999)).rejects.toThrow('Jikan indisponível');
+  });
+
+  it('getByMalId pula o upsert quando o anime foi editado manualmente (M6)', async () => {
+    const { animes, jikan, prisma } = buildAnimesService();
+    jikan.getAnimeById.mockResolvedValue({
+      malId: 52991,
+      title: 'Frieren (Jikan)',
+    });
+    prisma.anime.findUnique.mockResolvedValue({
+      malId: 52991,
+      manuallyEdited: true,
+    });
+
+    const result = await animes.getByMalId(52991);
+
+    expect(result.title).toBe('Frieren (Jikan)'); // a página de detalhe segue mostrando o Jikan ao vivo
+    expect(prisma.anime.upsert).not.toHaveBeenCalled(); // só o espelho local (usado no board) não é sobrescrito
+  });
+
+  it('update seta manuallyEdited:true pra proteger o próximo upsert do Jikan', async () => {
+    const { animes, prisma } = buildAnimesService();
+    prisma.anime.findUnique.mockResolvedValue({ id: 'anime-1' });
+    prisma.anime.update.mockResolvedValue({
+      id: 'anime-1',
+      title: 'Novo título',
+    });
+
+    await animes.update('anime-1', { title: 'Novo título' });
+
+    expect(prisma.anime.update).toHaveBeenCalledWith({
+      where: { id: 'anime-1' },
+      data: { title: 'Novo título', manuallyEdited: true },
+    });
+  });
+
+  it('update devolve 404 se o anime não existe', async () => {
+    const { animes, prisma } = buildAnimesService();
+    prisma.anime.findUnique.mockResolvedValue(null);
+
+    await expect(animes.update('anime-1', { title: 'X' })).rejects.toThrow(
+      NotFoundException,
+    );
   });
 });

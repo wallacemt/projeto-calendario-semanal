@@ -29,3 +29,22 @@ export function getCurrentSeason(reference: Date = new Date()): CurrentSeason {
     year: getYear(reference),
   };
 }
+
+// Ordem fixa da indústria (§7 do blueprint) — usada pelo import-previous (M6)
+// pra achar de qual estação trazer os animes "em andamento". Ao voltar de
+// WINTER, cai pra FALL do ano anterior.
+const SEASON_ORDER: readonly Season[] = [
+  Season.WINTER,
+  Season.SPRING,
+  Season.SUMMER,
+  Season.FALL,
+];
+
+export function getPreviousSeason({
+  season,
+  year,
+}: CurrentSeason): CurrentSeason {
+  const index = SEASON_ORDER.indexOf(season);
+  if (index === 0) return { season: Season.FALL, year: year - 1 };
+  return { season: SEASON_ORDER[index - 1], year };
+}

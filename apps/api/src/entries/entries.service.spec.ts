@@ -158,6 +158,20 @@ describe('EntriesService', () => {
     ).rejects.toThrow(BadRequestException);
   });
 
+  it('updateProgress aceita qualquer progresso quando totalEpisodes é null (anime em exibição, ex. One Piece)', async () => {
+    const { entries, prisma } = buildEntriesService();
+    prisma.calendarEntry.findUnique.mockResolvedValue({
+      id: 'entry-1',
+      status: EntryStatus.WATCHING,
+      totalEpisodes: null,
+    });
+    prisma.calendarEntry.update.mockResolvedValue({ id: 'entry-1' });
+
+    await expect(
+      entries.updateProgress('entry-1', 'user-1', { currentEpisode: 1088 }),
+    ).resolves.toEqual({ id: 'entry-1' });
+  });
+
   it('updateProgress promove PLANNED -> WATCHING ao registrar o 1º episódio', async () => {
     const { entries, prisma } = buildEntriesService();
     prisma.calendarEntry.findUnique.mockResolvedValue({
@@ -173,6 +187,70 @@ describe('EntriesService', () => {
       expect.objectContaining({
         data: { currentEpisode: 1, status: EntryStatus.WATCHING },
       }),
+    );
+  });
+
+  it('updateDetails reposiciona no fim da coluna quando o weekday muda (M6)', async () => {
+    const { entries, prisma } = buildEntriesService();
+    const beforeMove = {
+      id: 'entry-1',
+      calendarId: 'cal-1',
+      weekday: Weekday.MON,
+      position: 2,
+      currentEpisode: 1,
+      totalEpisodes: 12,
+    };
+    const afterMove = { ...beforeMove, weekday: Weekday.TUE, position: 3 };
+    // updateDetails busca a entrada (1), delega pra move() que busca de novo
+    // internamente (2), e por fim rebusca já reposicionada (3) — mesmo
+    // findOwned reaproveitado 3x, não é bug de teste duplicado.
+    prisma.calendarEntry.findUnique
+      .mockResolvedValueOnce(beforeMove)
+      .mockResolvedValueOnce(beforeMove)
+      .mockResolvedValueOnce(afterMove);
+    prisma.calendarEntry.findUniqueOrThrow.mockResolvedValue({ id: 'entry-1' });
+    prisma.calendarEntry.count.mockResolvedValue(3); // fim da coluna de TUE
+
+    await entries.updateDetails('entry-1', 'user-1', { weekday: Weekday.TUE });
+
+    expect(prisma.calendarEntry.update).toHaveBeenCalledWith({
+      where: { id: 'entry-1' },
+      data: { weekday: Weekday.TUE, position: 3 },
+    });
+  });
+
+  it('updateDetails rejeita currentEpisode acima do total (mesma regra AC-06)', async () => {
+    const { entries, prisma } = buildEntriesService();
+    prisma.calendarEntry.findUnique.mockResolvedValue({
+      id: 'entry-1',
+      calendarId: 'cal-1',
+      weekday: Weekday.MON,
+      currentEpisode: 1,
+      totalEpisodes: 12,
+    });
+
+    await expect(
+      entries.updateDetails('entry-1', 'user-1', { currentEpisode: 13 }),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('updateDetails atualiza status/total/progresso direto quando o weekday não muda', async () => {
+    const { entries, prisma } = buildEntriesService();
+    prisma.calendarEntry.findUnique.mockResolvedValue({
+      id: 'entry-1',
+      calendarId: 'cal-1',
+      weekday: Weekday.MON,
+      currentEpisode: 1,
+      totalEpisodes: 12,
+    });
+    prisma.calendarEntry.update.mockResolvedValue({ id: 'entry-1' });
+
+    await entries.updateDetails('entry-1', 'user-1', {
+      status: EntryStatus.DROPPED,
+    });
+
+    expect(prisma.calendarEntry.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { status: EntryStatus.DROPPED } }),
     );
   });
 

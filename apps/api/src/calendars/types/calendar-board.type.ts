@@ -21,6 +21,14 @@ export interface EntryResponse {
     malId: number;
     title: string;
     imageUrl: string | null;
+    linkAccess: string | null;
+    // Campos extras (M6, fora do blueprint) — já vêm carregados pelo
+    // include:{anime:true}, só passaram a ser expostos pro modal de editar
+    // card não precisar de uma 2ª chamada só pra ler o que já tem em mãos.
+    synopsis: string | null;
+    episodes: number | null;
+    malUrl: string | null;
+    genres: string[];
   };
 }
 
@@ -56,6 +64,13 @@ export function toCalendarBoard(
         malId: entry.anime.malId,
         title: entry.anime.title,
         imageUrl: entry.anime.imageUrl,
+        linkAccess: entry.anime.linkAccess,
+        synopsis: entry.anime.synopsis,
+        episodes: entry.anime.episodes,
+        malUrl: entry.anime.malUrl,
+        genres: Array.isArray(entry.anime.genres)
+          ? (entry.anime.genres as string[])
+          : [],
       },
     });
   }

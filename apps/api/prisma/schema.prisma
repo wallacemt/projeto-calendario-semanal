@@ -97,7 +97,14 @@ model Anime {
   episodes Int?
   genres   Json?
   malUrl   String?
-  cachedAt DateTime @default(now())
+  // Onde o usuário assiste (M6, fora do blueprint) — só exibe o botão
+  // "Acessar anime" no board quando preenchido.
+  linkAccess String?
+  // M6: quando true, getByMalId (upsert do Jikan) pula a atualização dos
+  // campos espelhados — protege uma edição manual (PATCH /animes/:id) de ser
+  // sobrescrita no próximo refetch da API externa.
+  manuallyEdited Boolean  @default(false)
+  cachedAt       DateTime @default(now())
 
   entries CalendarEntry[]
   // watched WatchedAnime[]

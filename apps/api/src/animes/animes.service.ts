@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import type {
   AnimeDto,
   AnimeFullDto,
   PaginatedAnimeDto,
   SearchAnimesQuery,
+  UpdateAnimeInput,
 } from '@aniweek/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { AnimeApiService } from '../anime-api/anime-api.service';
@@ -41,6 +42,12 @@ export class AnimesService {
   async getByMalId(malId: number): Promise<AnimeDto> {
     try {
       const dto = await this.animeApi.getAnimeById(malId);
+      // M6: se o usuário editou esse anime manualmente (PATCH /animes/:id),
+      // o upsert do Jikan não pisa em cima — só cria a linha se ela ainda
+      // não existir localmente. Sem esse guard, abrir o detalhe de novo
+      // (qualquer tela que chame esse método) sobrescreveria a edição.
+      const existing = await this.prisma.anime.findUnique({ where: { malId } });
+      if (existing?.manuallyEdited) return dto;
       await this.prisma.anime.upsert({
         where: { malId },
         create: toAnimeRow(dto),
@@ -55,6 +62,19 @@ export class AnimesService {
       );
       return toAnimeDto(fallback);
     }
+  }
+
+  // M6 (fora do blueprint): edição manual do espelho local — malId de fora
+  // (não muda a identidade externa). manuallyEdited:true é o que faz
+  // getByMalId parar de sobrescrever essa linha no próximo upsert do Jikan.
+  async update(id: string, input: UpdateAnimeInput): Promise<Anime> {
+    const existing = await this.prisma.anime.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException('Anime não encontrado');
+
+    return this.prisma.anime.update({
+      where: { id },
+      data: { ...input, manuallyEdited: true },
+    });
   }
 }
 

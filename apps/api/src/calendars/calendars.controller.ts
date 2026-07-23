@@ -3,8 +3,10 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import {
   addEntrySchema,
   createCalendarSchema,
+  importPreviousSchema,
   type AddEntryInput,
   type CreateCalendarInput,
+  type ImportPreviousInput,
 } from '@aniweek/shared';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Public } from '../auth/decorators/public.decorator';
@@ -71,5 +73,19 @@ export class CalendarsController {
     @Body(new ZodValidationPipe(addEntrySchema)) body: AddEntryInput,
   ) {
     return this.calendars.addEntry(id, user.id, body);
+  }
+
+  @Post(':id/import-previous')
+  @ApiCreatedResponse({
+    description:
+      'Traz em massa os animes em andamento da temporada anterior (AC-04).',
+  })
+  importPrevious(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthenticatedUser,
+    @Body(new ZodValidationPipe(importPreviousSchema))
+    body: ImportPreviousInput,
+  ) {
+    return this.calendars.importPrevious(id, user.id, body);
   }
 }
