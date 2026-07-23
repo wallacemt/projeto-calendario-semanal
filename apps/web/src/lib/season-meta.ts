@@ -1,7 +1,8 @@
 import { Season } from '@aniweek/shared'
 
-// Só usado pelo hero das telas de auth por enquanto — se calendar/museum
-// precisarem do mesmo rótulo depois, promove pra um lugar compartilhado.
+// Usado pelo hero das telas de auth e pelo calendário (M6 — troca/importa
+// estação). Promovido de features/auth/lib pra cá quando um 2º feature
+// passou a precisar do mesmo rótulo.
 export const seasonMeta: Record<Season, { emoji: string; label: string; range: string }> = {
   [Season.WINTER]: { emoji: '❄️', label: 'Winter', range: 'Jan–Mar' },
   [Season.SPRING]: { emoji: '🌸', label: 'Spring', range: 'Abr–Jun' },

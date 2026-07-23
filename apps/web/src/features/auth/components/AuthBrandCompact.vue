@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useThemeStore } from '../../../stores/theme'
-import { seasonMeta } from '../lib/season-meta'
+import { seasonMeta } from '../../../lib/season-meta'
 
 const theme = useThemeStore()
 </script>

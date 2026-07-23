@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import type { Weekday } from '@aniweek/shared'
+import type { UpdateEntryInput, Weekday } from '@aniweek/shared'
 import { HttpError } from '../../lib/http'
 import { useToastStore } from '../../stores/toast'
-import { calendarApi, type CalendarBoard } from './api'
+import { calendarApi, type CalendarBoard, type CalendarEntryResponse } from './api'
 
 export const useCalendarStore = defineStore('calendar', {
   state: () => ({
@@ -91,6 +91,59 @@ export const useCalendarStore = defineStore('calendar', {
         entry.currentEpisode = previous.currentEpisode
         entry.status = previous.status
         useToastStore().push(err instanceof HttpError ? err.message : 'Erro ao atualizar progresso')
+      }
+    },
+
+    // M6 (fora do blueprint): PATCH único do modal de editar card. Não
+    // engole erro (ao contrário de removeEntry/updateProgress, que são
+    // otimistas) — quem chama é um form de modal, o padrão aqui é o mesmo do
+    // addEntry: deixa a exceção subir pra quem submeteu decidir se fecha o
+    // modal ou mostra o erro e mantém aberto.
+    async updateEntry(oldWeekday: Weekday, entryId: string, patch: UpdateEntryInput) {
+      if (!this.board) return
+      const updated = await calendarApi.updateEntry(entryId, patch)
+      const oldList = this.board.entries[oldWeekday]
+      const idx = oldList.findIndex((e) => e.id === entryId)
+      if (idx !== -1) oldList.splice(idx, 1)
+      if (updated.weekday === oldWeekday && idx !== -1) {
+        oldList.splice(idx, 0, updated)
+      } else {
+        this.board.entries[updated.weekday].push(updated)
+      }
+    },
+
+    // M6 (fora do blueprint): merge local puro, sem round-trip — o form do
+    // EditEntryModal já chamou PATCH /animes/:id e sabe exatamente quais
+    // campos mudaram, então só espelha isso no card em vez de recarregar o
+    // board inteiro por causa de 1 campo de texto.
+    patchAnime(entryId: string, patch: Partial<CalendarEntryResponse['anime']>) {
+      if (!this.board) return
+      for (const list of Object.values(this.board.entries)) {
+        const entry = list.find((e) => e.id === entryId)
+        if (entry) {
+          Object.assign(entry.anime, patch)
+          return
+        }
+      }
+    },
+
+    // Bulk (AC-04) — botão "Importar da temporada anterior" na topbar, 1
+    // clique, sem modal. Erro/sucesso viram toast direto (não há form pra
+    // manter aberto em caso de falha).
+    async importPreviousBulk() {
+      if (!this.board) return
+      try {
+        const created = await calendarApi.importPrevious(this.board.id, {})
+        for (const entry of created) {
+          this.board.entries[entry.weekday].push(entry)
+        }
+        useToastStore().push(
+          created.length > 0
+            ? `${created.length} anime(s) trazido(s) da temporada anterior`
+            : 'Nada para trazer da temporada anterior',
+        )
+      } catch (err) {
+        useToastStore().push(err instanceof HttpError ? err.message : 'Erro ao importar da temporada anterior')
       }
     },
   },

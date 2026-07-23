@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { Weekday } from '@aniweek/shared'
+import type { Weekday } from '@aniweek/shared'
 import { VueDraggable, type DraggableEvent } from 'vue-draggable-plus'
+import { Plus, RotateCcw } from 'lucide-vue-next'
 import AppShell from '../../../components/AppShell.vue'
+import { seasonMeta } from '../../../lib/season-meta'
 import AddEntryModal from '../components/AddEntryModal.vue'
+import BringForwardModal from '../components/BringForwardModal.vue'
+import CalendarBoardSkeleton from '../components/CalendarBoardSkeleton.vue'
+import EditEntryModal from '../components/EditEntryModal.vue'
 import EntryCard from '../components/EntryCard.vue'
+import EntryContextMenu from '../components/EntryContextMenu.vue'
+import NewSeasonModal from '../components/NewSeasonModal.vue'
+import type { CalendarEntryResponse } from '../api'
 import { useCalendarStore } from '../store'
+import { WEEKDAY_META, WEEKDAY_ORDER } from '../weekday-meta'
 
 const calendar = useCalendarStore()
 onMounted(() => calendar.load())
@@ -14,16 +23,7 @@ onMounted(() => calendar.load())
 // ADR-08). Sem dependência nova: datas da semana calculadas com Date nativo,
 // não precisa de date-fns só pra formatar "21 Jul" no front (date-fns já é
 // usado no backend, aqui é 1 função pequena).
-const DAY_DEFS: { key: Weekday; short: string; isExtra?: boolean }[] = [
-  { key: Weekday.MON, short: 'SEG' },
-  { key: Weekday.TUE, short: 'TER' },
-  { key: Weekday.WED, short: 'QUA' },
-  { key: Weekday.THU, short: 'QUI' },
-  { key: Weekday.FRI, short: 'SEX' },
-  { key: Weekday.SAT, short: 'SÁB' },
-  { key: Weekday.SUN, short: 'DOM' },
-  { key: Weekday.BACKLOG, short: '🗂 EXTRA', isExtra: true },
-]
+const DAY_DEFS = WEEKDAY_ORDER.map((key) => ({ key, ...WEEKDAY_META[key] }))
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' })
 
@@ -72,6 +72,26 @@ function openAddModal(weekday: Weekday, label: string) {
   addModalLabel.value = label
 }
 
+const bringForwardOpen = ref(false)
+const newSeasonOpen = ref(false)
+
+// M6 (fora do blueprint): menu de contexto do right-click + modal de editar.
+const contextMenu = ref<{ x: number; y: number; entry: CalendarEntryResponse; weekday: Weekday } | null>(null)
+function onCardContextMenu(event: MouseEvent, entry: CalendarEntryResponse, weekday: Weekday) {
+  contextMenu.value = { x: event.clientX, y: event.clientY, entry, weekday }
+}
+const editingEntry = ref<{ entry: CalendarEntryResponse; weekday: Weekday } | null>(null)
+function openEdit() {
+  if (!contextMenu.value) return
+  editingEntry.value = { entry: contextMenu.value.entry, weekday: contextMenu.value.weekday }
+  contextMenu.value = null
+}
+function removeFromMenu() {
+  if (!contextMenu.value) return
+  calendar.removeEntry(contextMenu.value.weekday, contextMenu.value.entry.id)
+  contextMenu.value = null
+}
+
 // M5/AC-05: VueDraggablePlus (SortableJS) já move o card entre os arrays via
 // v-model — o @end só precisa persistir onde ele parou. group="board"
 // compartilhado entre as 8 colunas (7 dias + backlog) é o que permite soltar
@@ -87,10 +107,40 @@ function onDragEnd(evt: DraggableEvent) {
 <template>
   <AppShell title="Calendário Semanal" :subtitle="`${totalEntries} animes na semana`">
     <div class="flex h-full flex-col">
-      <p v-if="calendar.loading" class="p-8 text-sm text-(--ink-text-faint)">Carregando calendário...</p>
+      <CalendarBoardSkeleton v-if="calendar.loading" />
       <p v-else-if="calendar.error" class="p-8 text-sm text-(--ink-error)">{{ calendar.error }}</p>
 
-      <div v-else class="flex flex-1 gap-3 overflow-x-auto overflow-y-hidden p-6">
+      <template v-else>
+        <!-- M6 (fora do blueprint): navegação/import de temporada -->
+        <div v-if="calendar.board" class="flex flex-shrink-0 items-center justify-end gap-2.5 border-b px-6 py-3" style="border-color: rgba(255, 255, 255, 0.06)">
+          <button
+            type="button"
+            class="flex items-center gap-2 rounded-[10px] px-3.5 py-2 text-[12.5px] text-(--ink-text)"
+            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08)"
+            @click="bringForwardOpen = true"
+          >
+            {{ seasonMeta[calendar.board.season].emoji }} {{ seasonMeta[calendar.board.season].label }} · {{ calendar.board.year }}
+            <span class="text-(--ink-text-faint)">▾</span>
+          </button>
+          <button
+            type="button"
+            class="flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[12.5px]"
+            style="border: 1px solid rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); color: #c4b5fd"
+            @click="calendar.importPreviousBulk()"
+          >
+            <RotateCcw :size="13" /> Importar da temporada anterior
+          </button>
+          <button
+            type="button"
+            class="flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[12.5px] text-(--ink-text)"
+            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08)"
+            @click="newSeasonOpen = true"
+          >
+            <Plus :size="13" /> Nova temporada
+          </button>
+        </div>
+
+        <div class="flex flex-1 gap-3 overflow-x-auto overflow-y-hidden p-6">
         <div v-for="day in days" :key="day.key" class="relative flex  flex-col overflow-hidden rounded-[14px]" :style="{
           flex: day.isExpanded ? '4 1 420px' : '0 0 4.5rem',
           minWidth: day.isExpanded ? '340px' : '4.5rem',
@@ -123,7 +173,8 @@ function onDragEnd(evt: DraggableEvent) {
               @end="onDragEnd">
               <EntryCard v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
                 :entry="entry" @remove="calendar.removeEntry(day.key, entry.id)"
-                @progress="calendar.updateProgress(day.key, entry.id, $event)" />
+                @progress="calendar.updateProgress(day.key, entry.id, $event)"
+                @contextmenu="onCardContextMenu($event, entry, day.key)" />
             </VueDraggable>
 
             <button type="button"
@@ -159,10 +210,31 @@ function onDragEnd(evt: DraggableEvent) {
               class="h-0 w-0 overflow-hidden" />
           </VueDraggable>
         </div>
-      </div>
+        </div>
+      </template>
     </div>
 
     <AddEntryModal v-if="addModalWeekday" :weekday="addModalWeekday" :weekday-label="addModalLabel"
       @close="addModalWeekday = null" />
+
+    <BringForwardModal v-if="bringForwardOpen" @close="bringForwardOpen = false" />
+
+    <NewSeasonModal v-if="newSeasonOpen" @close="newSeasonOpen = false" />
+
+    <EntryContextMenu
+      v-if="contextMenu"
+      :x="contextMenu.x"
+      :y="contextMenu.y"
+      @edit="openEdit"
+      @remove="removeFromMenu"
+      @close="contextMenu = null"
+    />
+
+    <EditEntryModal
+      v-if="editingEntry"
+      :entry="editingEntry.entry"
+      :weekday="editingEntry.weekday"
+      @close="editingEntry = null"
+    />
   </AppShell>
 </template>

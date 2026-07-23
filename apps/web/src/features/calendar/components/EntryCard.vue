@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Minus, Plus, X } from 'lucide-vue-next'
+import { ExternalLink, Minus, Plus, X } from 'lucide-vue-next'
 import type { CalendarEntryResponse } from '../api'
 import { STATUS_META } from './entry-status-meta'
 
 const props = defineProps<{ entry: CalendarEntryResponse }>()
-const emit = defineEmits<{ remove: []; progress: [currentEpisode: number] }>()
+const emit = defineEmits<{ remove: []; progress: [currentEpisode: number]; contextmenu: [event: MouseEvent] }>()
 
 // totalEpisodes null = "em exibição" (ADR-06: episodes vem null do Jikan
 // pra animes ainda em transmissão) — não dá pra calcular % nesse caso.
@@ -37,6 +37,7 @@ function step(delta: number) {
   <div
     class="group flex-shrink-0 cursor-grab overflow-hidden rounded-[13px] border active:cursor-grabbing"
     style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.035) "
+    @contextmenu.prevent="emit('contextmenu', $event)"
   >
     <div class="relative aspect-[2/3] bg-white/5">
       <img
@@ -93,6 +94,21 @@ function step(delta: number) {
       >
         {{ meta.label }}
       </div>
+
+      <!-- Onde o usuário assiste (M6, fora do blueprint) — só aparece se
+           entry.anime.linkAccess estiver preenchido (PATCH /animes/:id). -->
+      <a
+        v-if="entry.anime.linkAccess"
+        :href="entry.anime.linkAccess"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Acessar anime"
+        class="mt-1.5 flex items-center justify-center gap-1 rounded-md py-1 text-[9.5px] font-bold text-(--ink-text-muted) hover:!bg-white/10 hover:!text-(--ink-text)"
+        style="background: rgba(255, 255, 255, 0.05)"
+        @click.stop
+      >
+        <ExternalLink :size="9" /> Acessar anime
+      </a>
     </div>
   </div>
 </template>

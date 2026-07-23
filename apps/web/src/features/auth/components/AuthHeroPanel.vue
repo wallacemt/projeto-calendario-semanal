@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useThemeStore } from '../../../stores/theme'
-import { seasonMeta } from '../lib/season-meta'
+import { seasonMeta } from '../../../lib/season-meta'
 import PosterCarousel from './PosterCarousel.vue'
 
 defineProps<{ subtitle: string }>()
