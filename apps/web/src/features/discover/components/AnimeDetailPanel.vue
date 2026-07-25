@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Maximize2, Minimize2, SquareArrowOutUpRight, X } from 'lucide-vue-next'
+import { computed, ref } from 'vue'
+import { Check, Maximize2, Minimize2, SquareArrowOutUpRight, X } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 import type { AnimeDto } from '@aniweek/shared'
+import { useCalendarSlot } from '../../../composables/useCalendarSlot'
+import { WEEKDAY_META, WEEKDAY_ORDER } from '../../calendar/weekday-meta'
 
-defineProps<{ anime: AnimeDto }>()
+const props = defineProps<{ anime: AnimeDto }>()
 defineEmits<{ close: [] }>()
 
 // Estado só do painel (não vai pra store): cada vez que o painel reabre pra
@@ -12,7 +14,8 @@ defineEmits<{ close: [] }>()
 // default sozinho — não precisa de reset manual.
 const expanded = ref(false)
 
-const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
+const malId = computed(() => props.anime.malId)
+const { entry: calendarEntry, pending: savingDay, setWeekday } = useCalendarSlot(malId)
 </script>
 
 <template>
@@ -55,26 +58,17 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
 
     <div class="flex flex-col gap-5 p-6" :class="expanded ? 'mx-auto w-full max-w-2xl' : ''">
       <div class="flex gap-2.5">
-        <div
-          class="flex-1 rounded-xl border p-3 text-center"
-          style="background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.08)"
-        >
+        <div class="glass flex-1 rounded-xl p-3 text-center">
           <div class="mb-1 text-[10.5px] text-(--ink-text-faint)">Nota</div>
           <div class="font-display text-[17px] font-extrabold" style="color: #fbbf24">
             ★ {{ anime.score?.toFixed(1) ?? '—' }}
           </div>
         </div>
-        <div
-          class="flex-1 rounded-xl border p-3 text-center"
-          style="background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.08)"
-        >
+        <div class="glass flex-1 rounded-xl p-3 text-center">
           <div class="mb-1 text-[10.5px] text-(--ink-text-faint)">Episódios</div>
           <div class="font-display text-[17px] font-extrabold text-white">{{ anime.episodes ?? '—' }}</div>
         </div>
-        <div
-          class="flex-1 rounded-xl border p-3 text-center"
-          style="background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.08)"
-        >
+        <div class="glass flex-1 rounded-xl p-3 text-center">
           <div class="mb-1 text-[10.5px] text-(--ink-text-faint)">Status</div>
           <div class="font-display text-[13px] font-bold" style="color: #5eead4">{{ anime.status ?? '—' }}</div>
         </div>
@@ -106,27 +100,30 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
       </div>
 
       <div>
-        <div class="mb-2.5 text-[13px] font-bold text-white">Adicionar ao calendário</div>
-        <div class="mb-3.5 grid grid-cols-4 gap-2">
-          <div
-            v-for="day in WEEKDAYS"
-            :key="day"
-            class="rounded-[9px] border py-2.25 text-center text-xs text-(--ink-text-faint)"
-            style="border-color: rgba(255, 255, 255, 0.1)"
-          >
-            {{ day }}
-          </div>
+        <div class="mb-2.5 text-[13px] font-bold text-white">
+          {{ calendarEntry ? 'No seu calendário' : 'Adicionar ao calendário' }}
         </div>
-        <!-- Calendar/CalendarEntry chegam na M4 (ADR-03) — sem onde persistir
-             a escolha ainda, então o botão fica desabilitado por enquanto. -->
-        <button
-          type="button"
-          disabled
-          class="flex h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl text-sm font-bold text-white opacity-50"
-          style="background: linear-gradient(135deg, #8b5cf6, #4f8ef7)"
-        >
-          Disponível no M4 — Calendário
-        </button>
+        <!-- Clique no dia adiciona (sem entry ainda) ou troca (já tem entry
+             noutro dia) — sem endpoint novo, ver useCalendarSlot. O dia atual
+             fica com o accent + check pra ficar óbvio qual está selecionado. -->
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            v-for="day in WEEKDAY_ORDER"
+            :key="day"
+            type="button"
+            :disabled="savingDay"
+            :title="day === calendarEntry?.weekday ? `Já está em ${WEEKDAY_META[day].short}` : `Mover para ${WEEKDAY_META[day].short}`"
+            class="glass flex items-center justify-center gap-1 rounded-[9px] py-2.25 text-center text-xs disabled:cursor-wait disabled:opacity-60"
+            :class="day === calendarEntry?.weekday ? 'text-white' : 'text-(--ink-text-faint) hover:border-white/25 hover:text-(--ink-text)'"
+            :style="day === calendarEntry?.weekday
+              ? 'border-color: rgba(139, 92, 246, 0.5); background: rgba(139, 92, 246, 0.18)'
+              : ''"
+            @click="setWeekday(day)"
+          >
+            <Check v-if="day === calendarEntry?.weekday" :size="10" />
+            {{ WEEKDAY_META[day].short }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

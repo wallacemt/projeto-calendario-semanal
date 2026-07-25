@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { ArrowLeft, Play, Search } from 'lucide-vue-next'
+import { ArrowLeft, Check, Play, Search } from 'lucide-vue-next'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import type { AnimeFullDto } from '@aniweek/shared'
 import AppShell from '../../../components/AppShell.vue'
+import { useCalendarSlot } from '../../../composables/useCalendarSlot'
 import { useDebounce } from '../../../composables/useDebounce'
 import { HttpError } from '../../../lib/http'
+import { WEEKDAY_META, WEEKDAY_ORDER } from '../../calendar/weekday-meta'
 import { discoverApi } from '../api'
 import { useDiscoverStore } from '../store'
 import { useThemeStore } from "../../../stores/theme.ts"
-import { Season } from '@aniweek/shared'
+import { Season, Weekday } from '@aniweek/shared'
 
 const route = useRoute()
 const router = useRouter()
@@ -116,7 +118,8 @@ const infoRows = computed(() => {
   return rows
 })
 
-const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
+const animeMalId = computed(() => anime.value?.malId)
+const { entry: calendarEntry, pending: savingDay, setWeekday } = useCalendarSlot(animeMalId)
 </script>
 
 <template>
@@ -157,7 +160,7 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
         <div class="absolute inset-0"
           style="background: linear-gradient(90deg, rgba(5, 6, 9, 0.35) 0%, rgba(5, 6, 9, 0.94) 100%)" />
         <div class="absolute bottom-0 left-8 flex items-end gap-6 pb-6">
-          <div class="-mb-6 h-53 w-37.5 flex-shrink-0 overflow-hidden rounded-[14px] border border-white/15 shadow-xl">
+          <div class="-mb-6 h-62 w-50 flex-shrink-0 overflow-hidden rounded-[14px] border border-white/15 shadow-xl">
             <img v-if="anime.imageUrl" :src="anime.imageUrl" :alt="anime.title" class="h-full w-full object-cover" />
           </div>
         </div>
@@ -187,8 +190,7 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
           </a>
 
           <div class="grid grid-cols-3 gap-3 sm:grid-cols-5">
-            <div v-for="stat in stats" :key="stat.label" class="rounded-xl border p-3 text-center"
-              style="background: rgba(255, 255, 255, 0.035); border-color: rgba(255, 255, 255, 0.08)">
+            <div v-for="stat in stats" :key="stat.label" class="glass rounded-xl p-3 text-center">
               <div class="mb-1 text-[10.5px] text-(--ink-text-faint)">{{ stat.label }}</div>
               <div class="font-display text-[1em] font-extrabold "
                 :style="stat.accent ? { color: stat.accent } : { color: '#fff' }">
@@ -198,7 +200,7 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
           </div>
 
           <div v-if="anime.bannerImage" class="-mx-1 overflow-hidden rounded-xl">
-            <img :src="anime.bannerImage" :alt="`Banner de ${anime.title}`" class="h-32 w-full object-cover" />
+            <img :src="anime.bannerImage" :alt="`Banner de ${anime.title}`" class="h-42 w-full object-cover" />
           </div>
 
           <div v-if="anime.synopsis">
@@ -206,11 +208,10 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
             <p class="text-[13px] leading-relaxed text-(--ink-text-muted)">{{ anime.synopsis }}</p>
           </div>
 
-          <div>
+          <div class="glass rounded-xl p-4">
             <div class="mb-2.5 text-[14px] font-bold text-white">Informações</div>
             <div class="grid grid-cols-1 gap-x-7 gap-y-3 text-[13px] sm:grid-cols-2">
-              <div v-for="row in infoRows" :key="row.label" class="flex justify-between border-b pb-2 gap-4"
-                style="border-color: rgba(255, 255, 255, 0.06)">
+              <div v-for="row in infoRows" :key="row.label" class="flex justify-between border-b border-white/8 pb-2 gap-4">
                 <span class="text-(--ink-text-faint)">{{ row.label }}</span>
                 <span class="text-(--ink-text) ">{{ row.value }}</span>
               </div>
@@ -227,22 +228,25 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
           <div class="h-px" style="background: rgba(255, 255, 255, 0.06)" />
 
           <div>
-            <div class="mb-3 text-[14px] font-bold text-white">Adicionar ao calendário</div>
-            <div class="mb-3.5 grid max-w-125 grid-cols-4 gap-2">
-              <div v-for="day in WEEKDAYS" :key="day" class="rounded-[9px] border py-2.25 text-center text-xs"
-                :class="day === 'Extra' ? 'border-dashed text-(--ink-text-faint)' : 'text-(--ink-text-faint)'"
-                style="border-color: rgba(255, 255, 255, 0.1)">
-                {{ day }}
-              </div>
+            <div class="mb-3 text-[14px] font-bold text-white">
+              {{ calendarEntry ? 'No seu calendário' : 'Adicionar ao calendário' }}
             </div>
-            <!-- Calendar/CalendarEntry chegam na M4 (ADR-03) — mesmo placeholder
-                 desabilitado do painel lateral (AnimeDetailPanel.vue), só que
-                 replicado aqui pra consistência visual entre os dois lugares. -->
-            <button type="button" disabled
-              class="flex h-12 w-full max-w-70 cursor-not-allowed items-center justify-center gap-2 rounded-xl text-sm font-bold text-white opacity-50"
-              style="background: linear-gradient(135deg, #8b5cf6, #4f8ef7)">
-              Disponível no M4 — Calendário
-            </button>
+            <!-- Mesmo comportamento do painel lateral (AnimeDetailPanel.vue) via
+                 useCalendarSlot: clique adiciona ou troca de dia, sem modal. -->
+            <div class="grid max-w-125 grid-cols-4 gap-2">
+              <button v-for="day in WEEKDAY_ORDER" :key="day" type="button" :disabled="savingDay"
+                :title="day === calendarEntry?.weekday ? `Já está em ${WEEKDAY_META[day].short}` : `Mover para ${WEEKDAY_META[day].short}`"
+                class="glass flex items-center justify-center gap-1 rounded-[9px] py-2.25 text-center text-xs disabled:cursor-wait disabled:opacity-60"
+                :class="[
+                  day === calendarEntry?.weekday ? 'text-white' : 'text-(--ink-text-faint) hover:border-white/25 hover:text-(--ink-text)',
+                  day === Weekday.BACKLOG && day !== calendarEntry?.weekday ? 'border-dashed' : '',
+                ]" :style="day === calendarEntry?.weekday
+                  ? 'border-color: rgba(139, 92, 246, 0.5); background: rgba(139, 92, 246, 0.18)'
+                  : ''" @click="setWeekday(day)">
+                <Check v-if="day === calendarEntry?.weekday" :size="10" />
+                {{ WEEKDAY_META[day].short }}
+              </button>
+            </div>
           </div>
 
           <div v-if="anime.relations.length">
@@ -271,8 +275,7 @@ const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom', 'Extra']
             <div class="text-[13px] font-bold text-white">Descobrir</div>
             <RouterLink :to="{ name: 'discover' }" class="text-[11.5px]">ver tudo</RouterLink>
           </div>
-          <div class="flex h-9.5 items-center gap-2 rounded-[10px] border px-3"
-            style="border-color: rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.04)">
+          <div class="glass flex h-9.5 items-center gap-2 rounded-[10px] px-3">
             <Search :size="13" class="text-(--ink-text-faint)" />
             <input v-model="railQuery" type="text" placeholder="Buscar..."
               class="flex-1 bg-transparent text-xs text-(--ink-text) outline-none placeholder:text-(--ink-text-faint)" />

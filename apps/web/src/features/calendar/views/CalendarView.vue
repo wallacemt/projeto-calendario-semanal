@@ -15,6 +15,7 @@ import NewSeasonModal from '../components/NewSeasonModal.vue'
 import type { CalendarEntryResponse } from '../api'
 import { useCalendarStore } from '../store'
 import { WEEKDAY_META, WEEKDAY_ORDER } from '../weekday-meta'
+import { router } from '../../../router/index.ts'
 
 const calendar = useCalendarStore()
 onMounted(() => calendar.load())
@@ -92,6 +93,11 @@ function removeFromMenu() {
   contextMenu.value = null
 }
 
+function viewAnimeDetails() {
+  if (!contextMenu.value) return
+  router.push(`/discover/${contextMenu.value.entry.anime.malId}`)
+}
+
 // M5/AC-05: VueDraggablePlus (SortableJS) já move o card entre os arrays via
 // v-model — o @end só precisa persistir onde ele parou. group="board"
 // compartilhado entre as 8 colunas (7 dias + backlog) é o que permite soltar
@@ -111,105 +117,103 @@ function onDragEnd(evt: DraggableEvent) {
       <p v-else-if="calendar.error" class="p-8 text-sm text-(--ink-error)">{{ calendar.error }}</p>
 
       <template v-else>
-        <!-- M6 (fora do blueprint): navegação/import de temporada -->
-        <div v-if="calendar.board" class="flex flex-shrink-0 items-center justify-end gap-2.5 border-b px-6 py-3" style="border-color: rgba(255, 255, 255, 0.06)">
-          <button
-            type="button"
-            class="flex items-center gap-2 rounded-[10px] px-3.5 py-2 text-[12.5px] text-(--ink-text)"
-            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08)"
-            @click="bringForwardOpen = true"
-          >
-            {{ seasonMeta[calendar.board.season].emoji }} {{ seasonMeta[calendar.board.season].label }} · {{ calendar.board.year }}
+        <!-- M6 (fora do blueprint): navegação/import de temporada. Em telas
+             estreitas os rótulos somem (só ícone/emoji + title) pra caber os
+             3 botões numa linha sem quebrar feio — flex-wrap como rede de
+             segurança se ainda assim não couber. -->
+        <div v-if="calendar.board"
+          class="glass glass-strong flex flex-shrink-0 flex-wrap items-center justify-end gap-1.5 rounded-none border-x-0 border-t-0 px-3 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3">
+          <button type="button" title="Trazer temporada anterior"
+            class="glass flex items-center gap-2 rounded-[10px] px-2.5 py-2 text-[12.5px] text-(--ink-text) sm:px-3.5"
+            @click="bringForwardOpen = true">
+            {{ seasonMeta[calendar.board.season].emoji }}
+            <span class="hidden sm:inline">{{ seasonMeta[calendar.board.season].label }} · {{ calendar.board.year
+            }}</span>
             <span class="text-(--ink-text-faint)">▾</span>
           </button>
-          <button
-            type="button"
-            class="flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[12.5px]"
-            style="border: 1px solid rgba(139, 92, 246, 0.35); background: rgba(139, 92, 246, 0.08); color: #c4b5fd"
-            @click="calendar.importPreviousBulk()"
-          >
-            <RotateCcw :size="13" /> Importar da temporada anterior
+          <button type="button" title="Importar da temporada anterior"
+            class="glass flex items-center gap-1.5 rounded-[10px] px-2.5 py-2 text-[12.5px]"
+            style="border-color: rgba(139, 92, 246, 0.35); color: #c4b5fd"
+            @click="calendar.importPreviousBulk()">
+            <RotateCcw :size="13" /> <span class="hidden sm:inline">Importar da temporada anterior</span>
           </button>
-          <button
-            type="button"
-            class="flex items-center gap-1.5 rounded-[10px] px-3.5 py-2 text-[12.5px] text-(--ink-text)"
-            style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08)"
-            @click="newSeasonOpen = true"
-          >
-            <Plus :size="13" /> Nova temporada
+          <button type="button" title="Nova temporada"
+            class="glass flex items-center gap-1.5 rounded-[10px] px-2.5 py-2 text-[12.5px] text-(--ink-text) sm:px-3.5"
+            @click="newSeasonOpen = true">
+            <Plus :size="13" /> <span class="hidden sm:inline">Nova temporada</span>
           </button>
         </div>
 
-        <div class="flex flex-1 gap-3 overflow-x-auto overflow-y-hidden p-6">
-        <div v-for="day in days" :key="day.key" class="relative flex  flex-col overflow-hidden rounded-[14px]" :style="{
-          flex: day.isExpanded ? '4 1 420px' : '0 0 4.5rem',
-          minWidth: day.isExpanded ? '340px' : '4.5rem',
-          cursor: day.isExpanded ? 'default' : 'pointer',
-          transition:
-            'flex-grow .45s cubic-bezier(.4,0,.2,1), flex-basis .45s cubic-bezier(.4,0,.2,1), min-width .45s cubic-bezier(.4,0,.2,1)',
-        }" @click="!day.isExpanded && (expandedDay = day.key)">
-          <!-- Expandido: dia atual (ou o último clicado) -->
-          <div v-if="day.isExpanded"
-            class="group flex h-full flex-col gap-2.5 overflow-auto max-h-full rounded-[14px]  p-3.5">
-            <div class="flex  items-center justify-between px-0.5">
-              <div>
-                <div class="font-mono text-[11px] font-bold tracking-wide"
-                  :style="{ color: day.isExtra ? '#FBBF24' : '#B4B8C6' }">
-                  {{ day.short }}
+        <div class="flex flex-1 gap-2 overflow-x-auto overflow-y-hidden p-3 sm:gap-3 sm:p-6">
+          <div v-for="day in days" :key="day.key" class="relative flex  flex-col overflow-hidden rounded-[14px]" :style="{
+            flex: day.isExpanded ? '4 1 clamp(260px, 88vw, 420px)' : '0 0 clamp(2.75rem, 8vw, 4.5rem)',
+            minWidth: day.isExpanded ? 'min(340px, 88vw)' : 'clamp(2.75rem, 8vw, 4.5rem)',
+            cursor: day.isExpanded ? 'default' : 'pointer',
+            transition:
+              'flex-grow .45s cubic-bezier(.4,0,.2,1), flex-basis .45s cubic-bezier(.4,0,.2,1), min-width .45s cubic-bezier(.4,0,.2,1)',
+          }" @click="!day.isExpanded && (expandedDay = day.key)">
+            <!-- Expandido: dia atual (ou o último clicado) -->
+            <div v-if="day.isExpanded"
+              class="group flex h-full flex-col gap-2.5 overflow-auto max-h-full rounded-[14px]  p-3.5">
+              <div class="flex  items-center justify-between px-0.5">
+                <div>
+                  <div class="font-mono text-[11px] font-bold tracking-wide"
+                    :style="{ color: day.isExtra ? '#FBBF24' : '#B4B8C6' }">
+                    {{ day.short }}
+                  </div>
+                  <div class="mt-0.5 text-[10px] text-(--ink-text-faint)">{{ day.date }}</div>
                 </div>
-                <div class="mt-0.5 text-[10px] text-(--ink-text-faint)">{{ day.date }}</div>
+                <div
+                  class="flex h-5 w-5 items-center justify-center rounded-md text-[10.5px] font-bold text-(--ink-text-muted)"
+                  style="background: rgba(255, 255, 255, 0.06)">
+                  {{ day.entries.length }}
+                </div>
               </div>
+
+              <!-- group="board" compartilhado com as outras 7 colunas (M5/AC-05):
+                 é isso que deixa soltar um card num dia diferente do de origem. -->
+              <VueDraggable v-if="calendar.board" v-model="calendar.board.entries[day.key]"
+                :group="{ name: 'board', pull: true, put: true }" tag="div"
+                class="grid flex-1 grid-cols-2 content-start gap-2.5 pb-1 sm:grid-cols-3 lg:grid-cols-4"
+                :data-weekday="day.key" @end="onDragEnd">
+                <EntryCard v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
+                  :entry="entry" @remove="calendar.removeEntry(day.key, entry.id)"
+                  @progress="calendar.updateProgress(day.key, entry.id, $event)"
+                  @contextmenu="onCardContextMenu($event, entry, day.key)" />
+              </VueDraggable>
+
+              <button type="button"
+                class="h-9.5 flex-shrink-0 rounded-[10px] border border-dashed text-[11px] text-(--ink-text-faint) opacity-0 transition-opacity group-hover:opacity-100 hover:border-(--brand-secondary)/40 hover:text-(--brand-secondary)"
+                style="border-color: rgba(255, 255, 255, 0.15)"
+                @click="openAddModal(day.key, `${day.short}${day.isExtra ? '' : ` · ${day.date}`}`)">
+                + Adicionar
+              </button>
+            </div>
+
+            <!-- Colapsado: só a faixa com contagem + label vertical, clique expande -->
+            <div v-else
+              class="glass flex h-full flex-col items-center gap-3.5 rounded-[14px] py-4 hover:border-(--brand-secondary)/35 hover:bg-(--brand-secondary)/8">
               <div
-                class="flex h-5 w-5 items-center justify-center rounded-md text-[10.5px] font-bold text-(--ink-text-muted)"
+                class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md text-[10px] font-bold text-(--ink-text-muted)"
                 style="background: rgba(255, 255, 255, 0.06)">
                 {{ day.entries.length }}
               </div>
+              <div class="font-mono text-[11.5px] font-bold tracking-wider whitespace-nowrap"
+                :style="{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: day.isExtra ? '#FBBF24' : '#B4B8C6' }">
+                {{ day.short }} · {{ day.date }}
+              </div>
             </div>
 
-            <!-- group="board" compartilhado com as outras 7 colunas (M5/AC-05):
-                 é isso que deixa soltar um card num dia diferente do de origem. -->
-            <VueDraggable v-if="calendar.board" v-model="calendar.board.entries[day.key]" :group="{ name: 'board', pull: true, put: true }"
-              tag="div" class="grid  flex-1 grid-cols-4 content-start gap-2.5 pb-1 " :data-weekday="day.key"
-              @end="onDragEnd">
-              <EntryCard v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
-                :entry="entry" @remove="calendar.removeEntry(day.key, entry.id)"
-                @progress="calendar.updateProgress(day.key, entry.id, $event)"
-                @contextmenu="onCardContextMenu($event, entry, day.key)" />
-            </VueDraggable>
-
-            <button type="button"
-              class="h-9.5 flex-shrink-0 rounded-[10px] border border-dashed text-[11px] text-(--ink-text-faint) opacity-0 transition-opacity group-hover:opacity-100 hover:border-(--brand-secondary)/40 hover:text-(--brand-secondary)"
-              style="border-color: rgba(255, 255, 255, 0.15)"
-              @click="openAddModal(day.key, `${day.short}${day.isExtra ? '' : ` · ${day.date}`}`)">
-              + Adicionar
-            </button>
-          </div>
-
-          <!-- Colapsado: só a faixa com contagem + label vertical, clique expande -->
-          <div v-else
-            class="flex h-full flex-col items-center gap-3.5 rounded-[14px] border py-4 hover:border-(--brand-secondary)/35 hover:bg-(--brand-secondary)/8"
-            style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.02)">
-            <div
-              class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md text-[10px] font-bold text-(--ink-text-muted)"
-              style="background: rgba(255, 255, 255, 0.06)">
-              {{ day.entries.length }}
-            </div>
-            <div class="font-mono text-[11.5px] font-bold tracking-wider whitespace-nowrap"
-              :style="{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', color: day.isExtra ? '#FBBF24' : '#B4B8C6' }">
-              {{ day.short }} · {{ day.date }}
-            </div>
-          </div>
-
-          <!-- Overlay invisível: aceita drop mesmo colapsado (mesmo group das
+            <!-- Overlay invisível: aceita drop mesmo colapsado (mesmo group das
                colunas expandidas). Itens 0x0 só pra manter DOM em sincronia
                1:1 com o array (o que o Sortable usa pra calcular índice). -->
-          <VueDraggable v-if="!day.isExpanded && calendar.board" v-model="calendar.board.entries[day.key]"
-            :group="{ name: 'board', pull: true, put: true }" tag="div" class="absolute inset-0 opacity-0"
-            :data-weekday="day.key" @end="onDragEnd">
-            <div v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
-              class="h-0 w-0 overflow-hidden" />
-          </VueDraggable>
-        </div>
+            <VueDraggable v-if="!day.isExpanded && calendar.board" v-model="calendar.board.entries[day.key]"
+              :group="{ name: 'board', pull: true, put: true }" tag="div" class="absolute inset-0 opacity-0"
+              :data-weekday="day.key" @end="onDragEnd">
+              <div v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
+                class="h-0 w-0 overflow-hidden" />
+            </VueDraggable>
+          </div>
         </div>
       </template>
     </div>
@@ -221,20 +225,10 @@ function onDragEnd(evt: DraggableEvent) {
 
     <NewSeasonModal v-if="newSeasonOpen" @close="newSeasonOpen = false" />
 
-    <EntryContextMenu
-      v-if="contextMenu"
-      :x="contextMenu.x"
-      :y="contextMenu.y"
-      @edit="openEdit"
-      @remove="removeFromMenu"
-      @close="contextMenu = null"
-    />
+    <EntryContextMenu v-if="contextMenu" :x="contextMenu.x" :y="contextMenu.y" @edit="openEdit" @remove="removeFromMenu"
+      @view_details="viewAnimeDetails" @close="contextMenu = null" />
 
-    <EditEntryModal
-      v-if="editingEntry"
-      :entry="editingEntry.entry"
-      :weekday="editingEntry.weekday"
-      @close="editingEntry = null"
-    />
+    <EditEntryModal v-if="editingEntry" :entry="editingEntry.entry" :weekday="editingEntry.weekday"
+      @close="editingEntry = null" />
   </AppShell>
 </template>
