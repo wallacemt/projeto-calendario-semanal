@@ -201,6 +201,31 @@ export const updateEntrySchema = z
     message: 'Informe ao menos um campo para atualizar',
   });
 
+// Temas (M7 — RF-08/ADR-09). accent/accent2 são os únicos campos que o
+// editor (design M7) deixa o usuário mexer — ver comentário no Theme model
+// do schema.prisma sobre por que não é um blob de cores maior.
+const hexColorSchema = z
+  .string()
+  .regex(/^#[0-9a-fA-F]{6}$/, 'Cor inválida — use o formato #RRGGBB');
+
+export const createThemeSchema = z.object({
+  name: z.string().min(1, 'Dê um nome ao tema').max(40),
+  accent: hexColorSchema,
+  accent2: hexColorSchema,
+  season: seasonSchema.optional(),
+});
+
+// Mesmo refine de updateEntrySchema: PATCH vazio não faz sentido.
+export const updateThemeSchema = createThemeSchema.partial().refine((data) => Object.keys(data).length > 0, {
+  message: 'Informe ao menos um campo para atualizar',
+});
+
+// themeId null = volta pro modo "auto" (ThemesService.getActive resolve pela
+// estação atual em vez de um tema fixo).
+export const activateThemeSchema = z.object({
+  themeId: z.string().min(1).nullable(),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
@@ -218,3 +243,6 @@ export type UpdateProgressInput = z.infer<typeof updateProgressSchema>;
 export type ImportPreviousInput = z.infer<typeof importPreviousSchema>;
 export type UpdateAnimeInput = z.infer<typeof updateAnimeSchema>;
 export type UpdateEntryInput = z.infer<typeof updateEntrySchema>;
+export type CreateThemeInput = z.infer<typeof createThemeSchema>;
+export type UpdateThemeInput = z.infer<typeof updateThemeSchema>;
+export type ActivateThemeInput = z.infer<typeof activateThemeSchema>;

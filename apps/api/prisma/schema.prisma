@@ -60,7 +60,13 @@ model User {
 
   calendars Calendar[]
   // watched   WatchedAnime[]
-  // themes    Theme[]
+
+  // null = modo "auto" (segue a estação atual — ver ThemesService.getActive).
+  // onDelete: SetNull em vez de Cascade: apagar o tema ativo não pode
+  // derrubar o User junto, só volta ele pro modo auto.
+  activeThemeId String?
+  activeTheme   Theme?  @relation("ActiveTheme", fields: [activeThemeId], references: [id], onDelete: SetNull)
+  themes        Theme[] @relation("UserThemes")
 
   refreshTokens RefreshToken[]
   oauthAccounts OAuthAccount[]
@@ -144,4 +150,31 @@ model CalendarEntry {
 
   @@unique([calendarId, animeId]) // sem anime duplicado no mesmo calendário
   @@index([calendarId, weekday, position]) // leitura ordenada do board
+}
+
+// Tema custom do usuário (M7 — RF-08/ADR-09). O MVP (M0) já cobria o caso
+// "1 paleta fixa por estação" via CSS vars ([data-season] em tokens.css) —
+// aqui é só a camada de override por cima disso: accent/accent2 (não a
+// paleta completa) porque é só isso que o editor (design M7) expõe pro
+// usuário mexer. bgImageUrl fica solto opcional: sem ele, o board continua
+// usando o bg padrão da estação (assets/seasons/*).
+//
+// Simplificação deliberada vs. o esboço original do blueprint (`colors
+// Json`): 2 colunas fixas em vez de um blob JSON — o shape é conhecido e
+// pequeno, JSON só compraria "flexibilidade" que não existe UI pra usar.
+model Theme {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String
+  accent     String // cor de destaque primária (hex #RRGGBB)
+  accent2    String // cor de destaque secundária (hex #RRGGBB) — usada em gradientes
+  bgImageUrl String?
+  season     Season? // preenchido = aplicado automaticamente no modo "auto" quando bate a estação
+  createdAt  DateTime @default(now())
+
+  user           User   @relation("UserThemes", fields: [userId], references: [id], onDelete: Cascade)
+  activeForUsers User[] @relation("ActiveTheme")
+
+  @@unique([userId, season]) // no máx. 1 tema "pinado" por estação (NULL não conta — Postgres trata múltiplos NULL como distintos)
+  @@index([userId])
 }

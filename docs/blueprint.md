@@ -246,7 +246,8 @@ model User {
 
   calendars     Calendar[]
   watched       WatchedAnime[]
-  themes        Theme[]        // Fase 2
+  themes        Theme[]        // temas salvos pelo usuário (M7)
+  activeThemeId String?        // null = modo "auto" (M7 — ver Theme model)
   refreshTokens RefreshToken[]
   oauthAccounts OAuthAccount[]          // ADR-11
 }
@@ -337,14 +338,24 @@ model WatchedAnime {
   @@unique([userId, animeId])
 }
 
-model Theme {                         // Fase 2 (ADR-09)
-  id        String  @id @default(cuid())
-  userId    String
-  name      String
-  colors    Json                      // { primary, secondary, bg, ... }
+// M7: implementado com accent/accent2 (2 colunas) em vez do `colors Json`
+// originalmente esboçado aqui — o editor (design M7) só expõe esses 2
+// campos pro usuário mexer, um blob JSON só compraria flexibilidade sem UI
+// que a use. userId+season é @@unique (NULL não conta): no máx. 1 tema
+// pinado por estação, senão o modo "auto" (User.activeThemeId = null) não
+// saberia qual escolher.
+model Theme {
+  id         String   @id @default(cuid())
+  userId     String
+  name       String
+  accent     String
+  accent2    String
   bgImageUrl String?
-  season    Season?                   // tema atrelado a uma estação (opcional)
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  season     Season?                  // tema atrelado a uma estação (opcional) — modo "auto"
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, season])
 }
 
 // Fase 3: Follow, CalendarShare, Notification, Comment, Reaction — modelados na Fase 3.
@@ -399,6 +410,15 @@ PATCH  /entries/:id/move         {weekday, position}         -> reordena (drag&d
 PATCH  /entries/:id/progress     {currentEpisode}            -> valida <= totalEpisodes
 PATCH  /entries/:id/status       {status}
 POST   /entries/:id/mark-watched {rating?, comment?}         -> cria WatchedAnime (Fase 2)
+
+# Themes (M7 — RF-08/ADR-09)
+GET    /themes                                               -> Theme[] do usuário
+POST   /themes                   {name, accent, accent2, season?} -> Theme (409 se já existe 1 pinado nessa estação)
+PATCH  /themes/:id               {name?, accent?, accent2?, season?}
+DELETE /themes/:id
+POST   /themes/:id/bg-image      multipart                   -> {bgImageUrl}
+GET    /themes/active                                        -> Theme efetivo (override manual > pinado na estação > null = default hardcoded)
+PATCH  /themes/active            {themeId: string|null}      -> themeId=null volta pro modo "auto"
 ```
 
 Erros padronizados via `HttpExceptionFilter` global: `{ statusCode, message, code }`. Swagger em `/docs`.

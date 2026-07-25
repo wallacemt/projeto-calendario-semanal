@@ -13,6 +13,7 @@ import { RedisModule } from './common/redis/redis.module';
 import { EntriesModule } from './entries/entries.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './prisma/prisma.module';
+import { ThemesModule } from './themes/themes.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -39,6 +40,7 @@ import { UsersModule } from './users/users.module';
     EntriesModule,
     UsersModule,
     AnimesModule,
+    ThemesModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
