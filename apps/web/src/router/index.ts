@@ -9,6 +9,7 @@ import CalendarView from '../features/calendar/views/CalendarView.vue'
 import AnimeDetailView from '../features/discover/views/AnimeDetailView.vue'
 import DiscoverView from '../features/discover/views/DiscoverView.vue'
 import ProfileView from '../features/profile/views/ProfileView.vue'
+import ThemeEditorView from '../features/theme/views/ThemeEditorView.vue'
 import { useAuthStore } from '../stores/auth'
 
 declare module 'vue-router' {
@@ -22,6 +23,7 @@ export const router = createRouter({
   routes: [
     { path: '/', name: 'home', component: CalendarView, meta: { requiresAuth: true } },
     { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
+    { path: '/themes', name: 'themes', component: ThemeEditorView, meta: { requiresAuth: true } },
     { path: '/discover', name: 'discover', component: DiscoverView, meta: { requiresAuth: true } },
     {
       path: '/discover/:malId',

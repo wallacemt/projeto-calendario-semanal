@@ -17,6 +17,10 @@ const booting = ref(true)
 onMounted(async () => {
   theme.setSeason(theme.season) // aplica o default local já, sem esperar a API
   await Promise.all([auth.restoreSession(), theme.fetchCurrentSeason()])
+  // GET /themes/active exige sessão — só dispara depois que restoreSession()
+  // resolve (não dá pra rodar em paralelo com os dois acima, o access token
+  // ainda não existiria no http client).
+  if (auth.isAuthenticated) await theme.fetchActiveTheme()
   booting.value = false
 })
 </script>

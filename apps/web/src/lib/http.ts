@@ -75,7 +75,13 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     throw new HttpError(res.status, await parseErrorMessage(res))
   }
   if (res.status === 204) return undefined as T
-  return res.json() as Promise<T>
+  // Nest manda corpo vazio (Content-Length: 0), não a string "null", quando
+  // o handler retorna `null` com status 200 (ex.: GET /themes/active sem
+  // tema ativo) — res.json() rejeita em body vazio ("Unexpected end of JSON
+  // input"). Lendo como texto primeiro e só fazendo parse se não vier vazio
+  // cobre os dois casos sem duplicar essa checagem em cada chamada da API.
+  const text = await res.text()
+  return (text ? JSON.parse(text) : null) as T
 }
 
 export const http = {
