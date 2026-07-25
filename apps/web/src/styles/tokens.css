@@ -41,8 +41,27 @@
   --ink-border: rgba(255, 255, 255, 0.1);
   --ink-text: #f5f6fa;
   --ink-text-muted: #9ca3b0;
-  --ink-text-faint: #6b7280;
+  --ink-text-faint: var(--color-secondary);
   --ink-error: #f87171;
+
+  /* Liquid glass (M7.1, fora do blueprint): painéis que antes eram
+     rgba(255,255,255,0.0X) chapado viraram ilegíveis com o bg-image do tema
+     visível atrás (ver style.css/AppShell.vue) — blur é o que devolve
+     contraste (separa o texto do que está atrás, não só "enfeita"). Ver
+     .glass/.glass-strong em style.css.
+     --glass-bg é ESCURO (não branco) de propósito: um tint branco a 6% só
+     "aparece" em cima de um fundo já escuro — em cima da parte clara de uma
+     foto (céu, neve, uma temporada spring/summer) fica invisível, porque
+     branco-sobre-claro não muda o contraste. Como o texto do app é sempre
+     claro (--ink-text), só um tint ESCURO garante contraste com qualquer
+     brilho de fundo — é a mesma lógica por trás de "dark vibrancy material"
+     no HIG da Apple (vs. "light vibrancy", pensado pra texto escuro). O
+     brilho/reflexo (--glass-highlight) continua branco — só a base muda. */
+  --glass-bg: rgba(8, 9, 14, 0.38);
+  --glass-bg-strong: rgba(8, 9, 14, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.18);
+  --glass-blur: 18px;
 }
 
 /* ponytail: full light-theme por estação (spring/summer) herdado do seed do

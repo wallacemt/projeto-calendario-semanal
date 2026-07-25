@@ -19,7 +19,7 @@ function isConnected(id: AuthProvider) {
 </script>
 
 <template>
-  <div class="rounded-[18px] border border-white/8 bg-white/3.5 px-5.5 py-5.5">
+  <div class="rounded-[18px] glass border border-white/8 bg-white/3.5 px-5.5 py-5.5">
     <div class="font-display mb-3.5 text-[14.5px] font-bold text-white">Conectado via</div>
     <div
       v-for="(provider, i) in providers"

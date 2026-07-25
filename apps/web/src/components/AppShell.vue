@@ -20,33 +20,25 @@ async function onLogout() {
 </script>
 
 <template>
-  <div class="flex h-screen overflow-hidden" style="background: var(--ink-bg)">
+  <!-- Sem bg sólido aqui de propósito: deixa o bg-image+overlay do body (M7,
+       style.css) aparecer por trás — ver AnimeSidebar/áreas internas pra onde
+       o app ainda precisa de opacidade (cards, sidebar). -->
+  <div class="flex h-screen overflow-hidden">
     <AppSidebar />
 
     <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-      <div
-        class="flex h-19 flex-shrink-0 items-center justify-between border-b px-8"
-        style="border-color: rgba(255, 255, 255, 0.06)"
-      >
+      <div class="glass glass-strong flex h-19 flex-shrink-0 items-center justify-between rounded-none border-x-0 border-t-0 px-8">
         <div>
           <div class="font-display text-[19px] font-extrabold text-white">{{ title }}</div>
           <div v-if="subtitle" class="text-[12.5px] text-(--ink-text-faint)">{{ subtitle }}</div>
         </div>
         <div class="flex items-center gap-3.5">
           <!-- Notificações reais chegam no M10 (SSE) — ícone só decorativo por enquanto. -->
-          <div
-            class="flex h-9 w-9 items-center justify-center rounded-[10px] border"
-            style="background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.08)"
-          >
+          <div class="glass flex h-9 w-9 items-center justify-center rounded-[10px]">
             <Bell :size="16" class="text-(--ink-text-muted)" />
           </div>
-          <button
-            type="button"
-            title="Sair"
-            class="flex h-9 w-9 items-center justify-center rounded-[10px] border hover:border-white/20"
-            style="background: rgba(255, 255, 255, 0.04); border-color: rgba(255, 255, 255, 0.08)"
-            @click="onLogout"
-          >
+          <button type="button" title="Sair" class="glass flex h-9 w-9 items-center justify-center rounded-[10px] hover:border-white/30"
+            @click="onLogout">
             <LogOut :size="16" class="text-(--ink-text-muted)" />
           </button>
         </div>

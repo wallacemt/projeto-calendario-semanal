@@ -4,7 +4,14 @@
 
 body {
   background-color: var(--color-bg);
-  background-image: var(--season-bg-image);
+  /* Overlay discreto (M7): gradiente translúcido por cima do bg-image da
+     estação/tema — sem ele, fotos mais claras (spring/summer) derrubavam o
+     contraste do texto sobre o body. "none" como 2º layer é válido em CSS
+     (background-image aceita uma lista de <bg-image>, e cada item pode ser
+     `none` — não é um erro de digitação); só nunca pinta nada nesse layer. */
+  background-image:
+    linear-gradient(180deg, rgba(5, 6, 9, 0.35), rgba(5, 6, 9, 0.65)),
+    var(--season-bg-image);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -14,4 +21,41 @@ body {
     background-color 0.3s ease,
     color 0.3s ease;
   user-select: none;
+}
+
+/* Liquid glass (M7.1, fora do blueprint) — ver tokens em tokens.css.
+   backdrop-filter é o que separa a superfície do que está atrás sem cobrir o
+   bg-image de opacity sólida (isso voltaria a esconder o tema); o gradiente
+   diagonal + inset highlight imitam o "specular edge" do vidro sem SVG nem
+   lib nova — mesma receita usada por qualquer glassmorphism de produção.
+   -webkit-backdrop-filter é obrigatório pro Safari (ainda não desprefixou).
+   @layer components: Tailwind v4 dá prioridade a utilities sobre components
+   na cascata (independe da ordem no arquivo) — sem isso, hover:border-
+   border-(--x) nos componentes que usam .glass nunca venceriam o border
+   fixo daqui. `
+  */
+@layer components {
+  .glass {
+    position: relative;
+    background:
+      linear-gradient(135deg, var(--glass-highlight), transparent 55%),
+      var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      0 8px 32px -12px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+
+  /* Superfícies estruturais (topbar, colunas do board, sidebar) — mais
+     opacas que os cards soltos: precisam ficar legíveis mesmo sob a parte
+     mais clara de um bg de estação (spring/summer), não só "parecer vidro". */
+  .glass-strong {
+    background:
+      linear-gradient(135deg, var(--glass-highlight), transparent 55%),
+      var(--glass-bg-strong);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  }
 }

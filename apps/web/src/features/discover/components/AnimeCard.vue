@@ -8,12 +8,8 @@ defineEmits<{ select: [anime: AnimeDto] }>()
 <template>
   <button
     type="button"
-    class="flex flex-col overflow-hidden rounded-2xl border text-left transition-colors"
-    :class="
-      selected
-        ? 'border-(--brand-secondary)/50 bg-(--brand-secondary)/10 shadow-[0_0_0_3px_rgba(139,92,246,0.12)]'
-        : 'border-white/8 bg-white/3.5 hover:border-white/20'
-    "
+    class="glass flex flex-col overflow-hidden rounded-2xl text-left transition-colors"
+    :class="selected ? 'border-(--brand-secondary)/50 shadow-[0_0_0_3px_rgba(139,92,246,0.12)]' : 'hover:border-white/30'"
     @click="$emit('select', anime)"
   >
     <div class="relative h-100 flex-shrink-0 bg-white/5">

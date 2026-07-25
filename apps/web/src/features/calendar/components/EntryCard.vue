@@ -35,8 +35,7 @@ function step(delta: number) {
 
 <template>
   <div
-    class="group flex-shrink-0 cursor-grab overflow-hidden rounded-[13px] border active:cursor-grabbing"
-    style="border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.035) "
+    class="glass group flex-shrink-0 cursor-grab overflow-hidden rounded-[13px] active:cursor-grabbing"
     @contextmenu.prevent="emit('contextmenu', $event)"
   >
     <div class="relative aspect-[2/3] bg-white/5">

@@ -53,13 +53,13 @@ async function save() {
 </script>
 
 <template>
-  <div class="rounded-[18px] border border-white/8 bg-white/3.5 px-7 py-6.5">
+  <div class="rounded-[18px] glass border border-white/8 bg-white/3.5 px-7 py-6.5">
     <div class="mb-4.5 flex items-center justify-between">
       <div class="font-display text-[15.5px] font-bold text-white">Informações</div>
       <button
         v-if="!editing"
         type="button"
-        class="flex items-center gap-1.5 rounded-[9px] border border-white/12 px-3.5 py-1.75 text-[12.5px] text-(--ink-text-muted) hover:bg-white/5 hover:text-white"
+        class="flex items-center glass gap-1.5 rounded-[9px] border border-white/12 px-3.5 py-1.75 text-[12.5px] text-(--ink-text-muted) hover:bg-white/5 hover:text-white"
         @click="startEdit"
       >
         <Pencil :size="13" /> Editar

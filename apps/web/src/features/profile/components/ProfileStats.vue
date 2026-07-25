@@ -10,7 +10,7 @@ defineProps<{ profile: Profile }>()
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col gap-4.5 rounded-[18px] border border-white/8 bg-white/3.5 px-7 py-6.5">
+  <div class="flex flex-1 flex-col  glass gap-4.5 rounded-[18px] border border-white/8 bg-white/3.5 px-7 py-6.5">
     <div class="font-display text-[15.5px] font-bold text-white">Estatísticas gerais</div>
 
     <div class="rounded-[14px] border border-white/6 bg-white/3 px-4.5 py-4 sm:w-64">

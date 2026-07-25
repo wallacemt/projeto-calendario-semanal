@@ -37,7 +37,7 @@ async function onFileChange(e: Event) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center rounded-[18px] border border-white/8 bg-white/3.5 px-6 py-7 text-center">
+  <div class="flex flex-col glass items-center rounded-[18px] border border-white/8 bg-white/3.5 px-6 py-7 text-center">
     <div class="relative mb-4">
       <img
         v-if="displayAvatar"
