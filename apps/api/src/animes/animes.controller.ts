@@ -1,18 +1,11 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Query } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import {
   searchAnimesQuerySchema,
+  seasonNowQuerySchema,
   updateAnimeSchema,
   type SearchAnimesQuery,
+  type SeasonNowQuery,
   type UpdateAnimeInput,
 } from '@aniweek/shared';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
@@ -40,9 +33,9 @@ export class AnimesController {
     description: 'Animes da temporada vigente (paginado, cache 1h).',
   })
   getByCurrentSeason(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query(new ZodValidationPipe(seasonNowQuerySchema)) query: SeasonNowQuery,
   ) {
-    return this.animes.getByCurrentSeason(page);
+    return this.animes.getByCurrentSeason(query);
   }
 
   @Get(':malId')

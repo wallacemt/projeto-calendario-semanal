@@ -13,7 +13,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 enum AuthProvider {
   GOOGLE
   GITHUB
@@ -59,7 +58,7 @@ model User {
   createdAt     DateTime @default(now())
 
   calendars Calendar[]
-  // watched   WatchedAnime[]
+  watched   WatchedAnime[]
 
   // null = modo "auto" (segue a estação atual — ver ThemesService.getActive).
   // onDelete: SetNull em vez de Cascade: apagar o tema ativo não pode
@@ -67,6 +66,13 @@ model User {
   activeThemeId String?
   activeTheme   Theme?  @relation("ActiveTheme", fields: [activeThemeId], references: [id], onDelete: SetNull)
   themes        Theme[] @relation("UserThemes")
+
+  // Museu em destaque (M8.1) — mesmo padrão de activeThemeId: null = modo
+  // "auto" (MuseumService.resolveFeaturedId cai pro assistido mais recente).
+  // onDelete: SetNull — apagar o item fixado só devolve o museu pro auto,
+  // não derruba o User.
+  featuredWatchedAnimeId String?
+  featuredWatchedAnime   WatchedAnime? @relation("FeaturedWatched", fields: [featuredWatchedAnimeId], references: [id], onDelete: SetNull)
 
   refreshTokens RefreshToken[]
   oauthAccounts OAuthAccount[]
@@ -95,17 +101,17 @@ model RefreshToken {
 // Espelho local do Jikan (M3 — ADR-06). Uma linha por anime, upsertada só
 // quando alguém abre o detalhe (GET /animes/:malId) — a busca não persiste.
 model Anime {
-  id       String   @id @default(cuid())
-  malId    Int      @unique
-  title    String
-  imageUrl String?
-  synopsis String?
-  episodes Int?
-  genres   Json?
-  malUrl   String?
+  id             String   @id @default(cuid())
+  malId          Int      @unique
+  title          String
+  imageUrl       String?
+  synopsis       String?
+  episodes       Int?
+  genres         Json?
+  malUrl         String?
   // Onde o usuário assiste (M6, fora do blueprint) — só exibe o botão
   // "Acessar anime" no board quando preenchido.
-  linkAccess String?
+  linkAccess     String?
   // M6: quando true, getByMalId (upsert do Jikan) pula a atualização dos
   // campos espelhados — protege uma edição manual (PATCH /animes/:id) de ser
   // sobrescrita no próximo refetch da API externa.
@@ -113,7 +119,35 @@ model Anime {
   cachedAt       DateTime @default(now())
 
   entries CalendarEntry[]
-  // watched WatchedAnime[]
+  watched WatchedAnime[]
+}
+
+// Museu — registro PERMANENTE, independente do ciclo de vida do calendário
+// (M8/RF-09). Ao contrário de CalendarEntry (que pertence a UM Calendar de
+// UMA estação), WatchedAnime não tem calendarId: sobrevive mesmo se o
+// usuário apagar a estação em que assistiu. @@unique([userId, animeId])
+// também é o que torna "marcar como assistido de novo" uma decisão de
+// design (upsert vs. rejeitar) em vez de deixar duplicar linha.
+model WatchedAnime {
+  id            String   @id @default(cuid())
+  userId        String
+  animeId       String
+  rating        Int? // 1..10
+  comment       String?
+  completedAt   DateTime @default(now())
+  // "Quando" narrativo (M8.1) — opcional e independente de completedAt:
+  // completedAt é o timestamp real do registro (usado nas stats/ordenação),
+  // watchedSeason/watchedYear é o que o usuário lembra/declara (ex.: "vi no
+  // verão de 2019"), só pra exibição. Nenhum dos dois obriga o outro.
+  watchedSeason Season?
+  watchedYear   Int?
+
+  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  anime           Anime  @relation(fields: [animeId], references: [id])
+  featuredByUsers User[] @relation("FeaturedWatched")
+
+  @@unique([userId, animeId])
+  @@index([userId, completedAt])
 }
 
 // "Branch de estação" (ADR-03) = 1 calendário por (user, season, year).

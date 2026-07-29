@@ -4,6 +4,7 @@ import type {
   AnimeFullDto,
   PaginatedAnimeDto,
   SearchAnimesQuery,
+  SeasonNowQuery,
   UpdateAnimeInput,
 } from '@aniweek/shared';
 import { PrismaService } from '../prisma/prisma.service';
@@ -23,8 +24,8 @@ export class AnimesService {
     return this.animeApi.searchAnime(input);
   }
 
-  getByCurrentSeason(page: number): Promise<PaginatedAnimeDto> {
-    return this.animeApi.getByCurrentSeason(page);
+  getByCurrentSeason(query: SeasonNowQuery): Promise<PaginatedAnimeDto> {
+    return this.animeApi.getByCurrentSeason(query);
   }
 
   // Página de detalhe completo (M3): só leitura, não passa pelo espelho
