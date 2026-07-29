@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import type { Weekday } from '@aniweek/shared'
 import { VueDraggable, type DraggableEvent } from 'vue-draggable-plus'
-import { Plus, RotateCcw } from 'lucide-vue-next'
+import { History, Plus, RotateCcw } from 'lucide-vue-next'
 import AppShell from '../../../components/AppShell.vue'
 import { seasonMeta } from '../../../lib/season-meta'
 import AddEntryModal from '../components/AddEntryModal.vue'
@@ -11,14 +11,21 @@ import CalendarBoardSkeleton from '../components/CalendarBoardSkeleton.vue'
 import EditEntryModal from '../components/EditEntryModal.vue'
 import EntryCard from '../components/EntryCard.vue'
 import EntryContextMenu from '../components/EntryContextMenu.vue'
+import MarkWatchedModal from '../components/MarkWatchedModal.vue'
 import NewSeasonModal from '../components/NewSeasonModal.vue'
+import SwitchSeasonModal from '../components/SwitchSeasonModal.vue'
 import type { CalendarEntryResponse } from '../api'
 import { useCalendarStore } from '../store'
 import { WEEKDAY_META, WEEKDAY_ORDER } from '../weekday-meta'
 import { router } from '../../../router/index.ts'
 
 const calendar = useCalendarStore()
-onMounted(() => calendar.load())
+// Só recarrega se ainda não tem board em memória — sem esse guard, sair da
+// tela (SPA, sem reload) e voltar chamava load() de novo e derrubava uma
+// temporada trocada manualmente pela "atual por data" de sempre.
+onMounted(() => {
+  if (!calendar.board) calendar.load()
+})
 
 // Ordem fixa do board (RF-04): 7 dias + BACKLOG (aba "extra" do legado —
 // ADR-08). Sem dependência nova: datas da semana calculadas com Date nativo,
@@ -51,11 +58,12 @@ const weekDates = (() => {
 // obrigar o usuário a caçar o dia certo entre 8 colunas.
 function todayKey(): Weekday {
   const day = new Date().getDay() // 0=dom..6=sáb
-  return DAY_DEFS[day === 0 ? 6 : day].key
+  return DAY_DEFS[day].key
 }
 const expandedDay = ref<Weekday>(todayKey())
 
 const days = computed(() =>
+
   DAY_DEFS.map((d, i) => ({
     ...d,
     date: d.isExtra ? 'Backlog' : weekDates[i],
@@ -75,6 +83,7 @@ function openAddModal(weekday: Weekday, label: string) {
 
 const bringForwardOpen = ref(false)
 const newSeasonOpen = ref(false)
+const switchSeasonOpen = ref(false)
 
 // M6 (fora do blueprint): menu de contexto do right-click + modal de editar.
 const contextMenu = ref<{ x: number; y: number; entry: CalendarEntryResponse; weekday: Weekday } | null>(null)
@@ -98,6 +107,13 @@ function viewAnimeDetails() {
   router.push(`/discover/${contextMenu.value.entry.anime.malId}`)
 }
 
+const markWatchedTarget = ref<{ entry: CalendarEntryResponse; weekday: Weekday } | null>(null)
+function openMarkWatched() {
+  if (!contextMenu.value) return
+  markWatchedTarget.value = { entry: contextMenu.value.entry, weekday: contextMenu.value.weekday }
+  contextMenu.value = null
+}
+
 // M5/AC-05: VueDraggablePlus (SortableJS) já move o card entre os arrays via
 // v-model — o @end só precisa persistir onde ele parou. group="board"
 // compartilhado entre as 8 colunas (7 dias + backlog) é o que permite soltar
@@ -119,22 +135,26 @@ function onDragEnd(evt: DraggableEvent) {
       <template v-else>
         <!-- M6 (fora do blueprint): navegação/import de temporada. Em telas
              estreitas os rótulos somem (só ícone/emoji + title) pra caber os
-             3 botões numa linha sem quebrar feio — flex-wrap como rede de
+             4 botões numa linha sem quebrar feio — flex-wrap como rede de
              segurança se ainda assim não couber. -->
         <div v-if="calendar.board"
-          class="glass glass-strong flex flex-shrink-0 flex-wrap items-center justify-end gap-1.5 rounded-none border-x-0 border-t-0 px-3 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3">
-          <button type="button" title="Trazer temporada anterior"
+          class="glass glass-strong border-none flex flex-shrink-0 flex-wrap items-center justify-end gap-1.5 rounded-none   px-3 py-2.5 sm:gap-2.5 sm:px-6 sm:py-3">
+          <button type="button" title="Trocar temporada"
             class="glass flex items-center gap-2 rounded-[10px] px-2.5 py-2 text-[12.5px] text-(--ink-text) sm:px-3.5"
-            @click="bringForwardOpen = true">
+            @click="switchSeasonOpen = true">
             {{ seasonMeta[calendar.board.season].emoji }}
             <span class="hidden sm:inline">{{ seasonMeta[calendar.board.season].label }} · {{ calendar.board.year
             }}</span>
             <span class="text-(--ink-text-faint)">▾</span>
           </button>
+          <button type="button" title="Trazer anime específico de outra temporada"
+            class="glass flex items-center gap-1.5 rounded-[10px] px-2.5 py-2 text-[12.5px] text-(--ink-text) sm:px-3.5"
+            @click="bringForwardOpen = true">
+            <History :size="13" /> <span class="hidden sm:inline">Buscar em outra temporada</span>
+          </button>
           <button type="button" title="Importar da temporada anterior"
             class="glass flex items-center gap-1.5 rounded-[10px] px-2.5 py-2 text-[12.5px]"
-            style="border-color: rgba(139, 92, 246, 0.35); color: #c4b5fd"
-            @click="calendar.importPreviousBulk()">
+            style="border-color: rgba(139, 92, 246, 0.35); color: #c4b5fd" @click="calendar.importPreviousBulk()">
             <RotateCcw :size="13" /> <span class="hidden sm:inline">Importar da temporada anterior</span>
           </button>
           <button type="button" title="Nova temporada"
@@ -225,10 +245,15 @@ function onDragEnd(evt: DraggableEvent) {
 
     <NewSeasonModal v-if="newSeasonOpen" @close="newSeasonOpen = false" />
 
+    <SwitchSeasonModal v-if="switchSeasonOpen" @close="switchSeasonOpen = false" />
+
     <EntryContextMenu v-if="contextMenu" :x="contextMenu.x" :y="contextMenu.y" @edit="openEdit" @remove="removeFromMenu"
-      @view_details="viewAnimeDetails" @close="contextMenu = null" />
+      @view_details="viewAnimeDetails" @complete="openMarkWatched" @close="contextMenu = null" />
 
     <EditEntryModal v-if="editingEntry" :entry="editingEntry.entry" :weekday="editingEntry.weekday"
       @close="editingEntry = null" />
+
+    <MarkWatchedModal v-if="markWatchedTarget" :entry="markWatchedTarget.entry" :weekday="markWatchedTarget.weekday"
+      @close="markWatchedTarget = null" />
   </AppShell>
 </template>

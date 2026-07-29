@@ -3,6 +3,7 @@ import type {
   CreateCalendarInput,
   EntryStatus,
   ImportPreviousInput,
+  MarkWatchedInput,
   MoveEntryInput,
   Season,
   UpdateAnimeInput,
@@ -68,6 +69,8 @@ export const calendarApi = {
     http.patch<CalendarEntryResponse>(`/entries/${entryId}/progress`, input),
   updateEntry: (entryId: string, input: UpdateEntryInput) =>
     http.patch<CalendarEntryResponse>(`/entries/${entryId}`, input),
+  completeEntry: (entryId: string, input: MarkWatchedInput) =>
+    http.post<CalendarEntryResponse>(`/entries/${entryId}/complete`, input),
   updateAnime: (animeId: string, input: UpdateAnimeInput) =>
     http.patch<{ id: string; linkAccess: string | null }>(`/animes/${animeId}`, input),
 }

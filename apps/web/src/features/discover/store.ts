@@ -36,9 +36,15 @@ export const useDiscoverStore = defineStore("discover", {
       await this.fetchPage(1);
     },
 
+    // Antes só reexecutava a busca por texto (if query.trim()) — no modo
+    // "temporada vigente" (tela ao abrir, sem termo digitado), clicar num
+    // chip de filtro não tinha efeito nenhum, porque nada disparava um novo
+    // fetchPage. `mode` já diz qual dos dois fetches (search/season) está
+    // ativo, então reexecuta o que for o caso.
     setFilter(filter: AnimeFilter) {
       this.filter = filter;
-      if (this.query.trim()) this.search(this.query);
+      if (this.mode === "search") this.search(this.query);
+      else this.getSeasonNow();
     },
 
     select(anime: AnimeDto) {
@@ -69,7 +75,7 @@ export const useDiscoverStore = defineStore("discover", {
         const { data, hasNextPage, lastPage } =
           this.mode === "search"
             ? await discoverApi.search(this.query, page, this.filter)
-            : await discoverApi.seasonNow(page);
+            : await discoverApi.seasonNow(page, this.filter);
         if (requestId !== this.requestId) return; // resposta obsoleta, ignora
         // page 1 é sempre uma busca/temporada nova (troca de termo, filtro ou
         // reload) — substitui o resultado. Só "carregar mais" (loadMore, que

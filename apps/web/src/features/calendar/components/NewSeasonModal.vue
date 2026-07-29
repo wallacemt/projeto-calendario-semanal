@@ -6,10 +6,11 @@ import AwSelect from '../../../components/AwSelect.vue'
 import { HttpError } from '../../../lib/http'
 import { seasonMeta } from '../../../lib/season-meta'
 import { useToastStore } from '../../../stores/toast'
-import { calendarApi } from '../api'
+import { useCalendarStore } from '../store'
 
 const emit = defineEmits<{ close: [] }>()
 const toast = useToastStore()
+const calendar = useCalendarStore()
 
 const seasonOptions = Object.values(Season).map((s) => ({ value: s, label: `${seasonMeta[s].emoji} ${seasonMeta[s].label}` }))
 const season = ref<Season>(Season.WINTER)
@@ -19,7 +20,10 @@ const saving = ref(false)
 async function save() {
   saving.value = true
   try {
-    await calendarApi.create({ season: season.value, year: year.value })
+    // createSeason já troca o board pra ela — sem isso, criar uma temporada
+    // que não é "a atual por data" deixava o usuário sem nenhum jeito de
+    // vê-la (load() só busca a estação atual).
+    await calendar.createSeason({ season: season.value, year: year.value })
     toast.push(`${seasonMeta[season.value].label} ${year.value} criada`)
     emit('close')
   } catch (err) {

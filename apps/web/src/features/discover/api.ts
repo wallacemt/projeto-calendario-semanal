@@ -28,6 +28,11 @@ export const discoverApi = {
   fullDetail: (malId: number) =>
     http.get<AnimeFullDto>(`/animes/${malId}/full`),
 
-  seasonNow: (page: number) =>
-    http.get<PaginatedAnimeDto>(`/animes/season/now?page=${page}`),
+  seasonNow: (page: number, filter: AnimeFilter) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      ...FILTER_PARAMS[filter],
+    }).toString();
+    return http.get<PaginatedAnimeDto>(`/animes/season/now?${params}`);
+  },
 };

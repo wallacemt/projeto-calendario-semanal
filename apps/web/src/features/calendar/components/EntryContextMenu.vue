@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Eye, Pencil, Trash2 } from 'lucide-vue-next'
+import { Eye, Pencil, Trash2, Trophy } from 'lucide-vue-next'
 
 defineProps<{ x: number; y: number }>()
-const emit = defineEmits<{ edit: []; remove: []; close: []; view_details: [] }>()
+const emit = defineEmits<{ edit: []; remove: []; close: []; view_details: []; complete: [] }>()
 </script>
 
 <template>
@@ -21,6 +21,11 @@ const emit = defineEmits<{ edit: []; remove: []; close: []; view_details: [] }>(
         class="flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-(--ink-text) hover:bg-white/5"
         @click="emit('edit')">
         <Pencil :size="14" /> Editar
+      </button>
+      <button type="button"
+        class="flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-(--ink-text) hover:bg-white/5"
+        @click="emit('complete')">
+        <Trophy :size="14" /> Marcar como assistido
       </button>
       <button type="button"
         class="flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-red-400 hover:bg-red-500/10"
