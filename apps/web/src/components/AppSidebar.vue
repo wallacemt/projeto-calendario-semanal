@@ -66,14 +66,15 @@ function onGripUp() {
 const auth = useAuthStore()
 const route = useRoute()
 
-// "Museu"/"Estatísticas" ainda não têm rota (M8/M10) — mostrados desabilitados
-// em vez de linkar para uma tela que não existe. "Descobrir" ganhou rota
-// própria na M3, "Temas" na M7.
+// "Descobrir" ganhou rota própria na M3, "Temas" na M7, "Museu"/"Estatísticas"
+// na M8 — cada item do menu é uma tela própria (não uma aba dentro da
+// outra), por isso o design M8 (pill switcher Museu/Estatísticas na topbar)
+// não foi replicado: já é redundante com esses dois links.
 const navItems = [
   { icon: Calendar, label: 'Calendário', to: { name: 'home' } },
   { icon: Search, label: 'Descobrir', to: { name: 'discover' } },
-  { icon: Landmark, label: 'Museu', to: null },
-  { icon: BarChart3, label: 'Estatísticas', to: null },
+  { icon: Landmark, label: 'Museu', to: { name: 'museum' } },
+  { icon: BarChart3, label: 'Estatísticas', to: { name: 'stats' } },
   { icon: Palette, label: 'Temas', to: { name: 'themes' } },
 ] as const
 

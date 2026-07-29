@@ -76,6 +76,13 @@ export const searchAnimesQuerySchema = z.object({
   orderBy: z.enum(["score"]).optional(),
 });
 
+// "Temporada vigente" (M3) — mesmos filtros type/status/orderBy da busca,
+// só sem `query` (não é uma busca por termo). Sem isso os chips de filtro da
+// tela Descobrir não tinham efeito nenhum enquanto o usuário não digitasse
+// algo: setFilter só reexecutava a busca por texto, e o modo "temporada
+// vigente" (tela ao abrir, sem termo) ignorava o filtro selecionado.
+export const seasonNowQuerySchema = searchAnimesQuerySchema.omit({ query: true });
+
 // Paginação (M3): tanto a busca quanto "temporada atual" são paginadas pelo
 // Jikan (pagination.has_next_page). hasNextPage é o que decide se mostra
 // "carregar mais"; lastPage é só informativo pra UI ("página X de Y") —
@@ -226,6 +233,51 @@ export const activateThemeSchema = z.object({
   themeId: z.string().min(1).nullable(),
 });
 
+// Museu (M8 — RF-09). rating/comment opcionais: o mockup pede nota+comentário
+// na hora de marcar como assistido, mas nenhum dos dois bloqueia o registro
+// (ex.: "assisti há anos, não lembro nota" ainda é um dado válido pro museu).
+// watchedSeason/watchedYear (M8.1) são um "quando" narrativo à parte de
+// completedAt — ver comentário no model WatchedAnime.
+const watchedYearSchema = z.coerce.number().int().min(1900).max(2100);
+export const markWatchedSchema = z.object({
+  rating: z.number().int().min(1).max(10).optional(),
+  comment: z.string().max(500).optional(),
+  watchedSeason: seasonSchema.optional(),
+  watchedYear: watchedYearSchema.optional(),
+});
+
+// Entrada direta no museu (sem passar pelo calendário) — reaproveita o
+// mesmo malId+upsert do addEntrySchema (RF-05) em vez de aceitar um título
+// livre: WatchedAnime.animeId sempre aponta pro espelho local (Anime), então
+// a origem do dado tem que ser a mesma busca Jikan usada em todo o resto do
+// app, não um campo de texto solto.
+export const createWatchedAnimeSchema = markWatchedSchema.extend({
+  malId: z.number().int().positive(),
+  completedAt: z.coerce.date().optional(),
+});
+
+// Edição de um registro do museu (M8.1 — right-click "Editar"). Todos os
+// campos opcionais (só atualiza o que vier) e season/year aceitam `null`
+// explícito pra permitir limpar um valor já setado — undefined = "não mexe
+// nesse campo", null = "apaga esse campo". Mesmo refine de updateEntrySchema.
+export const updateWatchedAnimeSchema = z
+  .object({
+    rating: z.number().int().min(1).max(10).nullable().optional(),
+    comment: z.string().max(500).nullable().optional(),
+    completedAt: z.coerce.date().optional(),
+    watchedSeason: seasonSchema.nullable().optional(),
+    watchedYear: watchedYearSchema.nullable().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'Informe ao menos um campo para atualizar',
+  });
+
+// watchedAnimeId null = volta pro modo "auto" (MuseumService.resolveFeaturedId
+// cai pro assistido mais recente) — mesmo padrão de activateThemeSchema.
+export const setFeaturedWatchedSchema = z.object({
+  watchedAnimeId: z.string().min(1).nullable(),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
@@ -234,6 +286,7 @@ export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 export type AnimeDto = z.infer<typeof animeDtoSchema>;
 export type SearchAnimesQuery = z.infer<typeof searchAnimesQuerySchema>;
+export type SeasonNowQuery = z.infer<typeof seasonNowQuerySchema>;
 export type PaginatedAnimeDto = z.infer<typeof paginatedAnimeDtoSchema>;
 export type AnimeFullDto = z.infer<typeof animeFullDtoSchema>;
 export type CreateCalendarInput = z.infer<typeof createCalendarSchema>;
@@ -246,3 +299,7 @@ export type UpdateEntryInput = z.infer<typeof updateEntrySchema>;
 export type CreateThemeInput = z.infer<typeof createThemeSchema>;
 export type UpdateThemeInput = z.infer<typeof updateThemeSchema>;
 export type ActivateThemeInput = z.infer<typeof activateThemeSchema>;
+export type MarkWatchedInput = z.infer<typeof markWatchedSchema>;
+export type CreateWatchedAnimeInput = z.infer<typeof createWatchedAnimeSchema>;
+export type UpdateWatchedAnimeInput = z.infer<typeof updateWatchedAnimeSchema>;
+export type SetFeaturedWatchedInput = z.infer<typeof setFeaturedWatchedSchema>;
