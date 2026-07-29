@@ -6,12 +6,14 @@ import {
 } from '@nestjs/common';
 import type {
   AddEntryInput,
+  MarkWatchedInput,
   MoveEntryInput,
   UpdateEntryInput,
   UpdateProgressInput,
 } from '@aniweek/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { AnimesService } from '../animes/animes.service';
+import { MuseumService } from '../museum/museum.service';
 import { EntryStatus, Prisma } from '../../generated/prisma/client';
 
 // Dona de CalendarEntry (§6 do blueprint) — Calendars delega aqui a criação
@@ -22,6 +24,7 @@ export class EntriesService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly animes: AnimesService,
+    private readonly museum: MuseumService,
   ) {}
 
   async create(calendarId: string, userId: string, input: AddEntryInput) {
@@ -234,6 +237,21 @@ export class EntriesService {
     return this.prisma.calendarEntry.update({
       where: { id: entryId },
       data,
+      include: { anime: true },
+    });
+  }
+
+  // M8 (RF-09/§6): "mark-watched" — dispara a criação no museu (registro
+  // permanente, sobrevive à estação) e fecha o card como COMPLETED no board.
+  // animeId já é conhecido pela entry: sem upsert via Jikan de novo aqui.
+  async complete(entryId: string, userId: string, input: MarkWatchedInput) {
+    const entry = await this.findOwned(entryId, userId);
+
+    await this.museum.createFromAnimeId(userId, entry.animeId, input);
+
+    return this.prisma.calendarEntry.update({
+      where: { id: entryId },
+      data: { status: EntryStatus.COMPLETED },
       include: { anime: true },
     });
   }

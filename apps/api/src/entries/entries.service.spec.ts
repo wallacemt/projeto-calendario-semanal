@@ -33,8 +33,13 @@ function buildEntriesService() {
     fn(prisma),
   );
   const animes = { getByMalId: jest.fn() };
-  const entries = new EntriesService(prisma as never, animes as never);
-  return { entries, prisma, animes };
+  const museum = { createFromAnimeId: jest.fn() };
+  const entries = new EntriesService(
+    prisma as never,
+    animes as never,
+    museum as never,
+  );
+  return { entries, prisma, animes, museum };
 }
 
 describe('EntriesService', () => {
@@ -268,6 +273,34 @@ describe('EntriesService', () => {
     expect(prisma.calendarEntry.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: { currentEpisode: 12, status: EntryStatus.COMPLETED },
+      }),
+    );
+  });
+
+  it('complete cria o registro no museu e fecha a entrada como COMPLETED (M8/RF-09)', async () => {
+    const { entries, prisma, museum } = buildEntriesService();
+    prisma.calendarEntry.findUnique.mockResolvedValue({
+      id: 'entry-1',
+      animeId: 'anime-1',
+    });
+    prisma.calendarEntry.update.mockResolvedValue({
+      id: 'entry-1',
+      status: EntryStatus.COMPLETED,
+    });
+
+    await entries.complete('entry-1', 'user-1', {
+      rating: 9,
+      comment: 'ótimo',
+    });
+
+    expect(museum.createFromAnimeId).toHaveBeenCalledWith('user-1', 'anime-1', {
+      rating: 9,
+      comment: 'ótimo',
+    });
+    expect(prisma.calendarEntry.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'entry-1' },
+        data: { status: EntryStatus.COMPLETED },
       }),
     );
   });
