@@ -19,6 +19,21 @@ const bio = ref(props.profile.bio ?? '')
 // apontar).
 const error = ref<string | null>(null)
 const saving = ref(false)
+const savingPrivacy = ref(false)
+
+// Independente do form de username/bio — é um toggle isolado, não faz
+// sentido exigir "Editar" -> "Salvar" só pra isso (LGPD: o titular deve
+// conseguir mudar isso a qualquer momento, sem fricção).
+async function toggleStatsPublic() {
+  savingPrivacy.value = true
+  try {
+    await store.update({ statsPublic: !props.profile.statsPublic })
+  } catch (err) {
+    toast.push(err instanceof HttpError ? err.message : 'Não foi possível salvar.')
+  } finally {
+    savingPrivacy.value = false
+  }
+}
 
 function startEdit() {
   username.value = props.profile.username
@@ -132,6 +147,22 @@ async function save() {
           {{ saving ? 'Salvando...' : 'Salvar alterações' }}
         </button>
       </div>
+    </div>
+
+    <div class="mt-5 flex items-center justify-between border-t border-white/6 pt-4.5">
+      <div class="pr-4">
+        <div class="text-[13px] font-semibold text-(--ink-text)">Estatísticas públicas</div>
+        <div class="text-[11.5px] text-(--ink-text-faint)">
+          Exibir suas métricas (RF-10) pra quem visitar seu perfil público. Você sempre vê as suas.
+        </div>
+      </div>
+      <button type="button" :disabled="savingPrivacy"
+        class="h-6 w-10.5 flex-shrink-0 rounded-full p-0.5 transition-colors disabled:opacity-60"
+        :style="{ background: profile.statsPublic ? 'linear-gradient(135deg,#8B5CF6,#4F8EF7)' : 'rgba(255,255,255,0.1)' }"
+        @click="toggleStatsPublic">
+        <div class="h-5 w-5 rounded-full bg-white transition-transform"
+          :style="{ transform: profile.statsPublic ? 'translateX(18px)' : 'translateX(0)' }" />
+      </button>
     </div>
   </div>
 </template>

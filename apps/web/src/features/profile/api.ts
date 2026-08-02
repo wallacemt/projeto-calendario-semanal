@@ -13,6 +13,7 @@ export interface Profile {
   bio: string | null
   emailVerified: boolean
   createdAt: string
+  statsPublic: boolean
   stats: ProfileStats
   connectedProviders: AuthProvider[]
 }

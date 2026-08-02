@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { ExternalLink, Minus, Plus, X } from 'lucide-vue-next'
+import { computed, ref } from 'vue'
+import { ExternalLink, Heart, MessageCircle, Minus, Plus, X } from 'lucide-vue-next'
 import type { CalendarEntryResponse } from '../api'
+import CommentsModal from '../../social/components/CommentsModal.vue'
 import { STATUS_META } from './entry-status-meta'
 
 const props = defineProps<{ entry: CalendarEntryResponse }>()
 const emit = defineEmits<{ remove: []; progress: [currentEpisode: number]; contextmenu: [event: MouseEvent] }>()
+
+// Comentário/reação são de QUEM VISITA (SharedEntryCard) — aqui, no próprio
+// card do dono, é só leitura: sem botão de reagir ao próprio progresso, só
+// um jeito de abrir o mesmo thread que a notificação truncada aponta.
+const showComments = ref(false)
+const commentCount = ref(props.entry.social?.commentCount ?? 0)
+const hasSocial = computed(
+  () => (props.entry.social?.commentCount ?? 0) > 0 || (props.entry.social?.reactionCount ?? 0) > 0,
+)
 
 // totalEpisodes null = "em exibição" (ADR-06: episodes vem null do Jikan
 // pra animes ainda em transmissão) — não dá pra calcular % nesse caso.
@@ -108,6 +118,27 @@ function step(delta: number) {
       >
         <ExternalLink :size="9" /> Acessar anime
       </a>
+
+      <!-- M10 — o que a rede social deixou nesse card. Só aparece se alguém
+           já interagiu (senão é um badge vazio poluindo todo card). -->
+      <button
+        v-if="hasSocial"
+        type="button"
+        title="Ver comentários e reações"
+        class="mt-1.5 flex w-full items-center justify-center gap-3 rounded-md py-1 text-[9.5px] font-bold text-(--ink-text-muted) hover:!bg-white/10 hover:!text-(--ink-text)"
+        style="background: rgba(255, 255, 255, 0.05)"
+        @click.stop="showComments = true"
+      >
+        <span v-if="entry.social!.reactionCount > 0" class="flex items-center gap-1">
+          <Heart :size="9" fill="currentColor" /> {{ entry.social!.reactionCount }}
+        </span>
+        <span v-if="commentCount > 0" class="flex items-center gap-1">
+          <MessageCircle :size="9" /> {{ commentCount }}
+        </span>
+      </button>
     </div>
+
+    <CommentsModal v-if="showComments" :entry-id="entry.id" :anime-title="entry.anime.title" :can-post="true"
+      @close="showComments = false" @count-change="commentCount += $event" />
   </div>
 </template>

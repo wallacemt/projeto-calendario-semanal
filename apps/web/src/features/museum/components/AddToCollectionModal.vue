@@ -53,7 +53,7 @@ async function save() {
 
 <template>
   <div class="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-6 pt-24" @click.self="emit('close')">
-    <div class="flex max-h-[70vh] w-full max-w-125 flex-col overflow-hidden rounded-2xl border"
+    <div class="flex min-h-[70vh] w-full max-w-125 flex-col overflow-auto rounded-2xl border"
       style="background: #0a0b12; border-color: rgba(255, 255, 255, 0.1)">
       <div class="flex items-center justify-between border-b p-4" style="border-color: rgba(255, 255, 255, 0.06)">
         <div class="font-display text-[15px] font-bold text-(--ink-text)">Adicionar à coleção</div>

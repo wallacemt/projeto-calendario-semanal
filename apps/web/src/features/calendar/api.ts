@@ -43,6 +43,7 @@ export interface CalendarEntryResponse {
     malUrl: string | null
     genres: string[]
   }
+  social?: { commentCount: number; reactionCount: number }
 }
 
 export type CalendarBoard = CalendarSummary & {
