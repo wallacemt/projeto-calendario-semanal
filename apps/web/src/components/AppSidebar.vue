@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { BarChart3, Calendar, Landmark, Palette, Search } from 'lucide-vue-next'
+import { BarChart3, Calendar, Globe, Landmark, Palette, Search } from 'lucide-vue-next'
 import { useAuthStore } from '../stores/auth'
 
 // Sidebar recolhível/arrastável (design AnimeWeek Perfil.dc.html) — estado é
@@ -76,6 +76,7 @@ const navItems = [
   { icon: Landmark, label: 'Museu', to: { name: 'museum' } },
   { icon: BarChart3, label: 'Estatísticas', to: { name: 'stats' } },
   { icon: Palette, label: 'Temas', to: { name: 'themes' } },
+  { icon: Globe, label: 'Social', to: { name: 'social' } },
 ] as const
 
 const initial = computed(() => auth.user?.username?.[0]?.toUpperCase() ?? '?')
