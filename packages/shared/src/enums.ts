@@ -29,3 +29,9 @@ export enum AuthProvider {
   GOOGLE = "GOOGLE",
   GITHUB = "GITHUB",
 }
+
+export enum NotificationType {
+  FOLLOW = "FOLLOW",
+  COMMENT = "COMMENT",
+  REACTION = "REACTION",
+}

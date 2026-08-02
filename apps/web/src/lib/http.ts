@@ -92,3 +92,54 @@ export const http = {
     request<T>(path, { ...options, method: 'PATCH', body }),
   delete: <T>(path: string, options?: RequestOptions) => request<T>(path, { ...options, method: 'DELETE' }),
 }
+
+// Consumo de SSE (M10 — notificações em tempo real). Não usa EventSource
+// nativo de propósito: EventSource não deixa setar header Authorization, só
+// manda cookies — e o access token deste app vive em memória (Pinia), nunca
+// em cookie (ADR-04). A alternativa mais comum (token na query string)
+// vazaria o access token em log de acesso do servidor/histórico do browser;
+// fetch + ReadableStream manda o Bearer normal, reaproveitando o mesmo
+// accessToken/refreshHandler já usados por toda chamada REST deste client.
+// Retorna uma função de cleanup (aborta a conexão) — chame no onUnmounted.
+export function streamSse(path: string, onEvent: (rawData: string) => void): () => void {
+  const controller = new AbortController()
+
+  async function connect(skipAuthRetry = false): Promise<void> {
+    let res: Response
+    try {
+      res = await fetch(`${API_URL}${path}`, {
+        credentials: 'include',
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        signal: controller.signal,
+      })
+    } catch {
+      return // rede caiu ou a conexão foi abortada (unmount) — sem retry aqui
+    }
+
+    if (res.status === 401 && !skipAuthRetry && refreshHandler) {
+      const newToken = await refreshHandler()
+      if (newToken) return connect(true)
+    }
+    if (!res.ok || !res.body) return
+
+    const reader = res.body.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ''
+    for (;;) {
+      const { done, value } = await reader.read()
+      if (done) return
+      buffer += decoder.decode(value, { stream: true })
+      // Frame SSE = bloco terminado em linha em branco ("\n\n"); a última
+      // fatia do split pode ser um frame incompleto, sobra pro buffer.
+      const frames = buffer.split('\n\n')
+      buffer = frames.pop() ?? ''
+      for (const frame of frames) {
+        const dataLine = frame.split('\n').find((line) => line.startsWith('data:'))
+        if (dataLine) onEvent(dataLine.slice(5).trim())
+      }
+    }
+  }
+
+  void connect()
+  return () => controller.abort()
+}

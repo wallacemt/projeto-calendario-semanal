@@ -45,6 +45,9 @@ export const resetPasswordSchema = z.object({
 export const updateProfileSchema = z.object({
   username: usernameSchema.optional(),
   bio: z.string().max(280, "A bio deve ter no máximo 280 caracteres").optional(),
+  // M10/LGPD: opt-out de exibir as estatísticas (RF-10) no perfil público
+  // (GET /social/users/:username) — ver comentário no model User.
+  statsPublic: z.boolean().optional(),
 });
 
 // Descoberta de animes via Jikan (M3 — RF-03 / ADR-06). animeDtoSchema é a
@@ -278,6 +281,19 @@ export const setFeaturedWatchedSchema = z.object({
   watchedAnimeId: z.string().min(1).nullable(),
 });
 
+// Compartilhamento (M9 — RF-11). Convite nominal por @usuário — reaproveita
+// o mesmo usernameSchema do registro/perfil (mesma regra de formato,
+// unicidade fica por conta do banco/service).
+export const inviteToShareSchema = z.object({
+  username: usernameSchema,
+});
+
+// Comentário num card do board de outro usuário (M10 — RF-11). Corpo curto
+// de propósito (mesmo teto do bio/comment do museu) — não é um fórum.
+export const createCommentSchema = z.object({
+  body: z.string().min(1, "O comentário não pode ser vazio").max(500, "O comentário deve ter no máximo 500 caracteres"),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
@@ -303,3 +319,5 @@ export type MarkWatchedInput = z.infer<typeof markWatchedSchema>;
 export type CreateWatchedAnimeInput = z.infer<typeof createWatchedAnimeSchema>;
 export type UpdateWatchedAnimeInput = z.infer<typeof updateWatchedAnimeSchema>;
 export type SetFeaturedWatchedInput = z.infer<typeof setFeaturedWatchedSchema>;
+export type InviteToShareInput = z.infer<typeof inviteToShareSchema>;
+export type CreateCommentInput = z.infer<typeof createCommentSchema>;

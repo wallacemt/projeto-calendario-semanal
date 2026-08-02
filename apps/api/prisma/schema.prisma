@@ -47,6 +47,16 @@ enum EntryStatus {
   DROPPED
 }
 
+// M10 — tipo do gatilho que gerou a notificação (RF-11). Sem um tipo
+// "EPISODE" ainda: o design (M10) mostra um exemplo desse tipo mas nenhum
+// gatilho real do backend produz esse evento hoje (exigiria um scheduler
+// vigiando o Jikan por novo episódio, fora de escopo) — YAGNI até existir.
+enum NotificationType {
+  FOLLOW
+  COMMENT
+  REACTION
+}
+
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
@@ -56,6 +66,14 @@ model User {
   bio           String?
   emailVerified Boolean  @default(false)
   createdAt     DateTime @default(now())
+
+  // M10 — LGPD/privacidade (RF-11): dado agregado (contagem de assistidos,
+  // nota média etc.) sobre o próprio usuário, exibido no perfil PÚBLICO pra
+  // quem não é o dono. Default true (visível) porque é estatística agregada,
+  // não dado sensível (Art. 5º LGPD) — mas o titular pode optar por ocultar
+  // a qualquer momento (PATCH /users/me), o que é o mínimo exigido de
+  // controle do titular sobre dado seu exposto a terceiros.
+  statsPublic Boolean @default(true)
 
   calendars Calendar[]
   watched   WatchedAnime[]
@@ -76,6 +94,21 @@ model User {
 
   refreshTokens RefreshToken[]
   oauthAccounts OAuthAccount[]
+
+  // M9 — compartilhamento view-only do calendário atual (§ADR abaixo do
+  // model CalendarShare). 1:1 porque só existe 1 "link público" por usuário
+  // por vez, não por Calendar/temporada — trocar de temporada não deveria
+  // exigir gerar um link novo.
+  calendarShare CalendarShare?
+  shareGrants   ShareGrant[] // convites recebidos (acesso concedido a mim)
+
+  // M10 — grafo social (RF-11).
+  following             Follow[]       @relation("Following")
+  followers             Follow[]       @relation("Followers")
+  notifications         Notification[]
+  notificationsAsActor  Notification[] @relation("NotificationActor")
+  comments              Comment[]
+  reactions             Reaction[]
 }
 
 model OAuthAccount {
@@ -182,6 +215,13 @@ model CalendarEntry {
   calendar Calendar @relation(fields: [calendarId], references: [id], onDelete: Cascade)
   anime    Anime    @relation(fields: [animeId], references: [id])
 
+  // M10 — comentários/reações pousam no card (RF-11), não no Anime: é o
+  // progresso da PESSOA que está sendo comentado ("comentou em Solo
+  // Leveling S2"), não uma review do anime em si.
+  comments      Comment[]
+  reactions     Reaction[]
+  notifications Notification[]
+
   @@unique([calendarId, animeId]) // sem anime duplicado no mesmo calendário
   @@index([calendarId, weekday, position]) // leitura ordenada do board
 }
@@ -211,4 +251,103 @@ model Theme {
 
   @@unique([userId, season]) // no máx. 1 tema "pinado" por estação (NULL não conta — Postgres trata múltiplos NULL como distintos)
   @@index([userId])
+}
+
+// M9 — Compartilhamento (RF-11/Fase 3). Sempre view-only: não existe campo
+// de permissão porque não existe uma 2ª opção real pra escolher ainda
+// (YAGNI — adicionar granularidade de permissão quando existir edição
+// compartilhada de verdade). O link aponta sempre para a estação ATUAL do
+// dono (getCurrentSeason, mesma resolução do CalendarsService.findCurrent),
+// não para um Calendar fixo — por isso 1:1 com User em vez de com Calendar:
+// trocar de temporada não deveria exigir gerar um link novo, e o design
+// (AnimeWeek Social.dc.html) nem expõe um seletor de estação nessa tela.
+model CalendarShare {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique @default(cuid())
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  grants ShareGrant[]
+}
+
+// Convite direto por usuário — revogável individualmente e independente do
+// toggle `active` do link (desativar o link não revoga quem já foi
+// convidado nominalmente, e vice-versa).
+model ShareGrant {
+  id        String        @id @default(cuid())
+  shareId   String
+  share     CalendarShare @relation(fields: [shareId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+
+  @@unique([shareId, userId]) // não duplica convite pro mesmo usuário
+}
+
+// M10 — grafo social (RF-11). followerId = quem aperta "seguir", followingId
+// = quem é seguido. Duas relations nomeadas no User (Following/Followers)
+// porque são os dois lados da mesma tabela — sem nome, o Prisma não sabe
+// qual FK pertence a qual relation.
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  followee    User     @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId]) // não segue 2x a mesma pessoa
+  @@index([followingId]) // "quem me segue" / contagem de seguidores
+}
+
+// M10 — feed de notificações (RF-11). actorId é opcional/SetNull: apagar
+// quem disparou o evento (ex.: deletou a conta) não pode derrubar a
+// notificação já entregue, só perde a referência de "quem fez o quê"
+// (mesmo raciocínio de User.activeThemeId). entryId aponta pro card
+// comentado/reagido — Cascade aqui é intencional: sem o card, a notificação
+// ("comentou em X") perde todo o contexto e não faz sentido manter.
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  actorId   String?
+  actor     User?            @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  entryId   String?
+  entry     CalendarEntry?   @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  message   String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read, createdAt]) // leitura do feed + contagem de não lidas
+}
+
+// M10 — comentário num card do board de outro usuário (RF-11).
+model Comment {
+  id        String        @id @default(cuid())
+  entryId   String
+  entry     CalendarEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime      @default(now())
+
+  @@index([entryId, createdAt])
+}
+
+// M10 — reação num card (RF-11). @@unique junto com emoji fixo por design
+// (design só mostra ❤️, sem seletor de emoji) vira "toggle": reagir de novo
+// no mesmo card é upsert/idempotente, não uma 2ª reação empilhada.
+model Reaction {
+  id        String        @id @default(cuid())
+  entryId   String
+  entry     CalendarEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emoji     String        @default("❤️")
+  createdAt DateTime      @default(now())
+
+  @@unique([entryId, userId])
 }
