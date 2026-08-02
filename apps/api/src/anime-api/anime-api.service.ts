@@ -256,9 +256,7 @@ export class AnimeApiService {
     return result;
   }
 
-  async getByCurrentSeason(
-    query: SeasonNowQuery,
-  ): Promise<PaginatedAnimeDto> {
+  async getByCurrentSeason(query: SeasonNowQuery): Promise<PaginatedAnimeDto> {
     const { page, type, status, orderBy } = query;
     // Mesma composição de cache key da busca (searchAnime) — filtros
     // diferentes são resultados diferentes, não podem compartilhar entrada.
