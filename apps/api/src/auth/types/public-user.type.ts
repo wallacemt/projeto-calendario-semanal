@@ -9,6 +9,7 @@ export interface PublicUser {
   bio: string | null;
   emailVerified: boolean;
   createdAt: Date;
+  statsPublic: boolean;
 }
 
 export function toPublicUser(user: User): PublicUser {
@@ -20,5 +21,6 @@ export function toPublicUser(user: User): PublicUser {
     bio: user.bio,
     emailVerified: user.emailVerified,
     createdAt: user.createdAt,
+    statsPublic: user.statsPublic,
   };
 }

@@ -23,7 +23,17 @@ import {
   type CalendarEntry,
 } from '../../generated/prisma/client';
 
-const BOARD_INCLUDE = { entries: { include: { anime: true } } } as const;
+// _count de comments/reactions (M10) pro dono ver, direto no board, quem
+// interagiu com o próprio progresso — sem isso ele só saberia pelo texto
+// truncado da notificação, sem nem contagem.
+const BOARD_INCLUDE = {
+  entries: {
+    include: {
+      anime: true,
+      _count: { select: { comments: true, reactions: true } },
+    },
+  },
+} as const;
 
 // Dona de Calendar (§6 do blueprint) — cria/lista por estação, detecta a
 // estação atual. NÃO sabe posicionar card na coluna do dia: isso é delegado

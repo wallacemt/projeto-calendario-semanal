@@ -14,6 +14,8 @@ import { EntriesModule } from './entries/entries.module';
 import { HealthController } from './health/health.controller';
 import { MuseumModule } from './museum/museum.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { SharingModule } from './sharing/sharing.module';
+import { SocialModule } from './social/social.module';
 import { ThemesModule } from './themes/themes.module';
 import { UsersModule } from './users/users.module';
 
@@ -43,6 +45,8 @@ import { UsersModule } from './users/users.module';
     AnimesModule,
     ThemesModule,
     MuseumModule,
+    SharingModule,
+    SocialModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],

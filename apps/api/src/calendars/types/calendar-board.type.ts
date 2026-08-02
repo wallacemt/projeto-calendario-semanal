@@ -30,6 +30,11 @@ export interface EntryResponse {
     malUrl: string | null;
     genres: string[];
   };
+  // M10 — contagens de comentários/reações (RF-11). Opcional porque nem toda
+  // query que monta um board pede o _count (ver BOARD_INCLUDE em
+  // calendars.service.ts vs. SharingService.getPublicBoard) — undefined aqui
+  // significa "essa tela não pediu", não "zero".
+  social?: { commentCount: number; reactionCount: number };
 }
 
 export interface CalendarBoardResponse {
@@ -41,7 +46,10 @@ export interface CalendarBoardResponse {
 }
 
 type CalendarWithEntries = Calendar & {
-  entries: (CalendarEntry & { anime: Anime })[];
+  entries: (CalendarEntry & {
+    anime: Anime;
+    _count?: { comments: number; reactions: number };
+  })[];
 };
 
 export function toCalendarBoard(
@@ -72,6 +80,12 @@ export function toCalendarBoard(
           ? (entry.anime.genres as string[])
           : [],
       },
+      social: entry._count
+        ? {
+            commentCount: entry._count.comments,
+            reactionCount: entry._count.reactions,
+          }
+        : undefined,
     });
   }
   for (const list of Object.values(grouped)) {
