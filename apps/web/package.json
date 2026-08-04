@@ -1,0 +1,35 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc -b"
+  },
+  "dependencies": {
+    "@aniweek/shared": "workspace:*",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+    "@tailwindcss/vite": "^4.3.2",
+    "@vueuse/motion": "^3.0.3",
+    "lucide-vue-next": "^1.0.0",
+    "pinia": "^3.0.4",
+    "tailwindcss": "^4.3.2",
+    "vue": "^3.5.39",
+    "vue-draggable-plus": "^0.6.1",
+    "vue-router": "^5.1.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/tsconfig": "^0.9.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1",
+    "vue-tsc": "^3.3.5"
+  }
+}

@@ -1,0 +1,108 @@
+/* CSS custom properties trocáveis em runtime (ADR-09). Tema default + 1 bloco
+   por estação, selecionados via [data-season] no <html> (ver stores/theme.ts).
+   Paleta alinhada a docs/design-system.md. */
+
+:root {
+  --color-primary: #6c63ff;
+  --color-primary-hover: #5b54e8;
+  --color-secondary: #8b5cf6;
+  --color-accent: #2dd4ff;
+  --color-bg: #09090b;
+  --color-surface: #111113;
+  --color-elevated: #18181b;
+  --color-border: #27272a;
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-text-faint: #71717a;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --season-bg-image: none;
+
+  /* Identidade por estação (design-system.md §Cores por Estação): só os
+     accents mudam, a estrutura (bg/surface/text acima) permanece — usado
+     hoje pelo hero de auth; setSeason() atualiza estes 2 valores. */
+  --season-accent-1: var(--color-primary);
+  --season-accent-2: var(--color-accent);
+
+  /* Tokens de marca e "ink surface" — propositalmente FORA do bloco
+     [data-season], nunca sobrescritos por ele. As telas de auth (login,
+     registro, etc.) são pré-login e sempre dark/glass (direção aprovada em
+     tmp/auth.html): usar --color-bg/--color-text ali herdaria o full
+     light-theme que spring/summer aplicam ao app autenticado, quebrando o
+     contraste do hero. --season-accent-1/2 acima continuam sendo o único
+     ponto onde a estação "vaza" pro visual do auth. */
+  --brand-primary: #6c63ff;
+  --brand-primary-hover: #5b54e8;
+  --brand-secondary: #8b5cf6;
+  --brand-accent: #2dd4ff;
+
+  --ink-bg: #05060b;
+  --ink-border: rgba(255, 255, 255, 0.1);
+  --ink-text: #f5f6fa;
+  --ink-text-muted: #9ca3b0;
+  --ink-text-faint: var(--color-secondary);
+  --ink-error: #f87171;
+
+  /* Liquid glass (M7.1, fora do blueprint): painéis que antes eram
+     rgba(255,255,255,0.0X) chapado viraram ilegíveis com o bg-image do tema
+     visível atrás (ver style.css/AppShell.vue) — blur é o que devolve
+     contraste (separa o texto do que está atrás, não só "enfeita"). Ver
+     .glass/.glass-strong em style.css.
+     --glass-bg é ESCURO (não branco) de propósito: um tint branco a 6% só
+     "aparece" em cima de um fundo já escuro — em cima da parte clara de uma
+     foto (céu, neve, uma temporada spring/summer) fica invisível, porque
+     branco-sobre-claro não muda o contraste. Como o texto do app é sempre
+     claro (--ink-text), só um tint ESCURO garante contraste com qualquer
+     brilho de fundo — é a mesma lógica por trás de "dark vibrancy material"
+     no HIG da Apple (vs. "light vibrancy", pensado pra texto escuro). O
+     brilho/reflexo (--glass-highlight) continua branco — só a base muda. */
+  --glass-bg: rgba(8, 9, 14, 0.38);
+  --glass-bg-strong: rgba(8, 9, 14, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.18);
+  --glass-blur: 18px;
+}
+
+/* ponytail: full light-theme por estação (spring/summer) herdado do seed do
+   M0 — mantido como estava, fora do escopo desta rodada de UI (M1). CRUD de
+   temas completo entra na M7 (ADR-09); não generalizar/duplicar agora. */
+[data-season='spring'] {
+  --color-primary: #4ade80;
+  --color-secondary: #f472b6;
+  --color-bg: #f0fdf4;
+  --color-surface: #ffffff;
+  --color-text: #14532d;
+  --season-accent-1: #34d399;
+  --season-accent-2: #a7f3d0;
+}
+
+[data-season='summer'] {
+  --color-primary: #38bdf8;
+  --color-secondary: #fbbf24;
+  --color-bg: #ecfeff;
+  --color-surface: #ffffff;
+  --color-text: #0c4a6e;
+  --season-accent-1: #fb923c;
+  --season-accent-2: #fdba74;
+}
+
+[data-season='fall'] {
+  --color-primary: #ea580c;
+  --color-secondary: #b45309;
+  --color-bg: #1c1210;
+  --color-surface: #2a1a15;
+  --color-text: #fde8d7;
+  --season-accent-1: #f97316;
+  --season-accent-2: #fed7aa;
+}
+
+[data-season='winter'] {
+  --color-primary: #38bdf8;
+  --color-secondary: #a5b4fc;
+  --color-bg: #0b1220;
+  --color-surface: #131c2e;
+  --color-text: #e0f2fe;
+  --season-accent-1: #60a5fa;
+  --season-accent-2: #bae6fd;
+}

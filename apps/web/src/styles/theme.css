@@ -1,0 +1,120 @@
+/* Fontes self-hosted (@fontsource) — sem request externo ao Google Fonts em
+   produção, sem FOUC de troca de fonte. Uma família variável cobre todos os
+   pesos usados (100–900), então basta este import por família. */
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Tailwind v4 é CSS-first (ADR-02): declarar tokens aqui em @theme gera as
+   utilities correspondentes automaticamente (font-display, rounded-lg,
+   animate-float, ...) — nada de tailwind.config.js. */
+@theme {
+  --font-display: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Inter Variable", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", monospace;
+
+  /* Escala de radius do design-system.md — sobrescreve os defaults do
+     Tailwind (que não batem com a escala do projeto: tudo arredondado). */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+
+  /* Flutuação ambiente do stack de posters do hero de auth — curta o
+     bastante para não cansar (design-system.md: preferir opacity/translate,
+     evitar animações longas). Respeita prefers-reduced-motion (ver abaixo). */
+  --animate-float: aw-float 5s ease-in-out infinite;
+
+  /* AppLoader (boot global) — respiração sutil do logo. */
+  --animate-breathe: aw-breathe 2.2s ease-in-out infinite;
+}
+
+@keyframes aw-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes aw-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* Assinatura do AppLoader: 7 barrinhas (uma por dia da semana) "acendendo"
+   em onda — motivo específico do domínio (calendário semanal), não um
+   spinner genérico. Delay por barra é setado inline (ver AppLoader.vue). */
+@keyframes aw-week-tick {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* select/input/textarea nativos renderizam a UI de sistema (o popup de
+   opções do <select>, o datepicker, etc.) no color-scheme padrão do SO —
+   quase sempre light. Resultado: dropdown abre com fundo branco e texto
+   também claro (herdado do nosso CSS), ilegível. Não dá pra resolver
+   estilizando <option> (Chromium/Firefox ignoram a maior parte disso);
+   color-scheme é a propriedade nativa feita pra isso — avisa o browser
+   "essa área é dark", ele escolhe automaticamente bg/texto legíveis pra
+   qualquer controle nativo, sem precisar de lib nem :deep() por componente.
+   Global porque a área autenticada inteira (--ink-*) é sempre dark. */
+select,
+input,
+textarea {
+  color-scheme: dark;
+}
+
+/* Scrollbar global — combina com o "ink surface" do app autenticado em vez do
+   scrollbar cinza default do SO. scrollbar-width/scrollbar-color cobre
+   Firefox; ::-webkit-scrollbar* cobre Chromium/Safari. CSS nativo, sem lib. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--brand-secondary) 35%, transparent)
+    transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--brand-secondary) 35%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--brand-secondary) 60%, transparent);
+  background-clip: padding-box;
+}

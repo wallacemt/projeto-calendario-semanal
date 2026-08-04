@@ -1,0 +1,57 @@
+# Stack de produção para o Portainer (ADR-10). Imagens publicadas pelo CI
+# (M0.5) em docker.io/wallacestm/aniweek-{api,web}. Todas as variáveis abaixo
+# são configuradas como Environment variables do stack no Portainer — nada
+# aqui é secreto nem versionado com valor real.
+services:
+  rt-aniweek-api:
+    image: wallacestm/aniweek-api:latest
+    container_name: rt-aniweek-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      FRONTEND_URL: ${FRONTEND_URL}
+      DATABASE_URL: ${DATABASE_URL}
+
+      REDIS_URL: ${REDIS_URL}
+      JWT_SECRET: ${JWT_SECRET}
+
+      JWT_AUX_SECRET: ${JWT_AUX_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      JWT_REFRESH_EXPIRES_IN_DAYS: ${JWT_REFRESH_EXPIRES_IN_DAYS}
+
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
+    ports:
+      - '${API_PORT:-3000}:3000'
+    networks:
+     - rt-network
+
+  # VITE_API_URL não é configurável aqui: o Vite embute essa URL no bundle
+  # estático em tempo de build (ver .github/workflows/deploy.yml e
+  # apps/web/Dockerfile), então uma env var neste container não tem efeito
+  # nenhum — nginx só serve os arquivos já compilados.
+  rt-aniweek:
+    image: wallacestm/aniweek-web:latest
+    container_name: rt-aniweek
+    restart: unless-stopped
+    ports:
+      - '${WEB_PORT:-8080}:80'
+    depends_on:
+      - rt-aniweek-api
+    networks:
+      - rt-network
+
+
+networks:
+  rt-network:
+    external: true

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- LSF-2026-004: o token de reset de senha vai na query string do link
+         do email (?token=...). Sem isso, um link/imagem de terceiro nessa
+         página vazaria a URL completa (com o token) no header Referer da
+         requisição para esse terceiro. -->
+    <meta name="referrer" content="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AnimeWeek — organize seus animes por dia da semana</title>
+    <meta
+      name="description"
+      content="Monte seu calendário semanal de animes, acompanhe o progresso dos episódios e organize suas temporadas — tudo num só lugar."
+    />
+    <meta name="theme-color" content="#05060b" />
+
+    <!-- Favicons (ver public/) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph / redes sociais -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AnimeWeek" />
+    <meta property="og:title" content="AnimeWeek — organize seus animes por dia da semana" />
+    <meta
+      property="og:description"
+      content="Monte seu calendário semanal de animes, acompanhe o progresso dos episódios e organize suas temporadas — tudo num só lugar."
+    />
+    <meta property="og:image" content="/android-chrome-512x512.png" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="AnimeWeek — organize seus animes por dia da semana" />
+    <meta
+      name="twitter:description"
+      content="Monte seu calendário semanal de animes, acompanhe o progresso dos episódios e organize suas temporadas — tudo num só lugar."
+    />
+    <meta name="twitter:image" content="/android-chrome-512x512.png" />
+
+    <!-- Ainda em construção (README) — não indexar até termos uma versão utilizável. -->
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
