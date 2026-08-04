@@ -52,7 +52,7 @@ export class AnimesService {
       // não existir localmente. Sem esse guard, abrir o detalhe de novo
       // (qualquer tela que chame esse método) sobrescreveria a edição.
       const existing = await this.prisma.anime.findUnique({ where: { malId } });
-      if (existing?.manuallyEdited) return dto;
+      if (existing?.manuallyEdited) return toAnimeDto(existing);
       await this.prisma.anime.upsert({
         where: { malId },
         create: toAnimeRow(dto),
