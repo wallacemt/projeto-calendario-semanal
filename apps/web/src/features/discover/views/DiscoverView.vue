@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { Search } from 'lucide-vue-next'
+import { ANIME_GENRES } from '@aniweek/shared'
 import AppShell from '../../../components/AppShell.vue'
 import { useDebounce } from '../../../composables/useDebounce'
 import type { AnimeFilter } from '../api'
@@ -40,8 +41,14 @@ function clearSearch() {
   store.search('')
 }
 
+function onGenreChange(event: Event) {
+  const value = (event.target as HTMLSelectElement).value
+  store.setGenre(value || null)
+}
+
 onMounted(async () => {
- await store.getSeasonNow();
+  await store.getSeasonNow()
+  store.fetchCommunityPopular()
 })
 </script>
 
@@ -58,7 +65,7 @@ onMounted(async () => {
               @keyup.enter="searchNow" />
           </div>
         </div>
-        <div class="flex flex-wrap gap-2.5">
+        <div class="flex flex-wrap items-center gap-2.5">
           <button v-for="f in FILTERS" :key="f.value" type="button"
             class="rounded-full px-3.5 py-1.75 text-[12.5px] font-semibold"
             :class="store.filter === f.value ? 'text-white' : 'border text-(--ink-text-muted)'" :style="store.filter === f.value
@@ -66,6 +73,27 @@ onMounted(async () => {
               : { borderColor: 'rgba(255,255,255,0.1)' }
               " @click="store.setFilter(f.value)">
             {{ f.label }}
+          </button>
+          <select :value="store.genre ?? ''" @change="onGenreChange"
+            class="rounded-full border px-3.5 py-1.75 text-[12.5px] font-semibold text-(--ink-text-muted) outline-none"
+            style="border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.04)">
+            <option value="">Todos os gêneros</option>
+            <option v-for="g in ANIME_GENRES" :key="g" :value="g">{{ g }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div v-if="store.communityPopular.length > 0"
+        class="flex-shrink-0 border-b px-8 py-5" style="border-color: rgba(255, 255, 255, 0.06)">
+        <div class="mb-3 text-[12.5px] font-bold text-(--ink-text-muted)">🔥 Populares na comunidade</div>
+        <div class="flex gap-4 overflow-x-auto pb-1">
+          <button v-for="anime in store.communityPopular" :key="anime.malId" type="button"
+            class="flex w-28 flex-shrink-0 flex-col gap-1.5 text-left" @click="store.select(anime)">
+            <div class="h-40 w-28 flex-shrink-0 overflow-hidden rounded-xl bg-white/5">
+              <img v-if="anime.imageUrl" :src="anime.imageUrl" :alt="anime.title" class="h-full w-full object-cover" />
+            </div>
+            <div class="truncate text-[11.5px] font-semibold text-(--ink-text)">{{ anime.title }}</div>
+            <div class="text-[10.5px] text-(--ink-text-faint)">{{ anime.entryCount }} calendário{{ anime.entryCount === 1 ? '' : 's' }}</div>
           </button>
         </div>
       </div>

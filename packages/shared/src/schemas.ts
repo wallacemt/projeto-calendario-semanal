@@ -50,6 +50,32 @@ export const updateProfileSchema = z.object({
   statsPublic: z.boolean().optional(),
 });
 
+// M10.3 — vocabulário fechado de gênero da AniList (genre_in só aceita esses
+// valores; mandar qualquer outra string faz a query GraphQL não dar erro,
+// mas também não filtrar nada). Fixo aqui em vez de buscar da API porque a
+// AniList não expõe um endpoint "list genres" barato — é a mesma lista que
+// aparece no filtro deles.
+export const ANIME_GENRES = [
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Drama",
+  "Ecchi",
+  "Fantasy",
+  "Horror",
+  "Mahou Shoujo",
+  "Mecha",
+  "Music",
+  "Mystery",
+  "Psychological",
+  "Romance",
+  "Sci-Fi",
+  "Slice of Life",
+  "Sports",
+  "Supernatural",
+  "Thriller",
+] as const;
+
 // Descoberta de animes via Jikan (M3 — RF-03 / ADR-06). animeDtoSchema é a
 // camada anticorrupção: nunca confiamos cegamente no shape de uma API externa,
 // então a resposta mapeada é validada antes de sair do backend — e o mesmo
@@ -77,6 +103,7 @@ export const searchAnimesQuerySchema = z.object({
   type: z.enum(["tv", "movie", "ova", "special", "ona", "music"]).optional(),
   status: z.enum(["airing", "complete", "upcoming"]).optional(),
   orderBy: z.enum(["score"]).optional(),
+  genre: z.enum(ANIME_GENRES).optional(),
 });
 
 // "Temporada vigente" (M3) — mesmos filtros type/status/orderBy da busca,
@@ -95,6 +122,17 @@ export const paginatedAnimeDtoSchema = z.object({
   hasNextPage: z.boolean(),
   currentPage: z.number().int().positive(),
   lastPage: z.number().int().positive().nullable(),
+});
+
+// M10.3 — "populares na comunidade": agregação sobre CalendarEntry (dados
+// internos), não vem da AniList. entryCount é quantos calendários (de
+// qualquer usuário) têm esse anime adicionado — a métrica de "popular" aqui.
+export const communityPopularItemSchema = animeDtoSchema.extend({
+  entryCount: z.number().int().nonnegative(),
+});
+
+export const communityPopularQuerySchema = z.object({
+  genre: z.enum(ANIME_GENRES).optional(),
 });
 
 // Detalhe completo (M3): só usado na página de detalhe do anime — o Jikan
@@ -304,6 +342,8 @@ export type AnimeDto = z.infer<typeof animeDtoSchema>;
 export type SearchAnimesQuery = z.infer<typeof searchAnimesQuerySchema>;
 export type SeasonNowQuery = z.infer<typeof seasonNowQuerySchema>;
 export type PaginatedAnimeDto = z.infer<typeof paginatedAnimeDtoSchema>;
+export type CommunityPopularItem = z.infer<typeof communityPopularItemSchema>;
+export type CommunityPopularQuery = z.infer<typeof communityPopularQuerySchema>;
 export type AnimeFullDto = z.infer<typeof animeFullDtoSchema>;
 export type CreateCalendarInput = z.infer<typeof createCalendarSchema>;
 export type AddEntryInput = z.infer<typeof addEntrySchema>;

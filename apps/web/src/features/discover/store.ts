@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { AnimeDto } from "@aniweek/shared";
+import type { AnimeDto, CommunityPopularItem } from "@aniweek/shared";
 import { HttpError } from "../../lib/http";
 import { useToastStore } from "../../stores/toast";
 import { discoverApi, type AnimeFilter } from "./api";
@@ -8,6 +8,7 @@ export const useDiscoverStore = defineStore("discover", {
   state: () => ({
     query: "",
     filter: "all" as AnimeFilter,
+    genre: null as string | null,
     results: [] as AnimeDto[],
     selected: null as AnimeDto | null,
     loading: false,
@@ -17,6 +18,8 @@ export const useDiscoverStore = defineStore("discover", {
     page: 1,
     hasNextPage: false,
     lastPage: null as number | null,
+    communityPopular: [] as CommunityPopularItem[],
+    communityLoading: false,
     // Incrementado a cada fetch disparado; uma resposta só é aplicada se
     // ainda for a mais recente. Sem isso, digitar rápido pode fazer uma
     // request antiga (que demorou mais) sobrescrever o resultado de uma
@@ -47,6 +50,27 @@ export const useDiscoverStore = defineStore("discover", {
       else this.getSeasonNow();
     },
 
+    // Mesma lógica do setFilter: gênero também reexecuta o fetch ativo
+    // (busca ou temporada), e refaz o painel de populares na comunidade
+    // (esse não tem paginação/mode, é sempre um fetch único).
+    setGenre(genre: string | null) {
+      this.genre = genre;
+      if (this.mode === "search") this.search(this.query);
+      else this.getSeasonNow();
+      this.fetchCommunityPopular();
+    },
+
+    async fetchCommunityPopular() {
+      this.communityLoading = true;
+      try {
+        this.communityPopular = await discoverApi.communityPopular(this.genre);
+      } catch {
+        this.communityPopular = [];
+      } finally {
+        this.communityLoading = false;
+      }
+    },
+
     select(anime: AnimeDto) {
       this.selected = anime;
     },
@@ -74,8 +98,8 @@ export const useDiscoverStore = defineStore("discover", {
       try {
         const { data, hasNextPage, lastPage } =
           this.mode === "search"
-            ? await discoverApi.search(this.query, page, this.filter)
-            : await discoverApi.seasonNow(page, this.filter);
+            ? await discoverApi.search(this.query, page, this.filter, this.genre)
+            : await discoverApi.seasonNow(page, this.filter, this.genre);
         if (requestId !== this.requestId) return; // resposta obsoleta, ignora
         // page 1 é sempre uma busca/temporada nova (troca de termo, filtro ou
         // reload) — substitui o resultado. Só "carregar mais" (loadMore, que
