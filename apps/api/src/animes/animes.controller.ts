@@ -9,9 +9,11 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import {
+  communityPopularQuerySchema,
   searchAnimesQuerySchema,
   seasonNowQuerySchema,
   updateAnimeSchema,
+  type CommunityPopularQuery,
   type SearchAnimesQuery,
   type SeasonNowQuery,
   type UpdateAnimeInput,
@@ -44,6 +46,19 @@ export class AnimesController {
     @Query(new ZodValidationPipe(seasonNowQuerySchema)) query: SeasonNowQuery,
   ) {
     return this.animes.getByCurrentSeason(query);
+  }
+
+  // Rota literal também precisa vir antes de ':malId', mesmo motivo do
+  // 'season/now' acima.
+  @Get('community/popular')
+  @ApiOkResponse({
+    description: 'Animes mais adicionados em calendários (dados internos).',
+  })
+  getCommunityPopular(
+    @Query(new ZodValidationPipe(communityPopularQuerySchema))
+    query: CommunityPopularQuery,
+  ) {
+    return this.animes.getCommunityPopular(query.genre);
   }
 
   @Get(':malId')

@@ -2,6 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import type {
   AnimeDto,
   AnimeFullDto,
+  CommunityPopularItem,
   PaginatedAnimeDto,
   SearchAnimesQuery,
   SeasonNowQuery,
@@ -10,6 +11,9 @@ import type {
 import { PrismaService } from '../prisma/prisma.service';
 import { AnimeApiService } from '../anime-api/anime-api.service';
 import type { Anime } from '../../generated/prisma/client';
+
+const COMMUNITY_LIMIT = 12;
+const COMMUNITY_CANDIDATE_POOL = 40;
 
 @Injectable()
 export class AnimesService {
@@ -63,6 +67,35 @@ export class AnimesService {
       );
       return toAnimeDto(fallback);
     }
+  }
+
+  // M10.3 — "populares na comunidade": quantos calendários (de qualquer
+  // usuário) têm cada anime adicionado. Filtro de gênero acontece em memória
+  // (genres é Json no Postgres) sobre um pool maior que o limite final, pra
+  // não devolver menos de COMMUNITY_LIMIT resultados só porque os mais
+  // populares no geral não batem com o gênero pedido.
+  async getCommunityPopular(genre?: string): Promise<CommunityPopularItem[]> {
+    const groups = await this.prisma.calendarEntry.groupBy({
+      by: ['animeId'],
+      _count: { animeId: true },
+      orderBy: { _count: { animeId: 'desc' } },
+      take: COMMUNITY_CANDIDATE_POOL,
+    });
+
+    const popular: CommunityPopularItem[] = [];
+    for (const group of groups) {
+      const anime = await this.prisma.anime.findUnique({
+        where: { id: group.animeId },
+      });
+      if (!anime) continue;
+      popular.push({ ...toAnimeDto(anime), entryCount: group._count.animeId });
+    }
+
+    const filtered = genre
+      ? popular.filter((anime) => anime.genres.includes(genre))
+      : popular;
+
+    return filtered.slice(0, COMMUNITY_LIMIT);
   }
 
   // M6 (fora do blueprint): edição manual do espelho local — malId de fora

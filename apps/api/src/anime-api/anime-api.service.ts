@@ -59,10 +59,10 @@ const MEDIA_CORE_FIELDS = `
 `;
 
 const SEARCH_QUERY = `
-  query ($search: String, $page: Int, $format: MediaFormat, $status: MediaStatus, $sort: [MediaSort]) {
+  query ($search: String, $page: Int, $format: MediaFormat, $status: MediaStatus, $sort: [MediaSort], $genre: String) {
     Page(page: $page, perPage: 20) {
       pageInfo { hasNextPage currentPage lastPage }
-      media(search: $search, type: ANIME, format: $format, status: $status, sort: $sort) {
+      media(search: $search, type: ANIME, format: $format, status: $status, sort: $sort, genre: $genre) {
         ${MEDIA_CORE_FIELDS}
       }
     }
@@ -70,10 +70,10 @@ const SEARCH_QUERY = `
 `;
 
 const SEASON_QUERY = `
-  query ($page: Int, $season: MediaSeason, $seasonYear: Int, $format: MediaFormat, $status: MediaStatus, $sort: [MediaSort]) {
+  query ($page: Int, $season: MediaSeason, $seasonYear: Int, $format: MediaFormat, $status: MediaStatus, $sort: [MediaSort], $genre: String) {
     Page(page: $page, perPage: 20) {
       pageInfo { hasNextPage currentPage lastPage }
-      media(season: $season, seasonYear: $seasonYear, type: ANIME, format: $format, status: $status, sort: $sort) {
+      media(season: $season, seasonYear: $seasonYear, type: ANIME, format: $format, status: $status, sort: $sort, genre: $genre) {
         ${MEDIA_CORE_FIELDS}
       }
     }
@@ -210,7 +210,7 @@ export class AnimeApiService {
   constructor(@Inject(REDIS_CLIENT) private readonly redis: Redis | null) {}
 
   async searchAnime(input: SearchAnimesQuery): Promise<PaginatedAnimeDto> {
-    const cacheKey = `animeapi:search:${input.query.toLowerCase()}:${input.page}:${input.type ?? ''}:${input.status ?? ''}:${input.orderBy ?? ''}`;
+    const cacheKey = `animeapi:search:${input.query.toLowerCase()}:${input.page}:${input.type ?? ''}:${input.status ?? ''}:${input.orderBy ?? ''}:${input.genre ?? ''}`;
     const cached = await this.readCache<PaginatedAnimeDto>(cacheKey);
     if (cached) return cached;
 
@@ -220,6 +220,7 @@ export class AnimeApiService {
       format: input.type ? FORMAT_FILTER[input.type] : undefined,
       status: input.status ? STATUS_FILTER[input.status] : undefined,
       sort: input.orderBy === 'score' ? ['SCORE_DESC'] : ['SEARCH_MATCH'],
+      genre: input.genre,
     });
     const result = mapAniListPage(raw);
     await this.writeCache(cacheKey, result, SEARCH_CACHE_TTL_SECONDS);
@@ -257,10 +258,10 @@ export class AnimeApiService {
   }
 
   async getByCurrentSeason(query: SeasonNowQuery): Promise<PaginatedAnimeDto> {
-    const { page, type, status, orderBy } = query;
+    const { page, type, status, orderBy, genre } = query;
     // Mesma composição de cache key da busca (searchAnime) — filtros
     // diferentes são resultados diferentes, não podem compartilhar entrada.
-    const cacheKey = `animeapi:seasonNowAnimes:${page}:${type ?? ''}:${status ?? ''}:${orderBy ?? ''}`;
+    const cacheKey = `animeapi:seasonNowAnimes:${page}:${type ?? ''}:${status ?? ''}:${orderBy ?? ''}:${genre ?? ''}`;
     const cached = await this.readCache<PaginatedAnimeDto>(cacheKey);
     if (cached) return cached;
 
@@ -272,6 +273,7 @@ export class AnimeApiService {
       format: type ? FORMAT_FILTER[type] : undefined,
       status: status ? STATUS_FILTER[status] : undefined,
       sort: orderBy === 'score' ? ['SCORE_DESC'] : ['POPULARITY_DESC'],
+      genre,
     });
     const result = mapAniListPage(raw);
     await this.writeCache(cacheKey, result, SEARCH_CACHE_TTL_SECONDS);

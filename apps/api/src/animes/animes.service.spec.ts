@@ -9,6 +9,7 @@ function buildAnimesService() {
   const jikan = { getAnimeById: jest.fn(), searchAnime: jest.fn() };
   const prisma = {
     anime: { upsert: jest.fn(), findUnique: jest.fn(), update: jest.fn() },
+    calendarEntry: { groupBy: jest.fn() },
   };
   const animes = new AnimesService(jikan as never, prisma as never);
   return { animes, jikan, prisma };
@@ -83,5 +84,27 @@ describe('AnimesService', () => {
     await expect(animes.update('anime-1', { title: 'X' })).rejects.toThrow(
       NotFoundException,
     );
+  });
+
+  it('getCommunityPopular ordena por entryCount e filtra por gênero (M10.3)', async () => {
+    const { animes, prisma } = buildAnimesService();
+    prisma.calendarEntry.groupBy.mockResolvedValue([
+      { animeId: 'anime-frieren', _count: { animeId: 5 } },
+      { animeId: 'anime-solo-leveling', _count: { animeId: 2 } },
+    ]);
+    prisma.anime.findUnique.mockImplementation(({ where: { id } }: { where: { id: string } }) =>
+      Promise.resolve(
+        id === 'anime-frieren'
+          ? { malId: 1, title: 'Frieren', genres: ['Fantasy'] }
+          : { malId: 2, title: 'Solo Leveling', genres: ['Action'] },
+      ),
+    );
+
+    const all = await animes.getCommunityPopular();
+    expect(all.map((a) => a.title)).toEqual(['Frieren', 'Solo Leveling']);
+    expect(all[0].entryCount).toBe(5);
+
+    const filtered = await animes.getCommunityPopular('Action');
+    expect(filtered.map((a) => a.title)).toEqual(['Solo Leveling']);
   });
 });
