@@ -89,7 +89,7 @@ export class EntriesService {
     await this.prisma.$transaction(async (tx) => {
       // weekday do Prisma e do @aniweek/shared são enums TS distintos (mesmos
       // valores, tipos nominais diferentes) — compara pela string.
-      if ((entry.weekday as string) === toWeekday) {
+      if ((entry.weekday as string) === (toWeekday as string)) {
         if (toPosition === entry.position) return;
         if (toPosition < entry.position) {
           await tx.calendarEntry.updateMany({

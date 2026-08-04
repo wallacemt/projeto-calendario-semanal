@@ -44,7 +44,7 @@ describe('AnimesService', () => {
     await expect(animes.getByMalId(999)).rejects.toThrow('Jikan indisponível');
   });
 
-  it('getByMalId pula o upsert quando o anime foi editado manualmente (M6)', async () => {
+  it('getByMalId serve o espelho local (não o Jikan) quando o anime foi editado manualmente (M6)', async () => {
     const { animes, jikan, prisma } = buildAnimesService();
     jikan.getAnimeById.mockResolvedValue({
       malId: 52991,
@@ -52,13 +52,19 @@ describe('AnimesService', () => {
     });
     prisma.anime.findUnique.mockResolvedValue({
       malId: 52991,
+      title: 'Frieren (editado pelo usuário)',
+      imageUrl: null,
+      synopsis: null,
+      episodes: 28,
+      genres: ['Fantasia'],
+      malUrl: null,
       manuallyEdited: true,
     });
 
     const result = await animes.getByMalId(52991);
 
-    expect(result.title).toBe('Frieren (Jikan)'); // a página de detalhe segue mostrando o Jikan ao vivo
-    expect(prisma.anime.upsert).not.toHaveBeenCalled(); // só o espelho local (usado no board) não é sobrescrito
+    expect(result.title).toBe('Frieren (editado pelo usuário)'); // edição do usuário não é descartada na leitura
+    expect(prisma.anime.upsert).not.toHaveBeenCalled(); // e o espelho local (usado no board) também não é sobrescrito
   });
 
   it('update seta manuallyEdited:true pra proteger o próximo upsert do Jikan', async () => {
@@ -92,12 +98,13 @@ describe('AnimesService', () => {
       { animeId: 'anime-frieren', _count: { animeId: 5 } },
       { animeId: 'anime-solo-leveling', _count: { animeId: 2 } },
     ]);
-    prisma.anime.findUnique.mockImplementation(({ where: { id } }: { where: { id: string } }) =>
-      Promise.resolve(
-        id === 'anime-frieren'
-          ? { malId: 1, title: 'Frieren', genres: ['Fantasy'] }
-          : { malId: 2, title: 'Solo Leveling', genres: ['Action'] },
-      ),
+    prisma.anime.findUnique.mockImplementation(
+      ({ where: { id } }: { where: { id: string } }) =>
+        Promise.resolve(
+          id === 'anime-frieren'
+            ? { malId: 1, title: 'Frieren', genres: ['Fantasy'] }
+            : { malId: 2, title: 'Solo Leveling', genres: ['Action'] },
+        ),
     );
 
     const all = await animes.getCommunityPopular();

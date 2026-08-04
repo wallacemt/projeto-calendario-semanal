@@ -152,7 +152,7 @@ interface AniListDateRaw {
 
 interface AniListRankingRaw {
   rank: number;
-  type: 'RATED' | 'POPULAR' | string;
+  type: string;
   allTime: boolean | null;
 }
 
