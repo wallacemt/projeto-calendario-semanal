@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { Search } from 'lucide-vue-next'
+import { ChevronDown, Search } from 'lucide-vue-next'
 import { ANIME_GENRES } from '@aniweek/shared'
 import AppShell from '../../../components/AppShell.vue'
 import { useDebounce } from '../../../composables/useDebounce'
@@ -50,10 +50,15 @@ onMounted(async () => {
   await store.getSeasonNow()
   store.fetchCommunityPopular()
 })
+
+// Faixa horizontal soma altura fixa à área de resultados — em telas mais
+// baixas (notebook) isso é o que sobra pra ver os cards. Colapsável em vez
+// de sempre ocupar espaço.
+const communityOpen = ref(true)
 </script>
 
 <template>
-  <AppShell title="Descobrir animes" subtitle="Busca via API · resultados em cache">
+  <AppShell title="Descobrir animes" subtitle="Busca via API">
     <div class="flex h-full flex-col">
       <div class="flex-shrink-0 border-b px-8 pt-6 pb-4.5" style="border-color: rgba(255, 255, 255, 0.06)">
         <div class="mb-3.5 flex gap-3">
@@ -83,10 +88,16 @@ onMounted(async () => {
         </div>
       </div>
 
+      <!-- Colapsado, a faixa vira só essa linha fina de toggle (~40px) — nada
+           de padding/borda extra sobrando, é isso que devolve espaço real
+           pra grid de resultados em telas mais baixas (notebook). -->
       <div v-if="store.communityPopular.length > 0"
-        class="flex-shrink-0 border-b px-8 py-5" style="border-color: rgba(255, 255, 255, 0.06)">
-        <div class="mb-3 text-[12.5px] font-bold text-(--ink-text-muted)">🔥 Populares na comunidade</div>
-        <div class="flex gap-4 overflow-x-auto pb-1">
+        class="flex-shrink-0 border-b px-8" style="border-color: rgba(255, 255, 255, 0.06)">
+        <button type="button" class="flex w-full items-center justify-between py-3 text-left" @click="communityOpen = !communityOpen">
+          <span class="text-[12.5px] font-bold text-(--ink-text-muted)">🔥 Populares na comunidade</span>
+          <ChevronDown :size="15" class="text-(--ink-text-faint) transition-transform duration-200" :class="{ 'rotate-180': !communityOpen }" />
+        </button>
+        <div v-show="communityOpen" class="flex gap-4 overflow-x-auto pb-4">
           <button v-for="anime in store.communityPopular" :key="anime.malId" type="button"
             class="flex w-28 flex-shrink-0 flex-col gap-1.5 text-left" @click="store.select(anime)">
             <div class="h-40 w-28 flex-shrink-0 overflow-hidden rounded-xl bg-white/5">
@@ -101,7 +112,7 @@ onMounted(async () => {
       <div class="relative flex flex-1 overflow-hidden">
         <div class="flex-1 overflow-y-auto p-8">
           <div v-if="store.loading"
-            class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            class="grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             <AnimeCardSkeleton v-for="n in 10" :key="n" />
           </div>
 
@@ -132,7 +143,7 @@ onMounted(async () => {
           </div>
 
           <template v-else>
-            <div class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div class="grid grid-cols-2 gap-3.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               <AnimeCard v-for="anime in store.results" :key="anime.malId" :anime="anime"
                 :selected="store.selected?.malId === anime.malId" @select="store.select" />
             </div>

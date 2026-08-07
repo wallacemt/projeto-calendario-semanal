@@ -12,7 +12,12 @@ defineEmits<{ select: [anime: AnimeDto] }>()
     :class="selected ? 'border-(--brand-secondary)/50 shadow-[0_0_0_3px_rgba(139,92,246,0.12)]' : 'hover:border-white/30'"
     @click="$emit('select', anime)"
   >
-    <div class="relative h-100 flex-shrink-0 bg-white/5">
+    <!-- aspect-[2/3] (proporção padrão de pôster) em vez de h-100 fixo: um
+         h-100 fixo virava um cartaz gigante e desproporcional quando a
+         coluna do grid encolhia em telas menores — aspect-ratio nativo
+         acompanha a largura disponível em qualquer breakpoint sem precisar
+         de h-56/h-72/h-100 responsivo duplicado por classe. -->
+    <div class="relative aspect-[2/3] flex-shrink-0 bg-white/5">
       <img v-if="anime.imageUrl" :src="anime.imageUrl" :alt="anime.title" class="h-full w-full object-cover" />
       <div
         v-if="anime.score"

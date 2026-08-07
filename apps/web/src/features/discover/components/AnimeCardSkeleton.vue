@@ -6,7 +6,7 @@
 
 <template>
   <div class="flex flex-col overflow-hidden rounded-2xl border border-white/8 bg-white/3.5">
-    <div class="h-100 flex-shrink-0 animate-pulse bg-white/5" />
+    <div class="aspect-[2/3] flex-shrink-0 animate-pulse bg-white/5" />
     <div class="flex flex-col gap-2 p-3.5">
       <div class="h-3.5 w-4/5 animate-pulse rounded bg-white/8" />
       <div class="h-3 w-2/5 animate-pulse rounded bg-white/8" />
