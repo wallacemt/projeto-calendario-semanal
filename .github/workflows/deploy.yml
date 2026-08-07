@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - 'release/**'
+      - 'main'
 
 env:
   API_IMAGE: wallacestm/aniweek-api
