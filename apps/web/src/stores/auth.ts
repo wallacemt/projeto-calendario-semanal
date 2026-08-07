@@ -8,6 +8,25 @@ import { setAccessToken, setRefreshHandler } from "../lib/http";
 // uma nova restauração faz sentido.
 let restoreSessionPromise: Promise<void> | null = null;
 
+// Flag (não sensível — nenhum token aqui) pra distinguir, no guard do router,
+// "nunca logou" de "sessão expirou": só persiste porque um reload de página
+// perde o state do Pinia, e é exatamente num reload com refresh cookie
+// vencido que o guard precisa saber a diferença pra mandar pra /login ou
+// /sessao-expirada. Marcada só quando setSession()/refresh() têm sucesso,
+// limpa só no logout() explícito — nunca em clearSession(), que também roda
+// quando o refresh falha (limpar ali apagaria o próprio sinal que o guard
+// vai ler logo em seguida).
+const HAD_SESSION_KEY = "aniweek:had-session";
+export function hadPriorSession(): boolean {
+  return localStorage.getItem(HAD_SESSION_KEY) === "1";
+}
+function markHadSession(): void {
+  localStorage.setItem(HAD_SESSION_KEY, "1");
+}
+function clearHadSession(): void {
+  localStorage.removeItem(HAD_SESSION_KEY);
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null as PublicUser | null,
@@ -33,6 +52,7 @@ export const useAuthStore = defineStore("auth", {
       // Best-effort: mesmo se a chamada de rede falhar, limpa a sessão local.
       await authApi.logout().catch(() => undefined);
       this.clearSession();
+      clearHadSession();
     },
 
     /** Troca o refresh cookie por um novo access token. Retorna null se a sessão não é mais válida. */
@@ -41,6 +61,7 @@ export const useAuthStore = defineStore("auth", {
         const { accessToken } = await authApi.refresh();
         this.accessToken = accessToken;
         setAccessToken(accessToken);
+        markHadSession();
         return accessToken;
       } catch {
         this.clearSession();
@@ -74,6 +95,7 @@ export const useAuthStore = defineStore("auth", {
       this.user = user;
       this.accessToken = accessToken;
       setAccessToken(accessToken);
+      markHadSession();
     },
 
     clearSession() {

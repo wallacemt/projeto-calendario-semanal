@@ -2,10 +2,6 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <!-- LSF-2026-004: o token de reset de senha vai na query string do link
-         do email (?token=...). Sem isso, um link/imagem de terceiro nessa
-         página vazaria a URL completa (com o token) no header Referer da
-         requisição para esse terceiro. -->
     <meta name="referrer" content="no-referrer" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -15,6 +11,11 @@
       content="Monte seu calendário semanal de animes, acompanhe o progresso dos episódios e organize suas temporadas — tudo num só lugar."
     />
     <meta name="theme-color" content="#05060b" />
+
+    <!-- SPA sem SSR por rota: só a home (/) tem canonical correto hoje.
+         Demais rotas públicas herdam este mesmo <head> — ver auditoria SEO,
+         Fase 2 (SSR/prerender) antes de generalizar isso por rota. -->
+    <link rel="canonical" href="https://aniweek.wallacedev.com.br/" />
 
     <!-- Favicons (ver public/) -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -31,18 +32,24 @@
       property="og:description"
       content="Monte seu calendário semanal de animes, acompanhe o progresso dos episódios e organize suas temporadas — tudo num só lugar."
     />
-    <meta property="og:image" content="/android-chrome-512x512.png" />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://aniweek.wallacedev.com.br/" />
 
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="AnimeWeek — organize seus animes por dia da semana" />
     <meta
       name="twitter:description"
       content="Monte seu calendário semanal de animes, acompanhe o progresso dos episódios e organize suas temporadas — tudo num só lugar."
     />
-    <meta name="twitter:image" content="/android-chrome-512x512.png" />
+    <meta name="twitter:image" content="/og-image.jpg" />
 
-    <!-- Ainda em construção (README) — não indexar até termos uma versão utilizável. -->
-    <meta name="robots" content="noindex, nofollow" />
+    <!-- VITE_ROBOTS_CONTENT vem do .env do ambiente de build (ver .env.example)
+         — "noindex, nofollow" em dev/staging, "index, follow" só no build de
+         produção. Antes era uma string fixa aqui: fácil de esquecer de tirar
+         no deploy de lançamento (achado da auditoria SEO). -->
+    <meta name="robots" content="%VITE_ROBOTS_CONTENT%" />
   </head>
   <body>
     <div id="app"></div>

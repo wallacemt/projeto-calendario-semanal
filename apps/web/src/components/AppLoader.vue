@@ -20,8 +20,8 @@ setInterval(() => {
 
 <template>
   <div class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-7 bg-(--ink-bg)">
-    <div class="flex items-center gap-2.5">
-      <img src="../assets/icon_with_text_and_bg.png" alt="" class="animate-breathe h-42 w-60 object-contain" />
+    <div class="flex items-center gap-2.5 ">
+      <img src="../assets/icon_with_text_and_no-bg.png" alt="" class="animate-breathe h-42 w-60 object-contain " />
     </div>
 
     <!-- 7 barras = 7 dias da semana "acendendo" em onda — assinatura do

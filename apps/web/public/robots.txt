@@ -1,0 +1,6 @@
+# Origem própria — o Cloudflare acrescenta seu bloco de Content-Signal
+# (busca sim, treino de IA não) por cima deste arquivo, na borda.
+User-agent: *
+Allow: /
+
+Sitemap: https://aniweek.wallacedev.com.br/sitemap.xml

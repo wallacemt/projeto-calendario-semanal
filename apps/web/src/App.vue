@@ -5,6 +5,7 @@ import { useAuthStore } from './stores/auth'
 import { useSocialStore } from './features/social/store'
 import AppLoader from './components/AppLoader.vue'
 import Toaster from './components/Toaster.vue'
+import OfflineOverlay from './components/OfflineOverlay.vue'
 
 const theme = useThemeStore()
 const auth = useAuthStore()
@@ -45,8 +46,7 @@ watch(
 
 <template>
   <AppLoader v-if="booting" />
-  <!-- Sem nav global aqui: rotas autenticadas se envolvem no AppShell (sidebar)
-       individualmente — ver components/AppShell.vue e HomeView/ProfileView. -->
   <RouterView v-else />
   <Toaster />
+  <OfflineOverlay />
 </template>
