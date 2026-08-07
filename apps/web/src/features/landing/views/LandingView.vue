@@ -160,9 +160,9 @@ function toggleFaq(id: string) {
 
     <!-- NAV -->
     <header
-      class="glass sticky top-2 z-20 flex h-19 items-center justify-between px-6 md:px-12   rounded-2xl mx-auto">
+      class="glass sticky top-2 z-20 flex h-19 items-center justify-between px-6 md:px-12  max-w-[98%]  rounded-2xl mx-auto">
       <div class="flex items-center gap-2.5  ">
-        <img src="/android-chrome-192x192.png" class="h-7 w-7 object-contain" alt="" />
+        <img src="/android-chrome-192x192.png" class="h-7 w-7 object-contain rounded-full" alt="" />
         <span class="font-display text-[17px] font-extrabold text-white">AnimeWeek</span>
       </div>
       <nav class="hidden items-center gap-9 text-[13.5px] text-(--ink-text-muted) md:flex">

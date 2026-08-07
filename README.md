@@ -1,12 +1,6 @@
 # 🍥 AnimeWeek
 
-![status](https://img.shields.io/badge/status-em%20constru%C3%A7%C3%A3o-yellow?style=for-the-badge)
-
-<p align="center">
-  <img src="https://em-content.zobj.net/source/microsoft-teams/363/construction_1f6a7.png" alt="Em construção" width="120" />
-</p>
-
-<p align="center"><b>🚧 Projeto em construção — ainda não há versão utilizável. 🚧</b></p>
+<p align="center"><b>Acesse em <a href="https://aniweek.wallacedev.com.br">aniweek.wallacedev.com.br</a></b></p>
 
 ---
 
@@ -14,7 +8,7 @@
 
 O **AnimeWeek** é uma plataforma para organizar os animes que você assiste durante a semana: um calendário semanal onde cada anime é encaixado no dia certo, com progresso de episódios, temporadas separadas por estação do ano e total liberdade para personalizar a cara do app.
 
-## Funcionalidades planejadas
+## Funcionalidades
 
 - 🔍 **Busca de animes** integrada à Jikan API (MyAnimeList) — título, imagem, sinopse e episódios corretos.
 - 🗓️ **Calendário semanal** com os 7 dias, drag-and-drop para reorganizar o que vai assistir.
@@ -23,10 +17,10 @@ O **AnimeWeek** é uma plataforma para organizar os animes que você assiste dur
 - 🎨 **Temas personalizáveis** — cores, imagem de fundo e layout do calendário, com temas próprios por estação.
 - 🏆 **Perfil e métricas** — total de animes/episódios assistidos, gêneros mais vistos.
 - 🖼️ **Museu de animes assistidos** — uma vitrine/timeline dos animes já completados, como um registro de memória.
-- 🔗 **Compartilhamento** do calendário com outros usuários.
+- 🔗 **Compartilhamento** do calendário (view-only) e **social** — seguir usuários, notificações, descoberta.
 - 🔐 **Autenticação** por e-mail/senha ou OAuth (Google/GitHub).
 
-Detalhes técnicos, decisões de arquitetura e o roadmap completo estão em [`docs/blueprint.md`](docs/blueprint.md). O progresso é acompanhado nas [milestones e issues do repositório](https://github.com/wallacemt/aniweek/milestones).
+Todas as milestones M0–M10 do roadmap estão implementadas. Detalhes técnicos e decisões de arquitetura estão em [`docs/blueprint.md`](docs/blueprint.md).
 
 ## Stack
 
@@ -35,4 +29,3 @@ Detalhes técnicos, decisões de arquitetura e o roadmap completo estão em [`do
 - **APIs externas:** Jikan API (MyAnimeList)
 - **Cache:** Redis
 - **Gerenciador de pacotes:** Bun (monorepo com workspaces)
-

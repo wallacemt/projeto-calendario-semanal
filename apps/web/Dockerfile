@@ -21,6 +21,14 @@ RUN bun run --filter @aniweek/shared build
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
+# VITE_ROBOTS_CONTENT também é substituição de build (vite faz %VITE_X%
+# -> valor no index.html na hora do build, não em runtime). Só esse
+# Dockerfile builda pra produção (deploy.yml só roda em push pra
+# release/**), então o valor de produção é sempre este — não é segredo,
+# não precisa vir de GitHub secret nem de build-arg no workflow.
+ARG VITE_ROBOTS_CONTENT="index, follow"
+ENV VITE_ROBOTS_CONTENT=$VITE_ROBOTS_CONTENT
+
 # type-check é gate de CI (M0.5), não do build de imagem — vite build sozinho
 # já faz strip de tipos via esbuild.
 RUN cd apps/web && bunx vite build
