@@ -194,7 +194,7 @@ function onDragEnd(evt: DraggableEvent) {
                  é isso que deixa soltar um card num dia diferente do de origem. -->
               <VueDraggable v-if="calendar.board" v-model="calendar.board.entries[day.key]"
                 :group="{ name: 'board', pull: true, put: true }" tag="div"
-                class="grid flex-1 grid-cols-1 content-start gap-2.5 pb-1 sm:grid-cols-2 lg:grid-cols-4"
+                class="grid flex-1 grid-cols-1 content-start gap-2.5 pb-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 "
                 :data-weekday="day.key" @end="onDragEnd">
                 <EntryCard v-for="entry in calendar.board!.entries[day.key]" :key="entry.id" :data-entry-id="entry.id"
                   :entry="entry" @remove="calendar.removeEntry(day.key, entry.id)"

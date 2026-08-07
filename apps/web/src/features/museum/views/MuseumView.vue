@@ -6,6 +6,7 @@ import { seasonMeta } from '../../../lib/season-meta'
 import AddToCollectionModal from '../components/AddToCollectionModal.vue'
 import EditWatchedModal from '../components/EditWatchedModal.vue'
 import MuseumContextMenu from '../components/MuseumContextMenu.vue'
+import MuseumSkeleton from '../components/MuseumSkeleton.vue'
 import { useMuseumStore } from '../store'
 import type { WatchedAnimeDto } from '../api'
 
@@ -105,15 +106,14 @@ const TIER_FILTERS = [
       </button>
     </div>
 
-    <div class="p-6 sm:p-8">
-      <p v-if="museum.loading" class="py-16 text-center text-[13px] text-(--ink-text-faint)">Carregando...</p>
+    <MuseumSkeleton v-if="museum.loading" />
+
+    <div v-else class="p-6 sm:p-8">
+      <p v-if="museum.trophies.length === 0" class="py-16 text-center text-[13px] text-(--ink-text-faint)">
+        Nenhum anime no museu ainda — marque um anime como assistido no calendário ou adicione direto aqui.
+      </p>
 
       <template v-else>
-        <p v-if="museum.trophies.length === 0" class="py-16 text-center text-[13px] text-(--ink-text-faint)">
-          Nenhum anime no museu ainda — marque um anime como assistido no calendário ou adicione direto aqui.
-        </p>
-
-        <template v-else>
           <!-- Vitrine central -->
           <div v-if="featured" class="mb-5.5 glass flex items-center gap-8 rounded-[22px] border p-7.5"
             style="border-color: rgba(255, 255, 255, 0.09); background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02))">
@@ -217,7 +217,6 @@ const TIER_FILTERS = [
               Nenhuma obra encontrada na coleção.
             </div>
           </div>
-        </template>
       </template>
     </div>
 

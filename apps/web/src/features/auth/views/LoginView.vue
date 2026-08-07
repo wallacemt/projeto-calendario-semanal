@@ -54,11 +54,17 @@ function loginWithProvider(provider: 'google' | 'github') {
 </script>
 
 <template>
-  <AuthShell heroSubtitle="Monte seu calendário por dia da semana, acompanhe o progresso dos episódios e nunca perca a estreia da temporada.">
+  <AuthShell
+    heroSubtitle="Monte seu calendário por dia da semana, acompanhe o progresso dos episódios e nunca perca a estreia da temporada.">
     <template #hero-title>Sua semana de<br />animes, organizada.</template>
 
-    <div class="font-mono mb-2.5 text-[11.5px] tracking-[0.12em] text-(--brand-primary)">
-      ENTRAR
+    <div class="mb-6 flex justify-between items-center gap-3  ">
+      <div class="font-mono mb-2.5 text-[11.5px] tracking-[0.12em] text-(--brand-primary)">
+        ENTRAR
+      </div>
+      <RouterLink :to="{ name: 'home' }" class="text-[13.5px] text-(--ink-text-muted) hover:text-(--ink-text)">
+        ← Voltar para o início
+      </RouterLink>
     </div>
     <h1 class="font-display mb-2 text-[28px] font-extrabold text-(--ink-text)">
       Bem-vindo de volta
@@ -69,10 +75,14 @@ function loginWithProvider(provider: 'google' | 'github') {
 
     <div class="mb-5 flex gap-3">
       <AuthProviderButton label="Google" @click="loginWithProvider('google')">
-        <template #icon><IconGoogle /></template>
+        <template #icon>
+          <IconGoogle />
+        </template>
       </AuthProviderButton>
       <AuthProviderButton label="GitHub" @click="loginWithProvider('github')">
-        <template #icon><IconGithub /></template>
+        <template #icon>
+          <IconGithub />
+        </template>
       </AuthProviderButton>
     </div>
 
@@ -85,40 +95,20 @@ function loginWithProvider(provider: 'google' | 'github') {
     </div>
 
     <form class="flex flex-col gap-4" novalidate @submit.prevent="onSubmit">
-      <AuthTextField
-        id="email"
-        v-model="email"
-        label="E-mail"
-        type="email"
-        autocomplete="email"
-        placeholder="voce@email.com"
-        required
-      />
+      <AuthTextField id="email" v-model="email" label="E-mail" type="email" autocomplete="email"
+        placeholder="voce@email.com" required />
 
-      <AuthTextField
-        id="password"
-        v-model="password"
-        :type="showPassword ? 'text' : 'password'"
-        label="Senha"
-        autocomplete="current-password"
-        placeholder="••••••••"
-        required
-      >
+      <AuthTextField id="password" v-model="password" :type="showPassword ? 'text' : 'password'" label="Senha"
+        autocomplete="current-password" placeholder="••••••••" required>
         <template #label-action>
-          <RouterLink
-            :to="{ name: 'forgot-password' }"
-            class="text-[12.5px] text-(--brand-primary) hover:text-(--brand-secondary)"
-          >
+          <RouterLink :to="{ name: 'forgot-password' }"
+            class="text-[12.5px] text-(--brand-primary) hover:text-(--brand-secondary)">
             Esqueci minha senha
           </RouterLink>
         </template>
         <template #trailing>
-          <button
-            type="button"
-            aria-label="Mostrar ou ocultar senha"
-            class="text-(--ink-text-faint) hover:text-(--ink-text)"
-            @click="showPassword = !showPassword"
-          >
+          <button type="button" aria-label="Mostrar ou ocultar senha"
+            class="text-(--ink-text-faint) hover:text-(--ink-text)" @click="showPassword = !showPassword">
             <EyeOff v-if="showPassword" class="h-4 w-4" />
             <Eye v-else class="h-4 w-4" />
           </button>

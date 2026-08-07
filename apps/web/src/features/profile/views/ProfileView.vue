@@ -5,6 +5,7 @@ import ConnectedAccounts from '../components/ConnectedAccounts.vue'
 import DangerZone from '../components/DangerZone.vue'
 import ProfileCard from '../components/ProfileCard.vue'
 import ProfileInfo from '../components/ProfileInfo.vue'
+import ProfileSkeleton from '../components/ProfileSkeleton.vue'
 import ProfileStats from '../components/ProfileStats.vue'
 import { useProfileStore } from '../store'
 
@@ -26,6 +27,6 @@ onMounted(() => store.fetch())
         <ProfileStats :profile="store.profile" />
       </div>
     </div>
-    <div v-else-if="store.loading" class="p-8 text-(--ink-text-faint)">Carregando perfil...</div>
+    <ProfileSkeleton v-else-if="store.loading" />
   </AppShell>
 </template>

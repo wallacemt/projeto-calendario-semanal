@@ -126,6 +126,17 @@ function loginWithProvider(provider: 'google' | 'github') {
       <AuthButton type="submit" :loading="loading" class="mt-1">
         {{ loading ? 'Criando...' : 'Criar conta' }}
       </AuthButton>
+
+      <p class="text-center text-[12px] text-(--ink-text-faint)">
+        Ao criar conta, você concorda com nossos
+        <RouterLink :to="{ name: 'privacy', hash: '#termos' }" class="text-(--brand-primary) hover:text-(--brand-secondary)">
+          Termos de uso
+        </RouterLink>
+        e nossa
+        <RouterLink :to="{ name: 'privacy', hash: '#privacidade' }" class="text-(--brand-primary) hover:text-(--brand-secondary)">
+          Política de Privacidade
+        </RouterLink>.
+      </p>
     </form>
 
     <p class="mt-6 text-center text-[13.5px] text-(--ink-text-muted)">

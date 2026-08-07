@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import AppShell from '../../../components/AppShell.vue'
+import StatsSkeleton from '../components/StatsSkeleton.vue'
 import { useMuseumStore } from '../store'
 
 const museum = useMuseumStore()
@@ -43,7 +44,7 @@ const maxMonthly = computed(() => Math.max(1, ...(museum.stats?.monthly.map((m) 
 <template>
   <AppShell title="Estatísticas" subtitle="Análise detalhada dos seus hábitos">
     <div class="p-6 sm:p-8">
-      <p v-if="museum.statsLoading" class="py-16 text-center text-[13px] text-(--ink-text-faint)">Carregando...</p>
+      <StatsSkeleton v-if="museum.statsLoading" />
 
       <div v-else-if="museum.stats" class="flex flex-col gap-5">
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
