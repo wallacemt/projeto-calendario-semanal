@@ -1,9 +1,13 @@
 name: Deploy
 
+# Dispara só depois que o workflow CI terminar no main — antes os dois
+# rodavam em paralelo no mesmo push, então um push que quebrava lint/test
+# ainda assim subia imagem nova pro Docker Hub e pro Portainer.
 on:
-  push:
-    branches:
-      - 'main'
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
 
 env:
   API_IMAGE: wallacestm/aniweek-api
@@ -11,11 +15,16 @@ env:
 
 jobs:
   build-and-push:
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          # workflow_run não faz checkout do commit certo por padrão (pega o
+          # HEAD atual do main) — head_sha é o commit exato que o CI validou.
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - uses: docker/setup-buildx-action@v3
 
@@ -32,7 +41,7 @@ jobs:
           push: true
           tags: |
             ${{ env.API_IMAGE }}:latest
-            ${{ env.API_IMAGE }}:${{ github.sha }}
+            ${{ env.API_IMAGE }}:${{ github.event.workflow_run.head_sha }}
           cache-from: type=gha,scope=api
           cache-to: type=gha,mode=max,scope=api
 
@@ -46,6 +55,6 @@ jobs:
             VITE_API_URL=${{ secrets.VITE_API_URL }}
           tags: |
             ${{ env.WEB_IMAGE }}:latest
-            ${{ env.WEB_IMAGE }}:${{ github.sha }}
+            ${{ env.WEB_IMAGE }}:${{ github.event.workflow_run.head_sha }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web

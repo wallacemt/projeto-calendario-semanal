@@ -24,7 +24,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
         config.get('GITHUB_CLIENT_ID', { infer: true }) ?? 'unconfigured',
       clientSecret:
         config.get('GITHUB_CLIENT_SECRET', { infer: true }) ?? 'unconfigured',
-      callbackURL: '/auth/oauth/github/callback',
+      // Absoluto de propósito — ver GoogleStrategy (LSF-2026-005).
+      callbackURL: `${config.get('API_URL', { infer: true })}/auth/oauth/github/callback`,
       scope: ['user:email'],
       store: stateStore,
     });

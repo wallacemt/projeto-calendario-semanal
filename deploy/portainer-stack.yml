@@ -11,6 +11,10 @@ services:
       NODE_ENV: production
       PORT: 3000
       FRONTEND_URL: ${FRONTEND_URL}
+      # URL pública desta API (https, domínio real) — monta o callbackURL
+      # absoluto do OAuth. Precisa ser IDÊNTICA ao redirect URI cadastrado no
+      # Google Cloud Console / GitHub OAuth App.
+      API_URL: ${API_URL}
       DATABASE_URL: ${DATABASE_URL}
 
       REDIS_URL: ${REDIS_URL}

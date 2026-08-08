@@ -16,6 +16,13 @@ jobs:
       - name: Install
         run: bun install --frozen-lockfile
 
+      # Bun não roda o postinstall (prisma generate) de dependências por
+      # padrão sem `trustedDependencies` — sem isso, apps/api/generated/prisma
+      # (gitignored) não existe e todo campo tipado por Prisma vira `any` pro
+      # ESLint typed, derrubando o Lint em quase todo módulo.
+      - name: Generate Prisma Client
+        run: bun run --filter api db:generate
+
       - name: Lint
         run: bun run lint
 

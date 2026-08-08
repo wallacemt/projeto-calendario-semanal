@@ -21,7 +21,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         config.get('GOOGLE_CLIENT_ID', { infer: true }) ?? 'unconfigured',
       clientSecret:
         config.get('GOOGLE_CLIENT_SECRET', { infer: true }) ?? 'unconfigured',
-      callbackURL: '/auth/oauth/google/callback',
+      // Absoluto de propósito (LSF-2026-005): um callbackURL relativo é
+      // resolvido pelo passport-oauth2 a partir de req.protocol/req.get(
+      // 'host') — atrás de reverse proxy sem `trust proxy`, req.protocol
+      // acusa 'http' mesmo com o cliente em https, e o redirect_uri enviado
+      // ao Google não bate com o cadastrado no Console (400
+      // redirect_uri_mismatch).
+      callbackURL: `${config.get('API_URL', { infer: true })}/auth/oauth/google/callback`,
       scope: ['email', 'profile'],
       store: stateStore,
     });

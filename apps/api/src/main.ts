@@ -3,6 +3,7 @@ import { setDefaultAutoSelectFamilyAttemptTimeout } from 'node:net';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
@@ -28,8 +29,16 @@ setDefaultAutoSelectFamilyAttemptTimeout(3_000);
 setDefaultResultOrder('ipv4first');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
   app.useLogger(app.get(Logger));
+  // Prod roda atrás de reverse proxy (Portainer/deploy/portainer-stack.yml)
+  // que termina TLS. Sem isso, req.protocol/req.ip refletem a conexão
+  // interna (http, IP do proxy) em vez do cliente real — mesma raiz do bug
+  // de redirect_uri_mismatch do OAuth (LSF-2026-005), agora corrigido de
+  // forma geral, não só pro callbackURL.
+  app.set('trust proxy', 1);
   app.useGlobalFilters(new HttpExceptionFilter());
   // Security headers (LSF-2026-004/007): CSP, X-Content-Type-Options,
   // X-Frame-Options, HSTS etc. — a API não serve HTML, mas ainda serve o

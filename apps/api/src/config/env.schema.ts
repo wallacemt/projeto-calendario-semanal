@@ -12,6 +12,11 @@ export const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   DATABASE_URL: z.url(),
   FRONTEND_URL: z.url(),
+  // URL pública da própria API (com https em prod). Usada para montar o
+  // callbackURL absoluto do OAuth — nunca derivar isso de req.protocol/host,
+  // que fica errado atrás de reverse proxy sem `trust proxy` (LSF-2026-005:
+  // era a causa do redirect_uri_mismatch do Google em prod).
+  API_URL: z.url(),
 
   REDIS_URL: z.url().optional(),
   JWT_SECRET: z.string().min(1),
