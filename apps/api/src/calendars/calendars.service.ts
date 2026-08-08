@@ -7,6 +7,7 @@ import type {
   AddEntryInput,
   CreateCalendarInput,
   ImportPreviousInput,
+  Season,
 } from '@aniweek/shared';
 import { PrismaService } from '../prisma/prisma.service';
 import { EntriesService } from '../entries/entries.service';
@@ -109,13 +110,14 @@ export class CalendarsService {
     });
     if (!target) throw new NotFoundException('Calendário não encontrado');
 
-    // weekday do Prisma e do @aniweek/shared são enums TS distintos (mesmos
+    // season do Prisma e do @aniweek/shared são enums TS distintos (mesmos
     // valores, tipos nominais diferentes — mesmo caso do comparador em
     // EntriesService.move). getPreviousSeason só lê os valores, então o
     // cast é seguro.
-    const { season, year } = getPreviousSeason(
-      target as unknown as Parameters<typeof getPreviousSeason>[0],
-    );
+    const { season, year } = getPreviousSeason({
+      season: target.season as unknown as Season,
+      year: target.year,
+    });
     const previous = await this.prisma.calendar.findUnique({
       where: { userId_season_year: { userId, season, year } },
     });

@@ -23,6 +23,14 @@ jobs:
       - name: Generate Prisma Client
         run: bun run --filter api db:generate
 
+      # @aniweek/shared resolve via dist/ (package.json#exports), que é
+      # gitignored — sem essa build, api/web importam um pacote inexistente e
+      # todo tipo vindo de lá vira `error` pro TS, cascateando em "cannot be
+      # resolved" no ESLint typed em qualquer arquivo que use os schemas Zod
+      # compartilhados.
+      - name: Build shared package
+        run: bun run --filter @aniweek/shared build
+
       - name: Lint
         run: bun run lint
 
